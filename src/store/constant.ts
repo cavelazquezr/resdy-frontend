@@ -1,0 +1,4 @@
+export enum SLICE_NAMES {
+	USER = 'USER',
+	RESTAURANT = 'RESTAURANT',
+}
