@@ -6,15 +6,15 @@ import { RestaurantOutput } from '../../types/restaurants';
 import { SLICE_NAMES } from '../constant';
 
 export interface ISlice {
-	currentRestaurant: StatePropWithThunkState<RestaurantOutput | null> | null;
+	restaurants: StatePropWithThunkState<RestaurantOutput | null> | null;
 }
 
 const sliceInitialState: ISlice = {
-	currentRestaurant: null,
+	restaurants: null,
 };
 
 const authSlice = createSlice({
-	name: SLICE_NAMES.USER,
+	name: SLICE_NAMES.RESTAURANT,
 	initialState: sliceInitialState,
 	reducers: {},
 	extraReducers: (builder) => {

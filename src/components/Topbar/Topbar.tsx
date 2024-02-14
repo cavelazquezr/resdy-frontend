@@ -17,37 +17,31 @@ import {
 	Icon,
 } from '@chakra-ui/react';
 import { FiBookOpen, FiBookmark, FiLogOut, FiMessageSquare, FiUser } from 'react-icons/fi';
+import { useLocation } from 'react-router-dom';
 
 import resdyLogoPrimary from '../../assets/Resdy.svg';
+import resdyForRestaurant from '../../assets/ResdyForRestaurant.svg';
 import { SuperLink } from '../../common/components/SuperLink/SuperLink';
 import { useAppSelector } from '../../store/store';
 import { UserOutput } from '../../types/user';
+import { breakpointLayoutWidth } from '../Layout/utils/styles';
 
 export const Topbar: React.FC = () => {
 	const authenticatedUser = useAppSelector((state) => state.user.userData?.data);
+	const location = useLocation();
+	const isRestautantView = location.pathname.includes('/restaurant');
+
 	return (
-		<Flex w="100%" justifyContent="center" py="0.5rem">
-			<HStack
-				bg="white"
-				py="0.5rem"
-				justifyContent="space-between"
-				w={{
-					xs: '100%',
-					sm: '840px',
-					md: '1024px',
-					lg: '1140px',
-					xl: '1140px', // From here on, global font-size is 16px
-					xxl: '1320px', // From here on, global font-size is 16px
-				}}
-			>
+		<Flex w="100%" justifyContent="center" py="0.5rem" bg={isRestautantView ? 'brand-primary.default' : 'white'}>
+			<HStack py="0.25rem" justifyContent="space-between" w={breakpointLayoutWidth}>
 				<SuperLink to="/">
-					<Img src={resdyLogoPrimary} />
+					<Img src={isRestautantView ? resdyForRestaurant : resdyLogoPrimary} />
 				</SuperLink>
 				{authenticatedUser ? (
 					<UserMenu user={authenticatedUser} />
 				) : (
 					<SuperLink to="/login">
-						<Button size="md" variant="solidPrimary">
+						<Button size="md" variant={isRestautantView ? 'solidWhite' : 'solidPrimary'}>
 							Ingresar
 						</Button>
 					</SuperLink>
@@ -60,10 +54,7 @@ export const Topbar: React.FC = () => {
 const UserMenu: React.FC<{ user: UserOutput }> = (props) => {
 	const { user } = props;
 	const handleLogout = () => {
-		// Remove the token from localStorage
 		localStorage.removeItem('accessToken');
-
-		// Refresh the page to reflect the changes
 		window.location.reload();
 	};
 	const menuItems = [

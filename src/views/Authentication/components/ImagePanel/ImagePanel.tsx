@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Flex, Img, Text, VStack } from '@chakra-ui/react';
+import { Box, Flex, Img, Text } from '@chakra-ui/react';
 
 import { ImageStepper } from './ImageStepper';
 import step1Create from '../../../../assets/illustrations/create1.svg';

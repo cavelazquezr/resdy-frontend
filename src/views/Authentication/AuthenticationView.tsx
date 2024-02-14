@@ -7,15 +7,6 @@ import { LoginForm } from './components/LoginForm/LoginForm';
 import { RegisterForm } from './components/RegisterForm/RegisterForm';
 import { SuperLink } from '../../common/components/SuperLink/SuperLink';
 
-export const responsiveFormWidth = {
-	xs: '80%',
-	sm: '65%',
-	md: '65%',
-	lg: '55%',
-	xl: '50%',
-	xxl: '50%',
-};
-
 interface IProps {
 	loginView?: boolean;
 }

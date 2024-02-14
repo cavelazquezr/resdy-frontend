@@ -14,8 +14,8 @@ import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { getAccessTokenThunk } from '../../../../store/user/thunk';
 import { InputConfiguration } from '../../../../types/input';
 import { UserCredentials } from '../../../../types/user';
-import { responsiveFormWidth } from '../../AuthenticationView';
 import { loginSchema as schema } from '../../schemas';
+import { responsiveFormWidth } from '../../utils/styles';
 
 export const LoginForm: React.FC = () => {
 	const { userData: user, error: authError } = useAppSelector((state) => state.user);
@@ -53,7 +53,6 @@ export const LoginForm: React.FC = () => {
 	React.useEffect(() => {
 		if (user?.data && !authError) {
 			navigate('/');
-			console.log('user', user);
 			toast({
 				position: 'top',
 				description: `Has iniciado sesión correctamente, ${user.data?.firstname}`,
@@ -78,7 +77,7 @@ export const LoginForm: React.FC = () => {
 						<NewInput
 							key={index}
 							label={field.label}
-							type={field.type}
+							type={field.type as 'text' | 'password'}
 							id={field.id}
 							size="md"
 							value={values[field.id]}

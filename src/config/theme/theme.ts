@@ -3,6 +3,7 @@ import { extendTheme } from '@chakra-ui/react';
 import Button from './components/Button';
 import Input from './components/Input';
 import Select from './components/Select';
+import Tabs from './components/Tabs';
 
 // Numbers: add 200 to every breakpoint
 const BREAKPOINTS = {
@@ -158,7 +159,7 @@ export const theme = extendTheme({
 			lineHeight: 'label1',
 		},
 	},
-	components: { Button, Input, Select },
+	components: { Button, Input, Select, Tabs },
 	styles: {
 		global: () => ({
 			'*': {

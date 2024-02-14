@@ -34,7 +34,7 @@ const RestaurantCard: React.FC<{ restaurant: RestaurantOutput }> = (props) => {
 		props.restaurant;
 
 	return (
-		<SuperLink to={`/restaurant/${name}`}>
+		<SuperLink to={`/restaurant/${name}/home`}>
 			<Card
 				maxW="xs"
 				shadow="none"
@@ -73,7 +73,7 @@ const RestaurantCard: React.FC<{ restaurant: RestaurantOutput }> = (props) => {
 					<Heading size="md">{brand_name}</Heading>
 					<VStack spacing="0rem" align="stretch">
 						<Text textStyle="body2" color="gray.500">
-							{`Precio medio: ${price_average}`}
+							{`Precio medio: ${price_average}€`}
 						</Text>
 						<Text textStyle="body2" color="gray.500">
 							{address}

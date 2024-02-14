@@ -8,6 +8,7 @@ export interface RestaurantOutput {
 	country?: string;
 	city?: string;
 	restaurant_type?: string;
+	description?: string;
 	location?: Record<string, string>;
 	price_average: number;
 	rating?: number;

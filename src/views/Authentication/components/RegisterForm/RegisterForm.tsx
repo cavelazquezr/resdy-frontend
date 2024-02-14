@@ -13,8 +13,8 @@ import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { postNewUserThunk } from '../../../../store/user/thunk';
 import { InputConfiguration } from '../../../../types/input';
 import { CreateUserInput } from '../../../../types/user';
-import { responsiveFormWidth } from '../../AuthenticationView';
 import { registerSchema as schema } from '../../schemas';
+import { responsiveFormWidth } from '../../utils/styles';
 
 export const RegisterForm: React.FC = () => {
 	const { userData: user, error: authError } = useAppSelector((state) => state.user);
@@ -99,7 +99,7 @@ export const RegisterForm: React.FC = () => {
 						<NewInput
 							key={index}
 							label={field.label}
-							type={field.type}
+							type={field.type as 'password' | 'text'}
 							id={field.id}
 							size="lg"
 							value={values[field.id]}

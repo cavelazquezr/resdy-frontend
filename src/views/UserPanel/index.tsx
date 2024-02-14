@@ -4,10 +4,10 @@ import { VStack, Text, Divider, Grid, GridItem, HStack, Button, Icon } from '@ch
 import { FiBookOpen, FiBookmark, FiMessageSquare, FiUser } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
 
-import { BookingsView } from './BookingsView';
 import { InformationView } from './InformationView';
 import { ListsView } from './ListsView';
 import { RatingsView } from './RatingsView';
+import { ReservationsView } from './ReservationView';
 import { SuperLink } from '../../common/components/SuperLink/SuperLink';
 import { useCustomParams } from '../../hooks/useCustomParams';
 
@@ -25,7 +25,7 @@ export const UserPanelLayout: React.FC = () => {
 			name: 'bookings',
 			label: 'Mis reservas',
 			description: 'Aquí podrás gestionar y ver tus reservas.',
-			component: BookingsView,
+			component: ReservationsView,
 		},
 		{
 			name: 'list',
@@ -44,15 +44,15 @@ export const UserPanelLayout: React.FC = () => {
 	const currentSection = sections.find((section) => section.name === panelSection);
 
 	return (
-		<VStack align="stretch" spacing="1rem">
+		<VStack align="stretch" spacing="1rem" h="100%">
 			<Text textStyle="heading5">Panel de usuario</Text>
 			<Divider />
-			<Grid templateColumns="repeat(12, 1fr)" columnGap="2rem">
+			<Grid templateColumns="repeat(12, 1fr)" columnGap="2rem" h="100%">
 				<GridItem colSpan={3}>
 					<Sidebar />
 				</GridItem>
 				<GridItem colSpan={9}>
-					<VStack align="stretch" spacing="1rem">
+					<VStack align="stretch" spacing="1rem" h="80vh" overflow="hidden">
 						<HStack justifyContent="space-between">
 							<VStack align="stretch">
 								<Text textStyle="heading6">{currentSection?.label ?? 'Sección'}</Text>

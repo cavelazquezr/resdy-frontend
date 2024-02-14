@@ -11,11 +11,11 @@ import { NewSelect } from '../../../../common/components/NewSelect/NewSelect';
 import { getFormikInitialValues } from '../../../../common/utils/getFormikInitialValues';
 import { useAppSelector } from '../../../../store/store';
 import { InputConfiguration } from '../../../../types/input';
-import { responsiveFormWidth } from '../../AuthenticationView';
 import { adminRegisterSchema as schema } from '../../schemas';
+import { responsiveFormWidth } from '../../utils/styles';
 
 export const RestaurantCreationForm: React.FC = () => {
-	const { userData: user, error: authError } = useAppSelector((state) => state.user);
+	const { userData: _user, error: authError } = useAppSelector((state) => state.user);
 
 	const [currentStep, setCurrentStep] = React.useState(0);
 	const onSubmit = async () => {

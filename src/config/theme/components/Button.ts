@@ -24,6 +24,21 @@ const componentOverride: ComponentStyleConfig = {
 				pointerEvents: 'none',
 			},
 		},
+		solidWhite: {
+			bg: 'White',
+			color: 'brand-primary.default',
+			_hover: {
+				bg: 'gray.100',
+			},
+			_active: {
+				bg: 'gray.200',
+				transform: 'scale(0.98)',
+			},
+			_disabled: {
+				opacity: 0.5,
+				pointerEvents: 'none',
+			},
+		},
 		solidPrimary: {
 			bg: 'brand-primary.default',
 			color: 'white',
@@ -39,9 +54,58 @@ const componentOverride: ComponentStyleConfig = {
 				pointerEvents: 'none',
 			},
 		},
+
 		solidSecondary: {
 			bg: 'brand-secondary.default',
 			color: 'black',
+			_hover: {
+				bg: 'brand-secondary.500',
+			},
+			_active: {
+				bg: 'brand-secondary.400',
+				transform: 'scale(0.98)',
+			},
+			_disabled: {
+				opacity: 0.5,
+				pointerEvents: 'none',
+			},
+		},
+		solidDefaultForm: {
+			bg: 'gray.200',
+			color: 'black',
+			borderRadius: '0.5rem',
+			_hover: {
+				bg: 'gray.300',
+			},
+			_active: {
+				bg: 'gray.400',
+				transform: 'scale(0.98)',
+			},
+			_disabled: {
+				opacity: 0.5,
+				pointerEvents: 'none',
+			},
+		},
+		solidPrimaryForm: {
+			bg: 'brand-primary.default',
+			color: 'white',
+			borderRadius: '0.5rem',
+			_hover: {
+				bg: 'brand-primary.500',
+			},
+			_active: {
+				bg: 'brand-primary.400',
+				transform: 'scale(0.98)',
+			},
+			_disabled: {
+				opacity: 0.5,
+				pointerEvents: 'none',
+			},
+		},
+		solidSecondaryForm: {
+			bg: 'brand-secondary.default',
+			color: 'white',
+			borderRadius: '0.5rem',
 			_hover: {
 				bg: 'brand-secondary.500',
 			},

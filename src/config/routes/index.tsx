@@ -28,7 +28,7 @@ export const Router: React.FC = () => {
 				<Route path="/register-restaurant" element={<RestaurantCreationView />} />
 				{/* Restaurant views */}
 				<Route path="/restaurant" element={<Outlet />}>
-					<Route path=":restaurantName" element={<RestaurantLayout />} />
+					<Route path=":restaurantName/:restaurantSection" element={<RestaurantLayout />} />
 				</Route>
 				{/* Protected routes */}
 				<Route element={<RequireAuth />}>
