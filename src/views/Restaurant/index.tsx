@@ -14,7 +14,7 @@ import { SuperLink } from '../../common/components/SuperLink/SuperLink';
 import { useCustomParams } from '../../hooks/useCustomParams';
 import { MenuOutput } from '../../types/menu';
 import { RatingOutput, RatingStatsOutput } from '../../types/rating';
-import { RestaurantOutput } from '../../types/restaurants';
+import { RestaurantRecord } from '../../types/restaurants';
 
 export const RestaurantLayout: React.FC = () => {
 	const { restaurantName, restaurantSection } = useCustomParams(['restaurantName', 'restaurantSection']);
@@ -46,7 +46,7 @@ export const RestaurantLayout: React.FC = () => {
 	});
 
 	// Query records
-	const restautantRecord = restaurantQuery.data?.data[0] as RestaurantOutput;
+	const restautantRecord = restaurantQuery.data?.data[0] as RestaurantRecord;
 	const ratingStatsRecord = ratingStatsQuery.data?.data as RatingStatsOutput;
 	const ratingsRecords = ratingsQuery.data?.data as RatingOutput[];
 	const menuRecords = menuQuery.data?.data as MenuOutput[];
@@ -89,7 +89,7 @@ export const RestaurantLayout: React.FC = () => {
 						</Text>
 					</Flex>
 					<Box bg="black" opacity="50%" w="100%" h="20rem" position="absolute" />
-					<Image src={restautantRecord.header_url} w="100%" h="20rem" objectFit="cover" objectPosition="center" />
+					<Image src={restautantRecord.header_url ?? ''} w="100%" h="20rem" objectFit="cover" objectPosition="center" />
 				</Box>
 				<Box bg="brand-primary.default" w="100%" h="3rem">
 					<HStack alignItems="center" h="100%" justifyContent="center" spacing="1rem">

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { VStack, Img, Text, HStack, Checkbox, Button, useToast } from '@chakra-ui/react';
+import { VStack, Img, Text, HStack, Checkbox, Button, useToast, Divider } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,6 @@ import { getAccessTokenThunk } from '../../../../store/user/thunk';
 import { InputConfiguration } from '../../../../types/input';
 import { UserCredentials } from '../../../../types/user';
 import { loginSchema as schema } from '../../schemas';
-import { responsiveFormWidth } from '../../utils/styles';
 
 export const LoginForm: React.FC = () => {
 	const { userData: user, error: authError } = useAppSelector((state) => state.user);
@@ -64,15 +63,23 @@ export const LoginForm: React.FC = () => {
 	}, [user, authError]);
 
 	return (
-		<VStack spacing="1.5rem" align="stretch" w={responsiveFormWidth}>
+		<VStack spacing="1.5rem" align="stretch">
 			<Img src={resdyLogoPrimary} h="2rem" w="fit-content" />
-			<VStack spacing="0.5rem" align="stretch">
-				<Text textStyle="heading5" fontWeight="bold" color="gray.900">
-					Inicia sesión en tu cuenta
-				</Text>
-			</VStack>
+			<Text textStyle="heading5" fontWeight="bold" color="gray.900">
+				Inicia sesión en tu cuenta
+			</Text>
 			<form onSubmit={handleSubmit} noValidate>
 				<VStack spacing="1.5rem" align="stretch">
+					<Button variant="solidDefault" size="lg" leftIcon={<FcGoogle />} isDisabled={isSubmitting}>
+						Ingresar con Google
+					</Button>
+					<HStack>
+						<Divider />
+						<Text textStyle="body1" color="gray.500">
+							o
+						</Text>
+						<Divider />
+					</HStack>
 					{fields.map((field, index) => (
 						<NewInput
 							key={index}
@@ -114,9 +121,6 @@ export const LoginForm: React.FC = () => {
 							loadingText={'Ingresando'}
 						>
 							Ingresar
-						</Button>
-						<Button variant="outlineDefault" size="lg" leftIcon={<FcGoogle />} isDisabled={isSubmitting}>
-							Ingresar con Google
 						</Button>
 					</VStack>
 				</VStack>

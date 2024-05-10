@@ -10,7 +10,7 @@ interface IProps {
 export const InputErrorMessage: React.FC<IProps> = (props) => {
 	const { error } = props;
 	return (
-		<HStack>
+		<HStack w="inherit">
 			<Icon color="red.500" as={FiAlertTriangle} />
 			<Text textStyle="body2" color="red.500">
 				{error}

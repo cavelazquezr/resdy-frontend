@@ -1,42 +1,36 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { getAccessToken, getCurrentUser, postNewUser } from '../../api/authentication';
-import { CreateUserInput, UserCredentials } from '../../types/user';
+import { getAccessToken, getCurrentUser, postNewUser, updateUser } from '../../api/authentication';
+import { UserCredentials } from '../../types/user';
 import { SLICE_NAMES } from '../constant';
 
-export const getCurrentUserThunk = createAsyncThunk(
-	`${SLICE_NAMES.USER}/getCurrentUserThunk`,
-	async (payload: string) => {
-		const response = await getCurrentUser(payload);
-		return response.data;
-	},
-);
+export const getCurrentUserThunk = createAsyncThunk(`${SLICE_NAMES.USER}/getCurrentUserThunk`, async () => {
+	const response = await getCurrentUser(undefined);
+	return response.data;
+});
 
 export const getAccessTokenThunk = createAsyncThunk(
 	`${SLICE_NAMES.USER}/postUserCredentialsThunk`,
-	async (payload: UserCredentials, thunkApi) => {
+	async (payload: Parameters<typeof getAccessToken>[0], thunkApi) => {
 		try {
 			const response = await getAccessToken(payload);
 			const token = response.data.token;
 
-			// Set the new token in localStorage
 			localStorage.setItem('accessToken', token);
 
-			// Dispatch the action to get the current user
-			thunkApi.dispatch(getCurrentUserThunk(token));
+			thunkApi.dispatch(getCurrentUserThunk());
 
 			return response.data;
 		} catch (error) {
-			// Handle authentication error if needed
 			console.error('Authentication failed:', error);
-			throw error; // Rethrow the error to let the component handle it
+			throw error;
 		}
 	},
 );
 
 export const postNewUserThunk = createAsyncThunk(
 	`${SLICE_NAMES.USER}/postNewUserThunk`,
-	async (payload: CreateUserInput, thunkApi) => {
+	async (payload: Parameters<typeof postNewUser>[0], thunkApi) => {
 		try {
 			const response = await postNewUser(payload);
 			const { email, password } = response.data;
@@ -45,14 +39,26 @@ export const postNewUserThunk = createAsyncThunk(
 				password: password,
 			};
 
-			// Dispatch the action to get authenticated after creation
 			thunkApi.dispatch(getAccessTokenThunk(credentials));
 
 			return response.data;
 		} catch (error) {
-			// Handle authentication error if needed
 			console.error('Authentication failed:', error);
-			throw error; // Rethrow the error to let the component handle it
+			throw error;
+		}
+	},
+);
+
+export const updateUserThunk = createAsyncThunk(
+	`${SLICE_NAMES.USER}/updateUserThunk`,
+	async (payload: Parameters<typeof updateUser>[0], thunkApi) => {
+		try {
+			const response = await updateUser(payload);
+			thunkApi.dispatch(getCurrentUserThunk());
+			return response.data;
+		} catch (error) {
+			console.error('Update failed:', error);
+			throw error;
 		}
 	},
 );

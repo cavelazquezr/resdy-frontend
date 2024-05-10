@@ -26,7 +26,7 @@ interface IProps {
 	rating: MyRatingOutput;
 }
 
-export const RestaurantVerticalCard: React.FC<IProps> = (props) => {
+export const RestaurantCard: React.FC<IProps> = (props) => {
 	const { rating } = props;
 	const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
 	const authenticatedUser = useAppSelector((state) => state.user.userData?.data);
@@ -59,7 +59,7 @@ export const RestaurantVerticalCard: React.FC<IProps> = (props) => {
 							<Heading size="md">{rating.brand_name}</Heading>
 						</SuperLink>
 						{rating.rating_info?.status !== 'finished' && (
-							<Button onClick={onOpen} variant="outlinePrimary">
+							<Button onClick={onOpen} variant="solidDefault" size="sm">
 								Dejar reseña
 							</Button>
 						)}

@@ -1,72 +1,184 @@
 import React from 'react';
 
-import { Flex, Text, VStack, Button } from '@chakra-ui/react';
+import { Flex, Text, VStack, Button, HStack, Box, Grid, GridItem, Img, Input, Select } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
+import { IconType } from 'react-icons';
+import { FiAward, FiThumbsUp, FiSmile } from 'react-icons/fi';
 
-import { MapSheet } from './components/MapSheet';
-import { PhoneSheet } from './components/PhoneSheet';
-import { RestaurantCardSlider } from './components/RestautantCardSlider';
-import { getRestaurants } from '../../api/restautants';
+import { FeatureStack } from './components/FeatureStack';
+import { HorizontalRestaurantStack } from './components/HorizontalRestaurantStack';
+import { VerticalRestaurantStackByCategory } from './components/VerticalRestaurantStackByCategory';
+import { getLandingRestaurants } from '../../api/restautants';
+import { SuperLink } from '../../common/components/SuperLink/SuperLink';
+import { Footer } from '../../components/Footer/Footer';
+import { breakpointLayoutWidth } from '../../components/Layout/utils/styles';
+import './styles.css';
+import { GetRestaurantsQueryParams, RestaurantCardRecord } from '../../types/restaurants';
+
+const cityBackground: Record<string, string> = {
+	madrid:
+		'https://images.pexels.com/photos/3757144/pexels-photo-3757144.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+};
+
+type RestaurantStackItem = {
+	category: string;
+	icon: IconType;
+	data: Array<RestaurantCardRecord>;
+};
 
 export const LandingView: React.FC = () => {
+	const [filters, setFilters] = React.useState<GetRestaurantsQueryParams>({
+		city: 'Madrid',
+	});
 	// Queries
-	const { data: madridRestaurantsData, isLoading: isMadridRestaurantsLoading } = useQuery({
-		queryKey: ['MadridRestaurants'],
-		queryFn: () => getRestaurants({ city: 'Madrid' }),
+	const { data } = useQuery({
+		queryKey: ['landingRestaurants', filters],
+		queryFn: () => getLandingRestaurants(filters),
 	});
-	const madridRestautants = madridRestaurantsData ? madridRestaurantsData.data : [];
 
-	const { data: barcelonaRestaurantsData, isLoading: isBarcelonaRestaurantsLoading } = useQuery({
-		queryKey: ['BarcelonaRestaurants'],
-		queryFn: () => getRestaurants({ city: 'Barcelona' }),
-	});
-	const barcelonaRestautants = barcelonaRestaurantsData ? barcelonaRestaurantsData.data : [];
+	const landingRestaurants = data?.data ?? {};
+
+	const mostVisitedRestaurants: RestaurantStackItem = {
+		category: 'Más visitados',
+		icon: FiAward,
+		data: landingRestaurants.most_visited ?? [],
+	};
+	const mostRatedRestaurants: RestaurantStackItem = {
+		category: 'Mejor calificados',
+		icon: FiThumbsUp,
+		data: landingRestaurants.best_rated ?? [],
+	};
+	const newRestaurants: RestaurantStackItem = {
+		category: 'Nuevos en Resdy',
+		icon: FiSmile,
+		data: landingRestaurants.new_restaurants ?? [],
+	};
 
 	return (
-		<VStack align="start">
-			<Flex h="30rem" alignItems="center">
-				<VStack w="40%" align="stretch" spacing="1.5rem">
-					<Text
-						textStyle="body2"
-						bg="brand-secondary.50"
-						w="fit-content"
-						color="brand-secondary.600"
-						borderRadius="0.5rem"
-						p="0.15rem"
-					>
-						¿Sin planes?
-					</Text>
-					<Text textStyle="heading2">
-						Descubre los restaurantes que están{' '}
-						<Text as="span" color="brand-secondary.default">
-							cerca de tí.
+		<React.Fragment>
+			<VStack>
+				<Flex h="28rem" alignItems="center">
+					<VStack w="100%" align="center" spacing="1rem" width={breakpointLayoutWidth}>
+						<Text textStyle="body1" w="fit-content" color="brand-primary.default" borderRadius="0.5rem" p="0.15rem">
+							Descubre, reserva y comparte
 						</Text>
-					</Text>
-					<Text textStyle="body1" color="gray.600">
-						Muchos restaurantes en tu ciudad utilizan Resdy para mostrarte todo lo que pueden ofrecerte. Explora y
-						consigue el restaurante para hacer tus planes
-					</Text>
-					<Button size="md" variant="shadowPrimary" w="fit-content">
-						Descubrir
-					</Button>
+						<Text textStyle="heading2" textAlign="center">
+							La plataforma para idear tu próximo plan y conseguir el mejor sitio de la ciudad
+						</Text>
+						<Text w="70%" textAlign="center" textStyle="body1" color="gray.500">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+							dolore magna aliqua. Ut enim ad minim veniam.
+						</Text>
+						<HStack>
+							<SuperLink to="/login">
+								<Button size="md" variant="primary" w="fit-content">
+									Comenzar
+								</Button>
+							</SuperLink>
+							<Button size="md" variant="default-light" w="fit-content">
+								Descubrir
+							</Button>
+						</HStack>
+					</VStack>
+				</Flex>
+				<VStack w="100%" align="center" spacing="2rem" width={breakpointLayoutWidth}>
+					<Text textStyle="heading4">Adecuado a tus necesidades</Text>
+					<FeatureStack />
 				</VStack>
-				<PhoneSheet position="absolute" right="30%" w="14rem" h="30rem" zIndex={1} boxShadow="dark-lg" bg="gray.800" />
-				<MapSheet position="absolute" right="0" w="40rem" h="20rem" zIndex={0} boxShadow="2xl" borderRadius="2rem" />
-			</Flex>
-			<VStack align="stretch" w="100%">
-				{/* Madrid restautants */}
-				<RestaurantCardSlider
-					title="Restaurantes más visitados de Madrid"
-					isLoading={isMadridRestaurantsLoading}
-					restaurants={madridRestautants}
-				/>
-				{/* Barcelona restautants */}
-				<RestaurantCardSlider
-					title="Restaurantes más visitados de Barcelona"
-					isLoading={isBarcelonaRestaurantsLoading}
-					restaurants={barcelonaRestautants}
-				/>
+				<Flex w="100%" position="relative" justifyContent="center" mt="2rem">
+					<Box className="gradient-divider" />
+					<Grid templateColumns="repeat(4, 1fr)" columnGap="2rem" mt="2rem" zIndex={2} width={breakpointLayoutWidth}>
+						<GridItem>
+							<VStack align="stretch" spacing="0.5rem">
+								<Text textStyle="heading6" color="gray.900">
+									Descubre restaurantes que te encantarán en Madrid
+								</Text>
+								<Text textStyle="body2" color="gray.500">
+									Se el primero en enterarte de las nuevas aperturas, restaurantes más visitados en Resdy y mucho más
+								</Text>
+								<VStack align="stretch" spacing="0.5rem">
+									<SuperLink
+										to={'/discover'}
+										textStyle="body2"
+										color="brand-primary.default"
+										fontWeight="medium"
+										_hover={{ color: 'brand-primary.800' }}
+									>
+										Más visitados
+									</SuperLink>
+									<SuperLink
+										to={'/discover'}
+										textStyle="body2"
+										color="brand-primary.default"
+										fontWeight="medium"
+										_hover={{ color: 'brand-primary.800' }}
+									>
+										Más valorados
+									</SuperLink>
+									<SuperLink
+										to={'/discover'}
+										textStyle="body2"
+										color="brand-primary.default"
+										fontWeight="medium"
+										_hover={{ color: 'brand-primary.800' }}
+									>
+										Nuevos en Resdy
+									</SuperLink>
+								</VStack>
+							</VStack>
+						</GridItem>
+						<GridItem colSpan={3}>
+							<Box position="relative" h="30rem" w="100%">
+								<Img
+									src={cityBackground.madrid}
+									alt="Madrid"
+									w="100%"
+									h="100%"
+									objectFit="cover"
+									objectPosition="center"
+								/>
+								<Flex position="absolute" bottom={0} right={0} bg="white" padding="1rem" w="40%">
+									<VStack align="stretch" spacing="0.5rem">
+										<Text textStyle="heading6" color="brand-primary.default">
+											En Madrid
+										</Text>
+										<Text textStyle="heading6" color="gray.900">
+											¿Ya sabes donde vas a comer?
+										</Text>
+										<Text textStyle="body2" color="gray.500">
+											Ya hay restaurantes que usan Resdy para posicionarse y asi podrás conseguir el mejor plan y la
+											mejor comida.
+										</Text>
+									</VStack>
+								</Flex>
+							</Box>
+						</GridItem>
+					</Grid>
+				</Flex>
+				<Flex w="100%" position="relative" justifyContent="center" mt="2rem">
+					<Box className="gradient-divider" />
+					<HStack width={breakpointLayoutWidth} justifyContent="space-between" mt="2rem" spacing="2rem" zIndex={2}>
+						{[mostVisitedRestaurants, mostRatedRestaurants, newRestaurants].map(({ icon, data, category }, index) => (
+							<VerticalRestaurantStackByCategory category={category} icon={icon} data={data} key={index} />
+						))}
+					</HStack>
+				</Flex>
+				<Flex w="100%" position="relative" justifyContent="center" mt="2rem">
+					<Box className="gradient-divider" />
+					<VStack width={breakpointLayoutWidth} align="stretch" spacing="2rem" mt="2rem" zIndex={2}>
+						<HStack justifyContent="space-between" w="100%">
+							<Text textStyle="heading6" color="gray.900">
+								Reserva esta noche...
+							</Text>
+							<SuperLink textStyle="heading6" to={'/discover'} _hover={{ color: 'brand-primary.default' }}>
+								Ver más
+							</SuperLink>
+						</HStack>
+						<HorizontalRestaurantStack data={landingRestaurants.book_tonight ?? []} />
+					</VStack>
+				</Flex>
+				<Footer />
 			</VStack>
-		</VStack>
+		</React.Fragment>
 	);
 };

@@ -23,6 +23,7 @@ export const Router: React.FC = () => {
 			>
 				{/* Public routes */}
 				<Route path="/" element={<LandingView />} />
+				<Route path="/discover" element={<>Discover</>} />
 				<Route path="/login" element={<AuthenticationView loginView />} />
 				<Route path="/register" element={<AuthenticationView />} />
 				<Route path="/register-restaurant" element={<RestaurantCreationView />} />

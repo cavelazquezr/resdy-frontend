@@ -26,7 +26,7 @@ export const MessageModal: React.FC<IProps> = (props) => {
 				<Text textStyle="body1" color="gray.500" textAlign="center">
 					{bodyText}
 				</Text>
-				<Button size="md" w="100%" variant="solidDefaultForm" onClick={handleToggle}>
+				<Button size="md" w="100%" variant="solidDefault" onClick={handleToggle}>
 					Cerrar
 				</Button>
 			</VStack>

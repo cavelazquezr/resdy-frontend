@@ -15,7 +15,7 @@ export const NewSelect: React.FC<IProps> = (props): React.ReactNode => {
 
 	return (
 		<VStack spacing="0.5rem" align="stretch" w="100%">
-			<Text textStyle="label1" color="gray.800">
+			<Text textStyle="body2" color="gray.900">
 				{inputProps.label}
 			</Text>
 			<Select {...inputProps}>{choices}</Select>

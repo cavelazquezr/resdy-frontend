@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './styles.css';
+
 import {
 	Avatar,
 	Button,
@@ -15,6 +17,8 @@ import {
 	VStack,
 	Box,
 	Icon,
+	Select,
+	Input,
 } from '@chakra-ui/react';
 import { FiBookOpen, FiBookmark, FiLogOut, FiMessageSquare, FiUser } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
@@ -33,19 +37,40 @@ export const Topbar: React.FC = () => {
 
 	return (
 		<Flex w="100%" justifyContent="center" py="0.5rem" bg={isRestautantView ? 'brand-primary.default' : 'white'}>
-			<HStack py="0.25rem" justifyContent="space-between" w={breakpointLayoutWidth}>
+			<HStack py="0.75rem" justifyContent="space-between" w={breakpointLayoutWidth}>
 				<SuperLink to="/">
 					<Img src={isRestautantView ? resdyForRestaurant : resdyLogoPrimary} />
 				</SuperLink>
-				{authenticatedUser ? (
-					<UserMenu user={authenticatedUser} />
-				) : (
-					<SuperLink to="/login">
-						<Button size="md" variant={isRestautantView ? 'solidWhite' : 'solidPrimary'}>
-							Ingresar
-						</Button>
-					</SuperLink>
-				)}
+				<Flex position="fixed" justifyContent="center" zIndex={3} top="0.5rem">
+					<Flex width={breakpointLayoutWidth} justify="end">
+						<HStack
+							className="topbar-background"
+							justifyContent="end"
+							padding="0.5rem"
+							spacing="1rem"
+							borderRadius="full"
+						>
+							<HStack borderRight="1px solid" borderRightColor="brand-gray.200" pe="1rem">
+								<Select placeholder="Madrid" border="none" w="8rem" />
+							</HStack>
+							<HStack borderRight="1px solid" borderRightColor="brand-gray.200" pe="1rem">
+								<Input placeholder="Buscar" border="none" />
+								<Button variant="default-light" size="sm" w="7rem">
+									Buscar
+								</Button>
+							</HStack>
+							{authenticatedUser ? (
+								<UserMenu user={authenticatedUser} />
+							) : (
+								<SuperLink to="/login">
+									<Button variant="primary" size="sm" w="7rem">
+										Ingresar
+									</Button>
+								</SuperLink>
+							)}
+						</HStack>
+					</Flex>
+				</Flex>
 			</HStack>
 		</Flex>
 	);
@@ -83,7 +108,7 @@ const UserMenu: React.FC<{ user: UserOutput }> = (props) => {
 		<Box position="relative" zIndex="2">
 			<Menu placement="bottom-end">
 				<MenuButton>
-					<Avatar size="md" src={user.avatar_url ?? 'https://bit.ly/broken-link'} />
+					<Avatar size="sm" src={user.avatar_url ?? 'https://bit.ly/broken-link'} />
 				</MenuButton>
 				<MenuList w="fit-content" p="1rem">
 					<VStack>

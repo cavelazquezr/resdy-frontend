@@ -28,9 +28,9 @@ export const NewInput: React.FC<IProps> = (props): React.ReactNode => {
 	const [showPassword, setShowPassword] = React.useState<boolean>(type !== 'password');
 
 	return (
-		<VStack spacing="0.5rem" align="stretch" w="100%">
+		<VStack spacing="0.5rem" align="stretch" w="inherit">
 			<HStack>
-				<Text textStyle="label1" color="gray.800">
+				<Text textStyle="body2" color="gray.900">
 					{inputProps.label}
 				</Text>
 				{tooltip && (
@@ -45,7 +45,7 @@ export const NewInput: React.FC<IProps> = (props): React.ReactNode => {
 					<InputRightElement display="flex" alignItems="center" h="100%">
 						<IconButton
 							aria-label="Show/hide password"
-							size="md"
+							size="sm"
 							me="0.5rem"
 							color="gray.500"
 							icon={!showPassword ? <FiEye /> : <FiEyeOff />}

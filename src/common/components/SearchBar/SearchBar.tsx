@@ -1,41 +1,64 @@
 import React from 'react';
 
-import { HStack, Icon, Input, Select } from '@chakra-ui/react';
-import { FiSearch } from 'react-icons/fi';
+import { Button, ButtonProps, HStack, Icon, Input, Select } from '@chakra-ui/react';
+import { FiCalendar, FiRefreshCcw, FiSearch } from 'react-icons/fi';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 
+import { QueryFilter } from '../../../types';
 import { GetMyRatingQueryParams } from '../../../types/rating';
+import { DatePicker } from '../DatePicker/DatePicker';
 
 interface IProps {
+	hasCalendar?: boolean;
 	selectValues?: string[];
+	filters?: QueryFilter | undefined;
 	handleSetFilter: (input: GetMyRatingQueryParams) => void;
 }
 
-export const SearchBar: React.FC<IProps> = (props) => {
-	const { selectValues, handleSetFilter } = props;
-	const [search, setSearch] = React.useState<GetMyRatingQueryParams | undefined>({});
+const datePickerButtonProps: ButtonProps = {
+	textStyle: 'body1',
+	fontWeight: 'normal',
+	color: 'gray.500',
+	bg: 'transparent',
+	_hover: { bg: 'transparent' },
+	_active: { bg: 'transparent' },
+};
 
-	const handleKeyDown = (e) => {
+export const SearchBar: React.FC<IProps> = (props) => {
+	const { filters, selectValues, handleSetFilter } = props;
+	const [search, setSearch] = React.useState<string | undefined>();
+
+	console.log('search', search);
+
+	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') {
-			const { id, value } = e.target as HTMLInputElement;
-			setSearch({ ...search, [id]: value });
+			handleSetFilter({ ...filters, search: search });
 		}
 	};
 
-	React.useEffect(() => {
-		if (search) {
-			handleSetFilter(search);
-		}
-	}, [search]);
 	return (
-		<HStack bg="gray.100" p="0rem 0.5rem" borderRadius="0.5rem" w="100%">
-			<HStack w="13rem">
-				<Icon as={HiOutlineLocationMarker} color="gray.700" />
+		<HStack
+			bg="brand-gray.100"
+			p="0rem 1rem"
+			borderRadius="full"
+			w="100%"
+			border="1px solid"
+			borderColor="brand-gray.200"
+			boxShadow={'0 4px 10px #8F8F8F33'}
+		>
+			<HStack w="fit-content" spacing="0rem">
+				<Icon as={FiCalendar} color="gray.500" />
+				<DatePicker filters={filters} buttonProps={datePickerButtonProps} handleSetFilter={handleSetFilter} />
+			</HStack>
+			<HStack w="13rem" spacing="0rem" borderLeft="1px solid" borderLeftColor="brand-gray.200" ps="1rem">
+				<Icon as={HiOutlineLocationMarker} color="gray.500" />
 				<Select
 					id="city"
+					border="none"
+					value={filters?.city || ''}
 					onChange={(e) => {
 						const { id, value } = e.target;
-						setSearch({ ...search, [id]: value });
+						handleSetFilter({ ...filters, [id]: value });
 					}}
 					size="md"
 					placeholder="Ciudad"
@@ -48,18 +71,35 @@ export const SearchBar: React.FC<IProps> = (props) => {
 						))}
 				</Select>
 			</HStack>
-			<HStack w="100%" borderLeft="1px solid" borderLeftColor="gray.300" ps="1rem">
-				<Icon as={FiSearch} color="gray.700" />
+			<HStack w="100%" borderLeft="1px solid" spacing="0rem" borderLeftColor="brand-gray.200" ps="1rem">
+				<Icon as={FiSearch} color="gray.500" />
 				<Input
 					id="search"
+					border="none"
 					size="md"
+					value={search}
 					placeholder="Nombre del restaurante..."
+					onChange={(e) => setSearch(e.target.value)}
 					onKeyDown={(e) => handleKeyDown(e)}
-					onBlur={(e) => {
-						const { id, value } = e.target;
-						setSearch({ ...search, [id]: value });
+					onBlur={() => {
+						handleSetFilter({ ...filters, search: search });
 					}}
 				/>
+				<Button
+					variant="default-light"
+					size="md"
+					leftIcon={<FiRefreshCcw />}
+					border="none"
+					boxShadow="none"
+					color="gray.500"
+					fontWeight="normal"
+					onClick={() => {
+						setSearch('');
+						handleSetFilter({});
+					}}
+				>
+					Limpiar filtros
+				</Button>
 			</HStack>
 		</HStack>
 	);

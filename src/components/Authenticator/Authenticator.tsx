@@ -23,7 +23,7 @@ export const Authenticator: React.FC<IProps> = (props) => {
 
 		if (storedToken) {
 			// Dispatch an action or perform any logic to authenticate using the stored token
-			dispatch(getCurrentUserThunk(storedToken));
+			dispatch(getCurrentUserThunk());
 		}
 	}, [dispatch]);
 

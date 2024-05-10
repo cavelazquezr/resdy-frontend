@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Box, Divider, HStack, VStack } from '@chakra-ui/react';
+import { Box, HStack, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 
-import { RestaurantVerticalCard } from './components/RestaurantVerticalCard';
+import { RestaurantCard } from './components/RestaurantCard';
 import { getMyRatings } from '../../../api/rating';
 import { SearchBar } from '../../../common/components/SearchBar/SearchBar';
 import { StatusMenuFilter } from '../../../common/components/StatusMenuFilter/StatusMenuFilter';
@@ -43,15 +43,16 @@ export const RatingsView: React.FC = () => {
 				<StatusMenuFilter handleSetFilter={handleSetStatusFilter} statusValues={['to_rate', 'finished']} />
 			</HStack>
 			{myRatings.length > 0 && (
-				<Box w="100%" h="100%" overflowY="scroll">
-					<VStack spacing="1rem" align="stretch" h="100%">
-						{myRatings.map((rating, index) => (
-							<VStack key={index} spacing="1rem" align="stretch">
-								<RestaurantVerticalCard rating={rating} />
-								{index !== myRatings.length - 1 && <Divider />}
-							</VStack>
-						))}
-					</VStack>
+				<Box overflowY="scroll" px="1rem">
+					<Box w="100%" h="100%">
+						<VStack spacing="1rem" align="stretch" h="100%">
+							{myRatings.map((rating, index) => (
+								<VStack key={index} spacing="1rem" align="stretch">
+									<RestaurantCard rating={rating} />
+								</VStack>
+							))}
+						</VStack>
+					</Box>
 				</Box>
 			)}
 			{isLoading && !myRatings.length && <>Loading</>}

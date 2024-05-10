@@ -14,7 +14,6 @@ import { postNewUserThunk } from '../../../../store/user/thunk';
 import { InputConfiguration } from '../../../../types/input';
 import { CreateUserInput } from '../../../../types/user';
 import { registerSchema as schema } from '../../schemas';
-import { responsiveFormWidth } from '../../utils/styles';
 
 export const RegisterForm: React.FC = () => {
 	const { userData: user, error: authError } = useAppSelector((state) => state.user);
@@ -86,7 +85,7 @@ export const RegisterForm: React.FC = () => {
 	}, [user, authError]);
 
 	return (
-		<VStack spacing="1.5rem" align="stretch" w={responsiveFormWidth}>
+		<VStack spacing="1.5rem" align="stretch">
 			<Img src={resdyLogoPrimary} h="2rem" w="fit-content" />
 			<VStack spacing="0.5rem" align="stretch">
 				<Text textStyle="heading5" fontWeight="bold" color="gray.900">
@@ -101,7 +100,7 @@ export const RegisterForm: React.FC = () => {
 							label={field.label}
 							type={field.type as 'password' | 'text'}
 							id={field.id}
-							size="lg"
+							size="md"
 							value={values[field.id]}
 							error={errors[field.id] && touched[field.id] && errors[field.id]}
 							isInvalid={!!(errors[field.id] && touched[field.id])}
@@ -114,7 +113,7 @@ export const RegisterForm: React.FC = () => {
 					<VStack spacing="1rem" align="stretch">
 						<Button
 							variant="solidPrimary"
-							size="md"
+							size="lg"
 							type="submit"
 							isDisabled={!isFormValid}
 							isLoading={isSubmitting}

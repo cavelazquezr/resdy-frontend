@@ -1,5 +1,5 @@
 export interface RatingStatsOutput {
-	rating: string;
+	rating: number;
 	rating_count: number;
 	stats?: Record<number, number>;
 }

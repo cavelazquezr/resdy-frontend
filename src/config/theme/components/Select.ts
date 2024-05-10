@@ -6,8 +6,9 @@ export const baseStyle: PartsStyleObject<typeof parts> = {
 	field: {
 		textStyle: 'body3',
 		color: 'gray.500',
-		border: 'none',
-		bg: 'gray.100',
+		border: '1px solid',
+		borderColor: 'gray.300',
+		bg: 'transparent',
 		borderRadius: '0.375rem',
 		padding: '0.3rem 1rem',
 		_disabled: { opacity: 0.75 },

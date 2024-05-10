@@ -36,6 +36,11 @@ export const StatusMenuFilter: React.FC<IProps> = (props) => {
 			color: 'yellow',
 		},
 		{
+			value: 'to_be_confirmed',
+			label: 'Por confirmar',
+			color: 'yellow',
+		},
+		{
 			value: 'cancelled',
 			label: 'Cancelada',
 			color: 'red',
@@ -56,7 +61,7 @@ export const StatusMenuFilter: React.FC<IProps> = (props) => {
 	return (
 		<Menu placement="bottom-end">
 			<MenuButton
-				variant="outlinePrimary"
+				variant="default-light"
 				size="md"
 				as={Button}
 				rightIcon={<FiChevronDown />}

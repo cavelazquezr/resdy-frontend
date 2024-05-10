@@ -1,0 +1,5 @@
+.topbar-background {
+	background-color: #fbfbfbd9;
+	border: 1px solid #e1e1e1;
+	backdrop-filter: blur(5px);
+}

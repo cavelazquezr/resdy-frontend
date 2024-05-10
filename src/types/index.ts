@@ -9,3 +9,7 @@ export type StatePropWithThunkState<T> = {
 	thunkState: THUNK_STATE;
 	data: T;
 };
+
+export type QueryFilter = {
+	[key: string]: string | undefined;
+};

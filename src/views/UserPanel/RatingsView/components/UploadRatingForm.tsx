@@ -99,7 +99,7 @@ export const UploadRatingForm: React.FC<IProps> = (props) => {
 						/>
 						<VStack w="100%">
 							<Button
-								variant="solidSecondaryForm"
+								variant="solidPrimary"
 								size="md"
 								w="100%"
 								type="submit"
@@ -109,7 +109,7 @@ export const UploadRatingForm: React.FC<IProps> = (props) => {
 							>
 								Dejar reseña
 							</Button>
-							<Button variant="solidDefaultForm" size="md" w="100%" onClick={handleToggle}>
+							<Button variant="solidDefault" size="md" w="100%" onClick={handleToggle}>
 								Cancelar
 							</Button>
 						</VStack>
@@ -141,6 +141,7 @@ const RatingSelect: React.FC<{ onChange: (rating: number) => void }> = (props) =
 					h="2rem"
 					w="2rem"
 					color={ratingIndex >= rating || hoverIndex >= rating ? 'yellow.400' : 'gray.500'}
+					filter={ratingIndex >= rating || hoverIndex >= rating ? 'drop-shadow(0 4px 10px #00000040)' : 'none'}
 					transition="color 0.2s ease-in-out"
 					key={rating}
 					as={ratingIndex >= rating ? FaStar : FaRegStar}

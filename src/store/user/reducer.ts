@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { getAccessTokenExtraReducer, getCurrentUserExtraReducer } from './extraReducer';
 import { StatePropWithThunkState } from '../../types';
-import { UserOutput } from '../../types/user';
+import { UserOutput, UserRecord } from '../../types/user';
 import { SLICE_NAMES } from '../constant';
 
 export interface ISlice {
-	userData: StatePropWithThunkState<UserOutput | null> | null;
+	userData: StatePropWithThunkState<UserRecord | null> | null;
 	accessToken: StatePropWithThunkState<string | null> | null;
 	error: string | null;
 }

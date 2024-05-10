@@ -25,7 +25,7 @@ export const registerSchema = yup.object({
 		.required(ErrorMessages.FIELD_REQUIRED),
 });
 
-export const adminRegisterSchema = yup.object({
+export const adminRegisterStep1Schema = yup.object({
 	email: yup.string().email(ErrorMessages.INVALID_EMAIL).required(ErrorMessages.FIELD_REQUIRED),
 	password: yup
 		.string()
@@ -37,8 +37,20 @@ export const adminRegisterSchema = yup.object({
 		.string()
 		.oneOf([yup.ref('password')], ErrorMessages.PASSWORD_DOESNT_MATCH)
 		.required(ErrorMessages.FIELD_REQUIRED),
+});
+
+export const adminRegisterStep2Schema = yup.object({
 	name: yup
 		.string()
 		.matches(/^[a-zA-Z]+$/, ErrorMessages.INVALID_NAME)
 		.required(ErrorMessages.FIELD_REQUIRED),
+	country: yup.string().required(ErrorMessages.FIELD_REQUIRED),
+	city: yup.string().required(ErrorMessages.FIELD_REQUIRED),
+	address: yup.string().required(ErrorMessages.FIELD_REQUIRED),
+	restaurantType: yup.string().required(ErrorMessages.FIELD_REQUIRED),
+});
+
+export const adminRegisterStep3Schema = yup.object({
+	brandName: yup.string().required(ErrorMessages.FIELD_REQUIRED),
+	avatar: yup.string().required(ErrorMessages.FIELD_REQUIRED),
 });

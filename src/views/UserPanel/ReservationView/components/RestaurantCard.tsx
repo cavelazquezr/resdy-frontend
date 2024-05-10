@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Card, Image, CardBody, Heading, Text, HStack, Box, VStack, Icon, Flex } from '@chakra-ui/react';
-import { FaStar } from 'react-icons/fa';
-import { FiMessageSquare } from 'react-icons/fi';
+import { Image, Text, HStack, Box, VStack } from '@chakra-ui/react';
+import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 
-import { RestaurantTypeBadge } from '../../../../common/components/RestaurantTypeBadge/RestaurantTypeBadge';
+import { ContentContainer } from '../../../../common/components/ContentContainer/ContentContainer';
+import { IconLabel } from '../../../../common/components/IconLabel/IconLabel';
+import { RestaurantSummary } from '../../../../common/components/RestaurantSummary/RestaurantSummary';
 import { StatusBadge } from '../../../../common/components/StatusBadge/StatusBadge';
 import { SuperLink } from '../../../../common/components/SuperLink/SuperLink';
 import { MyReservationOutput } from '../../../../types/reservation';
@@ -23,7 +24,7 @@ export const RestaurantCard: React.FC<IProps> = (props) => {
 	});
 
 	return (
-		<Card direction={{ base: 'column', xs: 'row' }} overflow="hidden" boxShadow="none">
+		<ContentContainer>
 			<Box position="relative">
 				<Box position="absolute" top="0.5rem" left="0.5rem">
 					<StatusBadge status={reservation.status || 'to_be_confirmed'} />
@@ -37,36 +38,36 @@ export const RestaurantCard: React.FC<IProps> = (props) => {
 					alt={reservation.name}
 				/>
 			</Box>
-			<CardBody p="0rem 0rem 0rem 1rem">
-				<HStack justifyContent="space-between">
-					<VStack align="stretch" spacing="0.35rem">
-						<RestaurantTypeBadge restaurantType={reservation.restaurant_type ?? ''} />
-						<HStack w="100%" justifyContent="space-between">
-							<SuperLink to={`/restaurant/${reservation.name}/home`}>
-								<Heading size="md">{reservation.brand_name}</Heading>
-							</SuperLink>
-						</HStack>
-						<Text textStyle="body1" color="gray.500">{`Precio medio: ${reservation.price_average}`}</Text>
-						<Text textStyle="body1" color="gray.500">{`${reservation.address}, ${reservation.city} - ${formatter.format(
-							new Date(reservation.date_of_reservation ?? ''),
-						)}`}</Text>
-					</VStack>
-					<VStack>
-						<Flex p="0.75rem" bg="brand-secondary.100" borderRadius="full">
-							<Icon as={FaStar} color="brand-secondary.800" />
-						</Flex>
-						<Text textStyle="heading5" color="black">
-							{reservation.rating_info?.rating}
-						</Text>
-						<HStack align="center" spacing="0.25rem">
-							<Icon color="gray.500" as={FiMessageSquare} />
-							<Text textStyle="body1" color="gray.500">
-								{reservation.rating_info?.rating_count}
+			<Box p="0rem 0rem 0rem 1rem">
+				<HStack justifyContent="space-between" alignItems="center" h="100%">
+					<VStack align="stretch" spacing="0.35rem" justifyContent="center">
+						<SuperLink to={`/restaurant/${reservation.name}/home`}>
+							<Text _hover={{ color: 'brand-primary.default' }} transition="all 0.2s" textStyle="heading6">
+								{reservation.brand_name}
 							</Text>
-						</HStack>
+						</SuperLink>
+						<RestaurantSummary
+							rating={reservation.rating_info?.rating ?? 0}
+							ratingCount={reservation.rating_info?.rating_count ?? 0}
+							priceAverage={reservation.price_average}
+							restaurantType={reservation.restaurant_type ?? ''}
+							address={reservation.address ?? ''}
+							city={reservation.city ?? ''}
+						/>
+						<VStack align="stretch">
+							<IconLabel icon={FiCalendar} label={formatter.format(new Date(reservation.date_of_reservation ?? ''))} />
+							<IconLabel
+								icon={FiClock}
+								label={new Date(reservation.date_of_reservation ?? '').toLocaleTimeString([], {
+									hour: '2-digit',
+									minute: '2-digit',
+								})}
+							/>
+							<IconLabel icon={FiUser} label={reservation.number_of_person.toString()} />
+						</VStack>
 					</VStack>
 				</HStack>
-			</CardBody>
-		</Card>
+			</Box>
+		</ContentContainer>
 	);
 };
