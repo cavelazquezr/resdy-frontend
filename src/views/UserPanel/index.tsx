@@ -13,39 +13,43 @@ import { SuperLink } from '../../common/components/SuperLink/SuperLink';
 import { useCustomParams } from '../../hooks/useCustomParams';
 import { useAppSelector } from '../../store/store';
 
+const sections = [
+	{
+		name: 'information',
+		label: 'Perfil',
+		icon: FiUser,
+		description: 'Actualiza la información de tu perfil a enviar al restaurante al hacer una reserva',
+		component: InformationView,
+		path: '/userpanel/information',
+	},
+	{
+		name: 'bookings',
+		label: 'Mis reservas',
+		icon: FiBookOpen,
+		description: 'Aquí podrás gestionar y ver tus reservas.',
+		component: ReservationsView,
+		path: '/userpanel/bookings',
+	},
+	{
+		name: 'list',
+		label: 'Guardados',
+		icon: FiBookmark,
+		description: 'Aquí podrás gestionar tus restaurantes guardados',
+		component: ListsView,
+		path: '/userpanel/list',
+	},
+	{
+		name: 'ratings',
+		label: 'Mis reseñas',
+		icon: FiMessageSquare,
+		description: 'Aquí podrás gestionar y ver tus reseñas.',
+		component: RatingsView,
+		path: '/userpanel/ratings',
+	},
+];
+
 export const UserPanelLayout: React.FC = () => {
 	const { panelSection } = useCustomParams(['panelSection']);
-
-	const sections = [
-		{
-			name: 'information',
-			label: 'Información personal',
-			icon: FiUser,
-			description: 'Actualiza la información de tu perfil a enviar al restaurante al hacer una reserva',
-			component: InformationView,
-		},
-		{
-			name: 'bookings',
-			label: 'Mis reservas',
-			icon: FiBookOpen,
-			description: 'Aquí podrás gestionar y ver tus reservas.',
-			component: ReservationsView,
-		},
-		{
-			name: 'list',
-			label: 'Guardados',
-			icon: FiBookmark,
-			description: 'Aquí podrás gestionar tus restaurantes guardados',
-			component: ListsView,
-		},
-		{
-			name: 'ratings',
-			label: 'Mis reseñas',
-			icon: FiMessageSquare,
-			description: 'Aquí podrás gestionar y ver tus reseñas.',
-			component: RatingsView,
-		},
-	];
 
 	const currentSection = sections.find((section) => section.name === panelSection) ?? sections[0];
 
@@ -78,28 +82,6 @@ export const UserPanelLayout: React.FC = () => {
 const Sidebar: React.FC = () => {
 	const { pathname } = useLocation();
 	const userData = useAppSelector((state) => state.user.userData?.data);
-	const menuItems = [
-		{
-			label: 'Información personal',
-			icon: FiUser,
-			path: '/userpanel/information',
-		},
-		{
-			label: 'Mis reservas',
-			icon: FiBookOpen,
-			path: '/userpanel/bookings',
-		},
-		{
-			label: 'Guardados',
-			icon: FiBookmark,
-			path: '/userpanel/list',
-		},
-		{
-			label: 'Mis reseñas',
-			icon: FiMessageSquare,
-			path: '/userpanel/ratings',
-		},
-	];
 
 	return (
 		<VStack
@@ -114,7 +96,7 @@ const Sidebar: React.FC = () => {
 				<Avatar size="md" src={userData?.avatar_url ?? undefined} />
 				<VStack align="stretch" spacing={0}>
 					<Text textStyle="body1" fontWeight="medium" color="gray.900">
-						{`${userData?.firstname} ${userData?.lastname}`}
+						{`¡Hola, ${userData?.firstname}!`}
 					</Text>
 					<Text textStyle="body2" color="gray.500">
 						{userData?.email}
@@ -126,7 +108,7 @@ const Sidebar: React.FC = () => {
 				Opciones
 			</Text>
 			<VStack spacing="0.25rem" align="stretch">
-				{menuItems.map((item, index) => (
+				{sections.map((item, index) => (
 					<SuperLink to={item.path} key={index}>
 						<HStack
 							spacing="1rem"

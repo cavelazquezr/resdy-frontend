@@ -17,7 +17,7 @@ export const NewTextArea: React.FC<IProps> = (props): React.ReactNode => {
 	return (
 		<VStack spacing="0.5rem" align="stretch" w="100%">
 			<HStack>
-				<Text textStyle="label1" color="gray.800">
+				<Text textStyle="body2" color="gray.900">
 					{inputProps.label}
 				</Text>
 				{tooltip && (
@@ -26,7 +26,7 @@ export const NewTextArea: React.FC<IProps> = (props): React.ReactNode => {
 					</Tooltip>
 				)}
 			</HStack>
-			<Textarea {...inputProps} bg="gray.100" border="none" maxH="15rem" color="gray.500" />
+			<Textarea {...inputProps} border="1px solid" borderColor="brand-gray.200" maxH="15rem" color="gray.500" />
 			{error && <InputErrorMessage error={error} />}
 		</VStack>
 	);

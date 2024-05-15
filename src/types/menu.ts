@@ -1,26 +1,6 @@
-export interface DishOutput {
-	id: string;
-	name: string;
-	price: number;
-	photo_url?: string;
-	description?: string;
-	allergen?: string[];
-}
+import { DishProps } from './dishes';
 
-export interface CreateDishInput {
-	id?: string;
-	name: string;
-	photo_url?: string;
-	price: number;
-	description?: string;
-	allergen?: string;
-}
-
-export interface UpdateCategoryInput {
-	label: string;
-}
-
-export interface MenuOutput {
+export interface MenuRecord {
 	category: string;
-	dishes: DishOutput[];
+	dishes: DishProps[];
 }

@@ -34,7 +34,6 @@ export const EditableInput: React.FC<IProps> = (props) => {
 			let response;
 			if (handleUpdateInfo) {
 				response = await handleUpdateInfo(field.id, value);
-				console.log('response: ', response);
 			}
 			if (!response.error) {
 				toast({

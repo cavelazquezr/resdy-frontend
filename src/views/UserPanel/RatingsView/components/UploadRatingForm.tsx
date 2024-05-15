@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, HStack, Icon, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import { Button, ButtonProps, HStack, Icon, IconButton, Text, VStack, useDisclosure } from '@chakra-ui/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFormik } from 'formik';
 import { FaRegStar, FaStar } from 'react-icons/fa';
@@ -8,11 +8,10 @@ import * as yup from 'yup';
 
 import { putRating } from '../../../../api/rating';
 import { MessageModal } from '../../../../common/components/MessageModal/MessageModal';
-import { ModalTemplate as Modal } from '../../../../common/components/ModalTemplate/ModalTemplate';
 import { NewInput } from '../../../../common/components/NewInput/NewInput';
 import { NewTextArea } from '../../../../common/components/NewTextArea/NewTextArea';
 import { getFormikInitialValues } from '../../../../common/utils/getFormikInitialValues';
-import { UpdateRatingRecord } from '../../../../types/rating';
+import { RatingUpdateRecord } from '../../../../types/rating';
 
 const schema = yup.object({
 	title: yup.string().required(),
@@ -21,13 +20,11 @@ const schema = yup.object({
 
 interface IProps {
 	ratingId: string;
-	isOpenForm: boolean;
-	onCloseForm: () => void;
-	handleToggle: () => void;
+	resetEditingRating: () => void;
 }
 
 export const UploadRatingForm: React.FC<IProps> = (props) => {
-	const { ratingId, isOpenForm, onCloseForm, handleToggle } = props;
+	const { ratingId } = props;
 	const [rating, setRating] = React.useState<number>(0);
 	const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
 
@@ -39,26 +36,24 @@ export const UploadRatingForm: React.FC<IProps> = (props) => {
 	};
 
 	const mutation = useMutation({
-		mutationFn: (ratingUpdateRecord: UpdateRatingRecord) => {
+		mutationFn: (ratingUpdateRecord: RatingUpdateRecord) => {
 			return putRating(ratingUpdateRecord);
 		},
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({
 				queryKey: ['myRatingsQuery'],
 			});
-			handleToggle();
 			onOpen();
 		},
 	});
 
 	const onSubmit = async () => {
-		const mutatedRating: UpdateRatingRecord = {
+		const mutatedRating: RatingUpdateRecord = {
 			rating,
-			ratingId,
-			title: (values as UpdateRatingRecord).title,
-			comment: (values as UpdateRatingRecord).comment,
+			id: ratingId,
+			title: (values as RatingUpdateRecord).title,
+			comment: (values as RatingUpdateRecord).comment,
 		};
-		console.log(mutatedRating);
 		mutation.mutate(mutatedRating);
 	};
 
@@ -72,50 +67,47 @@ export const UploadRatingForm: React.FC<IProps> = (props) => {
 
 	return (
 		<React.Fragment>
-			<Modal title="Valora tu experiencia" isOpen={isOpenForm} onClose={onCloseForm}>
-				<form onSubmit={handleSubmit} noValidate>
-					<VStack w="100%" spacing="1.5rem">
-						<Text textAlign="start" w="100%" textStyle="body2" color="gray.500">
-							Comparte con el resto tu experiencia en el restaurante.
-						</Text>
-						<RatingSelect onChange={handleSetRating} />
-						<NewInput
-							type="text"
-							id="title"
-							label="Título"
-							size="md"
-							value={values['title']}
-							isDisabled={isSubmitting}
-							onBlur={handleBlur}
-							onChange={handleChange}
-						/>
-						<NewTextArea
-							id="comment"
-							label="Comentario"
-							value={values['comment']}
-							isDisabled={isSubmitting}
-							onBlur={handleBlur}
-							onChange={handleChange}
-						/>
-						<VStack w="100%">
-							<Button
-								variant="solidPrimary"
-								size="md"
-								w="100%"
-								type="submit"
-								isDisabled={!isFormValid}
-								isLoading={isSubmitting}
-								loadingText={'Cargando'}
-							>
-								Dejar reseña
-							</Button>
-							<Button variant="solidDefault" size="md" w="100%" onClick={handleToggle}>
-								Cancelar
-							</Button>
-						</VStack>
-					</VStack>
-				</form>
-			</Modal>
+			<form onSubmit={handleSubmit} noValidate style={{ width: '100%' }}>
+				<VStack align="stretch" w="100%" spacing="1.5rem">
+					<Text textStyle="heading5" color="gray.900">
+						Valora tu experiencia
+					</Text>
+					<Text textAlign="start" w="100%" textStyle="body2" color="gray.500">
+						Comparte con el resto tu experiencia en el restaurante.
+					</Text>
+					<RatingSelect onChange={handleSetRating} />
+					<NewInput
+						type="text"
+						id="title"
+						label="Título"
+						size="md"
+						value={values['title']}
+						isDisabled={isSubmitting}
+						onBlur={handleBlur}
+						onChange={handleChange}
+					/>
+					<NewTextArea
+						id="comment"
+						label="Comentario"
+						value={values['comment']}
+						isDisabled={isSubmitting}
+						onBlur={handleBlur}
+						onChange={handleChange}
+					/>
+					<Button
+						variant="primary"
+						w="fit-content"
+						px="1.5rem"
+						size="md"
+						type="submit"
+						isDisabled={!isFormValid}
+						isLoading={isSubmitting}
+						loadingText={'Cargando'}
+					>
+						Dejar reseña
+					</Button>
+				</VStack>
+			</form>
 			<MessageModal
 				isOpen={isOpen}
 				onClose={onClose}
@@ -131,28 +123,58 @@ const RatingSelect: React.FC<{ onChange: (rating: number) => void }> = (props) =
 	const { onChange } = props;
 	const [hoverIndex, setHoverIndex] = React.useState<number>(0);
 	const [ratingIndex, setRatingIndex] = React.useState<number>(0);
+
 	React.useEffect(() => {
 		onChange(ratingIndex);
 	}, [ratingIndex]);
+
 	return (
-		<HStack>
-			{Array.from({ length: 5 }, (_, i) => i + 1).map((rating) => (
-				<Icon
-					h="2rem"
-					w="2rem"
-					color={ratingIndex >= rating || hoverIndex >= rating ? 'yellow.400' : 'gray.500'}
-					filter={ratingIndex >= rating || hoverIndex >= rating ? 'drop-shadow(0 4px 10px #00000040)' : 'none'}
-					transition="color 0.2s ease-in-out"
-					key={rating}
-					as={ratingIndex >= rating ? FaStar : FaRegStar}
-					cursor="pointer"
-					onMouseOver={() => setHoverIndex(rating)}
+		<HStack spacing="0.75rem">
+			{Array.from({ length: 5 }, (_, i) => i + 1).map((rating, index) => (
+				<RatingButton
+					key={index}
+					isHovered={hoverIndex >= rating}
+					isActive={ratingIndex >= rating}
 					onClick={() => {
 						setRatingIndex(rating);
 					}}
 					onMouseLeave={() => setHoverIndex(0)}
+					onMouseOver={() => setHoverIndex(rating)}
 				/>
 			))}
 		</HStack>
+	);
+};
+
+interface IRatingButtonProps extends ButtonProps {
+	isActive?: boolean;
+	isHovered?: boolean;
+}
+
+const RatingButton: React.FC<IRatingButtonProps> = (props) => {
+	const { isActive = false, isHovered, onClick, onMouseLeave, onMouseOver } = props;
+
+	const ref = React.useRef<HTMLDivElement>(null);
+
+	return (
+		<IconButton
+			as="span"
+			ref={ref}
+			aria-label="rating"
+			variant="default-light"
+			px="1.5rem"
+			_hover={{ bg: 'brand-gray.100' }}
+			transform={isActive || isHovered ? 'scale(1.1)' : 'none'}
+			onClick={onClick}
+			onMouseLeave={onMouseLeave}
+			onMouseOver={onMouseOver}
+		>
+			<Icon
+				h="1.5rem"
+				w="1.5rem"
+				color={isActive ? 'yellow.400' : 'brand-gray.200'}
+				as={isActive || isHovered ? FaStar : FaRegStar}
+			/>
+		</IconButton>
 	);
 };

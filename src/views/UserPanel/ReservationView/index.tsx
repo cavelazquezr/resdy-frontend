@@ -3,17 +3,20 @@ import React from 'react';
 import { Text, Box, Center, HStack, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 
-import { RestaurantCard } from './components/RestaurantCard';
 import { getMyReservations } from '../../../api/reservation';
 import { NotFoundMessage } from '../../../common/components/NotFoundMessage/NotFoundMessage';
+import { RestaurantCard } from '../../../common/components/RestaurantCard/RestaurantCard';
 import { SearchBar } from '../../../common/components/SearchBar/SearchBar';
 import { StatusMenuFilter } from '../../../common/components/StatusMenuFilter/StatusMenuFilter';
 import { QueryFilter } from '../../../types';
-import { MyReservationsQueryParams, MyReservationOutput } from '../../../types/reservation';
+import { RestaurantCardOutput } from '../../../types/common';
+import { MyReservationsQueryParams, ReservationDetailOutput } from '../../../types/reservation';
+
+type MyReservationsRecord = RestaurantCardOutput<ReservationDetailOutput>;
 
 export const ReservationsView: React.FC = () => {
 	const [filters, setFilters] = React.useState<MyReservationsQueryParams | undefined>();
-	const [myReservations, setMyReservations] = React.useState<MyReservationOutput[]>([]);
+	const [myReservations, setMyReservations] = React.useState<Array<MyReservationsRecord>>([]);
 	const { data, isLoading } = useQuery({
 		queryKey: ['myReservationsQuery', filters],
 		queryFn: () => getMyReservations(filters ? filters : {}),
@@ -37,8 +40,6 @@ export const ReservationsView: React.FC = () => {
 		}
 	};
 
-	console.log('filters', filters);
-
 	React.useEffect(() => {
 		const values = data?.data;
 		if (values) {
@@ -48,7 +49,7 @@ export const ReservationsView: React.FC = () => {
 
 	return (
 		<VStack align="stretch" w="100%" h="100%" spacing="1rem" pb="9rem">
-			<HStack justifyContent="space-between">
+			<HStack justifyContent="space-between" px="0.75rem">
 				<SearchBar
 					filters={filters as QueryFilter}
 					handleSetFilter={handleSetSearchFilter}
@@ -62,11 +63,9 @@ export const ReservationsView: React.FC = () => {
 			<HStack h="100%" spacing="1rem">
 				{myReservations.length > 0 ? (
 					<Box w="100%" h="100%" pe="1rem" overflowY="scroll">
-						<VStack spacing="1rem" align="stretch" h="100%">
+						<VStack spacing="1rem" align="stretch" h="100%" px="0.75rem" py="0.5rem">
 							{myReservations.map((reservation, index) => (
-								<VStack key={index} spacing="1rem" align="stretch">
-									<RestaurantCard reservation={reservation} />
-								</VStack>
+								<RestaurantCard key={index} record={reservation} navigateToRestaurantView showStatus />
 							))}
 						</VStack>
 					</Box>

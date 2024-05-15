@@ -12,7 +12,7 @@ import { getFormikInitialValues } from '../../../../common/utils/getFormikInitia
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { postNewUserThunk } from '../../../../store/user/thunk';
 import { InputConfiguration } from '../../../../types/input';
-import { CreateUserInput } from '../../../../types/user';
+import { UserCreateInput } from '../../../../types/user';
 import { registerSchema as schema } from '../../schemas';
 
 export const RegisterForm: React.FC = () => {
@@ -24,8 +24,8 @@ export const RegisterForm: React.FC = () => {
 	const toast = useToast();
 
 	const onSubmit = async () => {
-		const { email, firstname, lastname, password } = values as CreateUserInput;
-		const newUser: CreateUserInput = {
+		const { email, firstname, lastname, password } = values as UserCreateInput;
+		const newUser: UserCreateInput = {
 			email,
 			firstname,
 			lastname,
@@ -40,7 +40,6 @@ export const RegisterForm: React.FC = () => {
 		onSubmit,
 		validationSchema: schema,
 	});
-	console.log(values);
 	const fields: InputConfiguration[] = [
 		{
 			id: 'firstname',
@@ -112,7 +111,7 @@ export const RegisterForm: React.FC = () => {
 					{authError && <InputErrorMessage error={authError} />}
 					<VStack spacing="1rem" align="stretch">
 						<Button
-							variant="solidPrimary"
+							variant="default-light"
 							size="lg"
 							type="submit"
 							isDisabled={!isFormValid}

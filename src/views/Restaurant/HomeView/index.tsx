@@ -22,22 +22,20 @@ import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { RestaurantDescriptionLabels } from './components/RestaurantDescriptionLabels';
 import { IconLabel } from '../../../common/components/IconLabel/IconLabel';
 import { breakpointLayoutWidth } from '../../../components/Layout/utils/styles';
-import { RestaurantOutput } from '../../../types/restaurants';
+import { RestaurantRecord } from '../../../types/restaurants';
 
 export const HomeView: React.FC = () => {
 	const queryClient = useQueryClient();
-	const restaurantQuery = queryClient.getQueryData<AxiosResponse<RestaurantOutput[]>>(['restaurantQuery']);
+	const restaurantQuery = queryClient.getQueryData<AxiosResponse<RestaurantRecord[]>>(['restaurantQuery']);
 	const queriesFetching = queryClient.isFetching();
 	const isLoading = queriesFetching !== 0;
 
-	const restaurant = React.useMemo<RestaurantOutput | undefined>(() => {
+	const restaurant = React.useMemo<RestaurantRecord | undefined>(() => {
 		if (restaurantQuery && !isLoading) {
 			return restaurantQuery.data[0];
 		}
 		return undefined;
 	}, [restaurantQuery]);
-
-	console.log('restaurant', restaurant);
 
 	if (isLoading) {
 		return <>Loading</>;

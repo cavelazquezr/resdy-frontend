@@ -13,13 +13,11 @@ import { getRestaurants } from '../../api/restautants';
 import { SuperLink } from '../../common/components/SuperLink/SuperLink';
 import { useCustomParams } from '../../hooks/useCustomParams';
 import { MenuOutput } from '../../types/menu';
-import { RatingOutput, RatingStatsOutput } from '../../types/rating';
+import { RatingsOutput, RatingStatsOutput } from '../../types/rating';
 import { RestaurantRecord } from '../../types/restaurants';
 
 export const RestaurantLayout: React.FC = () => {
 	const { restaurantName, restaurantSection } = useCustomParams(['restaurantName', 'restaurantSection']);
-
-	console.log('changed to restaurant: ', restaurantName);
 
 	const queryBuilder = [
 		{
@@ -48,7 +46,7 @@ export const RestaurantLayout: React.FC = () => {
 	// Query records
 	const restautantRecord = restaurantQuery.data?.data[0] as RestaurantRecord;
 	const ratingStatsRecord = ratingStatsQuery.data?.data as RatingStatsOutput;
-	const ratingsRecords = ratingsQuery.data?.data as RatingOutput[];
+	const ratingsRecords = ratingsQuery.data?.data as RatingsOutput[];
 	const menuRecords = menuQuery.data?.data as MenuOutput[];
 
 	const requestFinished =

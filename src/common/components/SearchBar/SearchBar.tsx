@@ -5,14 +5,14 @@ import { FiCalendar, FiRefreshCcw, FiSearch } from 'react-icons/fi';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 
 import { QueryFilter } from '../../../types';
-import { GetMyRatingQueryParams } from '../../../types/rating';
 import { DatePicker } from '../DatePicker/DatePicker';
 
 interface IProps {
 	hasCalendar?: boolean;
 	selectValues?: string[];
 	filters?: QueryFilter | undefined;
-	handleSetFilter: (input: GetMyRatingQueryParams) => void;
+	handleSetFilter: (input: Record<string, string | undefined>) => void;
+	hideDatePicker?: boolean;
 }
 
 const datePickerButtonProps: ButtonProps = {
@@ -25,10 +25,8 @@ const datePickerButtonProps: ButtonProps = {
 };
 
 export const SearchBar: React.FC<IProps> = (props) => {
-	const { filters, selectValues, handleSetFilter } = props;
+	const { filters, selectValues, handleSetFilter, hideDatePicker } = props;
 	const [search, setSearch] = React.useState<string | undefined>();
-
-	console.log('search', search);
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') {
@@ -46,11 +44,13 @@ export const SearchBar: React.FC<IProps> = (props) => {
 			borderColor="brand-gray.200"
 			boxShadow={'0 4px 10px #8F8F8F33'}
 		>
-			<HStack w="fit-content" spacing="0rem">
-				<Icon as={FiCalendar} color="gray.500" />
-				<DatePicker filters={filters} buttonProps={datePickerButtonProps} handleSetFilter={handleSetFilter} />
-			</HStack>
-			<HStack w="13rem" spacing="0rem" borderLeft="1px solid" borderLeftColor="brand-gray.200" ps="1rem">
+			{!hideDatePicker && (
+				<HStack w="fit-content" spacing="0rem" borderRight="1px solid" borderRightColor="brand-gray.200">
+					<Icon as={FiCalendar} color="gray.500" />
+					<DatePicker filters={filters} buttonProps={datePickerButtonProps} handleSetFilter={handleSetFilter} />
+				</HStack>
+			)}
+			<HStack w="13rem" spacing="0rem" ps="1rem">
 				<Icon as={HiOutlineLocationMarker} color="gray.500" />
 				<Select
 					id="city"

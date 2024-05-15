@@ -2,23 +2,21 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 import { CustomAxiosRequest } from '.';
 import { envConfig } from '../config/env';
+import { RestaurantCardOutput } from '../types/common';
 import {
-	GetMyRatingQueryParams,
-	MyRatingOutput,
-	RatingOutput,
+	MyRatingQueryParams,
+	RatingDetailOutput,
+	RatingRecord,
 	RatingStatsOutput,
-	UpdateRatingRecord,
+	RatingUpdateRecord,
 } from '../types/rating';
 
-export type MyRatingsResponse = {
-	ratings?: MyRatingOutput[];
-	unique_values?: Record<string, string[]>;
-};
-
-export const getMyRatings: CustomAxiosRequest<GetMyRatingQueryParams, MyRatingsResponse> = (params) => {
+export const getMyRatings: CustomAxiosRequest<MyRatingQueryParams, Array<RestaurantCardOutput<RatingDetailOutput>>> = (
+	params,
+) => {
 	const token = localStorage.getItem('accessToken');
 	const url = `${envConfig.API_URL}/rating/myRatings`;
-	const config: AxiosRequestConfig<MyRatingsResponse> = {
+	const config: AxiosRequestConfig<Array<RestaurantCardOutput<RatingDetailOutput>>> = {
 		method: 'GET',
 		url,
 		params,
@@ -42,7 +40,7 @@ export const getRatingStats: CustomAxiosRequest<string, RatingStatsOutput> = (re
 	return axios(config);
 };
 
-export const getRatings: CustomAxiosRequest<string, RatingOutput[]> = (restaurantName) => {
+export const getRatings: CustomAxiosRequest<string, RatingRecord[]> = (restaurantName) => {
 	const url = `${envConfig.API_URL}/rating/${restaurantName}`;
 	const config: AxiosRequestConfig = {
 		method: 'GET',
@@ -54,19 +52,18 @@ export const getRatings: CustomAxiosRequest<string, RatingOutput[]> = (restauran
 	return axios(config);
 };
 
-export const putRating: CustomAxiosRequest<UpdateRatingRecord, RatingOutput> = (args) => {
-	const { ratingId, ...ratingRecord } = args;
+export const putRating: CustomAxiosRequest<RatingUpdateRecord, RatingRecord> = (args) => {
 	const token = localStorage.getItem('accessToken');
-	const url = `${envConfig.API_URL}/rating/${ratingId}`;
+	const url = `${envConfig.API_URL}/rating/${args.id}`;
 
-	const config: AxiosRequestConfig<UpdateRatingRecord> = {
+	const config: AxiosRequestConfig<RatingUpdateRecord> = {
 		method: 'PUT',
 		url,
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
 		},
-		data: ratingRecord,
+		data: args,
 	};
 	return axios(config);
 };

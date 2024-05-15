@@ -1,3 +1,5 @@
+import { UserInfo } from './user';
+
 export enum THUNK_STATE {
 	IDLE = 'IDLE',
 	FULFILLED = 'FULFILLED',
@@ -12,4 +14,16 @@ export type StatePropWithThunkState<T> = {
 
 export type QueryFilter = {
 	[key: string]: string | undefined;
+};
+
+export type WithIsUsed<T> = T & {
+	is_used: boolean;
+};
+
+export type WithHide<T> = T & {
+	hide?: boolean;
+};
+
+export type WithUserInfo<T> = T & {
+	user: UserInfo;
 };

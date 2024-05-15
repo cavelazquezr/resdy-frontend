@@ -2,7 +2,7 @@ import React from 'react';
 
 import { HStack, Icon, Text } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
-import { FiCalendar, FiCheckCircle, FiClock, FiEdit3, FiX } from 'react-icons/fi';
+import { FiCheckCircle, FiClock, FiEdit3, FiX } from 'react-icons/fi';
 
 interface IProps {
 	status: string;

@@ -70,7 +70,7 @@ export const LoginForm: React.FC = () => {
 			</Text>
 			<form onSubmit={handleSubmit} noValidate>
 				<VStack spacing="1.5rem" align="stretch">
-					<Button variant="solidDefault" size="lg" leftIcon={<FcGoogle />} isDisabled={isSubmitting}>
+					<Button variant="default-light" size="lg" leftIcon={<FcGoogle />} isDisabled={isSubmitting}>
 						Ingresar con Google
 					</Button>
 					<HStack>
@@ -113,7 +113,7 @@ export const LoginForm: React.FC = () => {
 					</HStack>
 					<VStack spacing="1rem" align="stretch">
 						<Button
-							variant="solidPrimary"
+							variant="default-light"
 							size="lg"
 							type="submit"
 							isDisabled={!isFormValid}

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { getAccessTokenExtraReducer, getCurrentUserExtraReducer } from './extraReducer';
 import { StatePropWithThunkState } from '../../types';
-import { UserOutput, UserRecord } from '../../types/user';
+import { UserRecord } from '../../types/user';
 import { SLICE_NAMES } from '../constant';
 
 export interface ISlice {

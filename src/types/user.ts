@@ -1,4 +1,4 @@
-export type UserOutput = {
+type User = {
 	id: string;
 	email: string;
 	firstname: string;
@@ -11,13 +11,13 @@ export type UserOutput = {
 	is_owner: boolean;
 };
 
-export type UserRecord = Omit<UserOutput, 'password'>;
-export type UserProps = Partial<UserOutput>;
-export type UserCreateInput = Pick<UserOutput, 'email' | 'firstname' | 'lastname' | 'password' | 'is_owner'>;
+export type UserRecord = Omit<User, 'password'>;
+export type UserProps = Partial<User>;
+export type UserCreateInput = Pick<User, 'email' | 'firstname' | 'lastname' | 'password' | 'is_owner'>;
 export type UserUpdateInput = Partial<
-	Pick<UserOutput, 'email' | 'firstname' | 'lastname' | 'password' | 'is_owner' | 'phone'>
+	Pick<User, 'email' | 'firstname' | 'lastname' | 'password' | 'is_owner' | 'phone'>
 >;
-export type UserInfo = Pick<UserOutput, 'firstname' | 'lastname' | 'avatar_url'>;
+export type UserInfo = Pick<User, 'firstname' | 'lastname' | 'avatar_url'>;
 
 export interface UserCredentials {
 	email: string;

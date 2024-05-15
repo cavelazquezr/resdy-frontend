@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Flex, Text, VStack, Button, HStack, Box, Grid, GridItem, Img, Input, Select } from '@chakra-ui/react';
+import { Flex, Text, VStack, Button, HStack, Box, Grid, GridItem, Img } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { IconType } from 'react-icons';
 import { FiAward, FiThumbsUp, FiSmile } from 'react-icons/fi';
@@ -27,7 +27,7 @@ type RestaurantStackItem = {
 };
 
 export const LandingView: React.FC = () => {
-	const [filters, setFilters] = React.useState<GetRestaurantsQueryParams>({
+	const [filters, _setFilters] = React.useState<GetRestaurantsQueryParams>({
 		city: 'Madrid',
 	});
 	// Queries
