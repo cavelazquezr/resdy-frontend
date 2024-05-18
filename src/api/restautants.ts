@@ -2,11 +2,11 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 import { CustomAxiosRequest } from '.';
 import { envConfig } from '../config/env';
-import { GetRestaurantsQueryParams, LandingRestaurantInfo, RestaurantOutput } from '../types/restaurants';
+import { GetRestaurantsQueryParams, LandingRestaurantInfo, RestaurantRecord } from '../types/restaurants';
 
-export const getRestaurants: CustomAxiosRequest<GetRestaurantsQueryParams, RestaurantOutput[]> = (params) => {
+export const getRestaurants: CustomAxiosRequest<GetRestaurantsQueryParams, RestaurantRecord[]> = (params) => {
 	const url = `${envConfig.API_URL}/restaurant`;
-	const config: AxiosRequestConfig<RestaurantOutput[]> = {
+	const config: AxiosRequestConfig<RestaurantRecord[]> = {
 		method: 'GET',
 		url,
 		params,

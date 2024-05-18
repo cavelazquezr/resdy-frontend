@@ -1,4 +1,11 @@
-type User = {
+/*
+ * Notes:
+ * 1. Types with suffix 'Output' represents the data structure of database schema
+ * 2. Types with suffix 'Output' are never used in the front-end, This represents how Prisma builds the types
+ * 3. Everytime that schemas are updated in the ´´schema.prisma´´ file, the 'Output' types must be updated in the front-end
+ */
+
+type UserOutput = {
 	id: string;
 	email: string;
 	firstname: string;
@@ -11,13 +18,11 @@ type User = {
 	is_owner: boolean;
 };
 
-export type UserRecord = Omit<User, 'password'>;
-export type UserProps = Partial<User>;
-export type UserCreateInput = Pick<User, 'email' | 'firstname' | 'lastname' | 'password' | 'is_owner'>;
-export type UserUpdateInput = Partial<
-	Pick<User, 'email' | 'firstname' | 'lastname' | 'password' | 'is_owner' | 'phone'>
->;
-export type UserInfo = Pick<User, 'firstname' | 'lastname' | 'avatar_url'>;
+export type UserRecord = Omit<UserOutput, 'password'>;
+export type UserProps = Partial<UserOutput>;
+export type UserCreateInput = Pick<UserOutput, 'email' | 'firstname' | 'lastname' | 'password' | 'is_owner'>;
+export type UserUpdateInput = Partial<Pick<UserOutput, 'email' | 'firstname' | 'lastname' | 'password' | 'phone'>>;
+export type UserInfo = Pick<UserOutput, 'firstname' | 'lastname' | 'avatar_url'>;
 
 export interface UserCredentials {
 	email: string;

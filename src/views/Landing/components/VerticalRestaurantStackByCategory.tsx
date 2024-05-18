@@ -40,15 +40,19 @@ export const VerticalRestaurantStackByCategory: React.FC<IProps> = (props) => {
 								>
 									<HStack justifyContent="space-between">
 										<HStack spacing="0.75rem">
-											<Image
-												src={summary.header_url ?? ''}
-												alt={brand_name ?? ''}
-												w="5rem"
-												h="5rem"
-												borderRadius="0.5rem"
-												objectFit="cover"
-												objectPosition="center"
-											/>
+											{summary.header_url ? (
+												<Image
+													src={summary.header_url ?? ''}
+													alt={brand_name ?? ''}
+													w="5rem"
+													h="5rem"
+													borderRadius="0.5rem"
+													objectFit="cover"
+													objectPosition="center"
+												/>
+											) : (
+												<Box bg="gray.200" w="5rem" h="5rem" borderRadius="0.5rem" />
+											)}
 											<VStack spacing={0} align="stretch">
 												<Text textStyle="heading6" color="gray.900">
 													{brand_name}

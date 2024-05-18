@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 import { CustomAxiosRequest } from './index';
 import { envConfig } from '../config/env';
-import { UserCreateInput, UserCredentials, UserOutput, UserRecord, UserUpdateInput } from '../types/user';
+import { UserCreateInput, UserCredentials, UserRecord, UserUpdateInput } from '../types/user';
 
 export const getCurrentUser: CustomAxiosRequest<undefined, UserRecord> = () => {
 	const token = localStorage.getItem('accessToken');
@@ -32,7 +32,7 @@ export const getAccessToken: CustomAxiosRequest<UserCredentials, { token: string
 	return axios(config);
 };
 
-export const postNewUser: CustomAxiosRequest<UserCreateInput, UserOutput> = (args) => {
+export const postNewUser: CustomAxiosRequest<UserCreateInput, UserRecord> = (args) => {
 	const url = `${envConfig.API_URL}/authentication/create_user`;
 
 	const config: AxiosRequestConfig<UserCreateInput> = {
@@ -46,7 +46,7 @@ export const postNewUser: CustomAxiosRequest<UserCreateInput, UserOutput> = (arg
 	return axios(config);
 };
 
-export const updateUser: CustomAxiosRequest<UserUpdateInput, UserOutput> = (args) => {
+export const updateUser: CustomAxiosRequest<UserUpdateInput, UserRecord> = (args) => {
 	const url = `${envConfig.API_URL}/authentication`;
 	const token = localStorage.getItem('accessToken');
 

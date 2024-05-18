@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './styles.css';
-import { Text, HStack, Image, VStack, Button } from '@chakra-ui/react';
+import { Text, HStack, Image, VStack, Button, Box } from '@chakra-ui/react';
 
 import { RestaurantSummary } from '../../../common/components/RestaurantSummary/RestaurantSummary';
 import { SuperLink } from '../../../common/components/SuperLink/SuperLink';
@@ -28,7 +28,11 @@ export const HorizontalRestaurantStack: React.FC<IProps> = (props) => {
 					overflow="hidden"
 					w="100%"
 				>
-					<Image src={header_url ?? ''} alt={name} w="100%" h="10rem" objectFit="cover" />
+					{header_url ? (
+						<Image src={header_url ?? ''} alt={name} w="100%" h="10rem" objectFit="cover" />
+					) : (
+						<Box bg="gray.200" w="100%" h="10rem" />
+					)}
 					<VStack padding="1rem" align="stretch">
 						<Text textStyle="heading6" color="gray.900">
 							{brand_name}
