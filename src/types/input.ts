@@ -15,4 +15,5 @@ export type InputConfiguration = {
 	value?: InputValueType;
 	choices?: InputChoices[];
 	tooltip?: string;
+	blocked?: boolean;
 };

@@ -51,6 +51,7 @@ export const InformationView: React.FC = () => {
 			type: 'text',
 			colSpan: 2,
 			value: userData?.email,
+			blocked: true,
 		},
 		{
 			id: 'phone',
@@ -68,7 +69,7 @@ export const InformationView: React.FC = () => {
 						field={field}
 						labelingCol={3}
 						inputCol={5}
-						handleUpdateInfo={handleUpdateInfo}
+						handleSubmit={handleUpdateInfo}
 						isDisabled={!!(editingField && editingField !== field.id)}
 						setEditingField={setEditingField}
 					/>

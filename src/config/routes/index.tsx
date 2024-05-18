@@ -6,6 +6,7 @@ import { Layout } from '../../components/Layout';
 import { RequireAuth } from '../../components/RequireAuth/RequireAuth';
 import { AuthenticationView } from '../../views/Authentication/AuthenticationView';
 import { RestaurantCreationView } from '../../views/Authentication/RestaurantCreationView';
+import { DiscoverView } from '../../views/Discover';
 import { LandingView } from '../../views/Landing';
 import { RestaurantLayout } from '../../views/Restaurant';
 import { UserPanelLayout } from '../../views/UserPanel';
@@ -23,7 +24,7 @@ export const Router: React.FC = () => {
 			>
 				{/* Public routes */}
 				<Route path="/" element={<LandingView />} />
-				<Route path="/discover" element={<>Discover</>} />
+				<Route path="/discover" element={<DiscoverView />} />
 				<Route path="/login" element={<AuthenticationView loginView />} />
 				<Route path="/register" element={<AuthenticationView />} />
 				<Route path="/register-restaurant" element={<RestaurantCreationView />} />

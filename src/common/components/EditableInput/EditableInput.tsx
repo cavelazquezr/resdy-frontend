@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Text, Grid, GridItem, VStack, HStack, Icon, Input, Flex, useToast, Spinner } from '@chakra-ui/react';
-import { FiChevronRight } from 'react-icons/fi';
+import { FiChevronRight, FiLock } from 'react-icons/fi';
 
 import { InputConfiguration, InputValueType } from '../../../types/input';
 import { UploadAvatarInput } from '../UploadAvatarInput/UploadAvatarInput';
@@ -11,12 +11,12 @@ interface IProps {
 	isDisabled?: boolean;
 	labelingCol?: number;
 	inputCol?: number;
-	handleUpdateInfo?: (id: string, value: InputValueType) => void;
+	handleSubmit?: (id: string, value: InputValueType) => void;
 	setEditingField?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 export const EditableInput: React.FC<IProps> = (props) => {
-	const { field, isDisabled, labelingCol = 1, inputCol = 1, handleUpdateInfo, setEditingField } = props;
+	const { field, isDisabled, labelingCol = 1, inputCol = 1, handleSubmit, setEditingField } = props;
 	const ref = React.useRef<HTMLDivElement>(null);
 
 	const toast = useToast();
@@ -32,8 +32,8 @@ export const EditableInput: React.FC<IProps> = (props) => {
 			setIsHovered(false);
 			setIsEditing(false);
 			let response;
-			if (handleUpdateInfo) {
-				response = await handleUpdateInfo(field.id, value);
+			if (handleSubmit) {
+				response = await handleSubmit(field.id, value);
 			}
 			if (!response.error) {
 				toast({
@@ -79,7 +79,7 @@ export const EditableInput: React.FC<IProps> = (props) => {
 				return (
 					<VStack spacing="0.25rem" align="stretch">
 						<HStack>
-							<Text textStyle="body1" color={field.value ? 'gray.900' : 'gray.500'}>
+							<Text textStyle="body1" color={!field.value || field.blocked ? 'gray.500' : 'gray.900'}>
 								{field.value?.toString() ?? 'No especificado'}
 							</Text>
 							{isSubmitting && (
@@ -92,31 +92,35 @@ export const EditableInput: React.FC<IProps> = (props) => {
 								/>
 							)}
 						</HStack>
-						<HStack
-							ref={ref}
-							cursor={isDisabled || isSubmitting ? 'default' : 'pointer'}
-							w="fit-content"
-							opacity={isDisabled || isSubmitting ? 0.5 : 1}
-							alignItems="center"
-							spacing="0.15rem"
-							onMouseEnter={!(isDisabled || isSubmitting) ? handleMouseEnter : undefined}
-							onMouseLeave={!(isDisabled || isSubmitting) ? handleMouseLeave : undefined}
-							onClick={!(isDisabled || isSubmitting) ? () => onEditClick() : undefined}
-						>
-							<Text
-								textStyle="body1"
-								color={isHovered ? 'brand-primary.300' : 'brand-primary.default'}
-								transition="all 0.3s"
+						{!field.blocked ? (
+							<HStack
+								ref={ref}
+								cursor={isDisabled || isSubmitting ? 'default' : 'pointer'}
+								w="fit-content"
+								opacity={isDisabled || isSubmitting ? 0.5 : 1}
+								alignItems="center"
+								spacing="0.15rem"
+								onMouseEnter={!(isDisabled || isSubmitting) ? handleMouseEnter : undefined}
+								onMouseLeave={!(isDisabled || isSubmitting) ? handleMouseLeave : undefined}
+								onClick={!(isDisabled || isSubmitting) ? () => onEditClick() : undefined}
 							>
-								Editar
-							</Text>
-							<Icon
-								as={FiChevronRight}
-								color={isHovered ? 'brand-primary.300' : 'brand-primary.default'}
-								ms={isHovered ? '0.25rem' : '0'}
-								transition="all 0.3s"
-							/>
-						</HStack>
+								<Text
+									textStyle="body1"
+									color={isHovered ? 'brand-primary.300' : 'brand-primary.default'}
+									transition="all 0.3s"
+								>
+									Editar
+								</Text>
+								<Icon
+									as={FiChevronRight}
+									color={isHovered ? 'brand-primary.300' : 'brand-primary.default'}
+									ms={isHovered ? '0.25rem' : '0'}
+									transition="all 0.3s"
+								/>
+							</HStack>
+						) : (
+							<Icon as={FiLock} color="gray.500" />
+						)}
 					</VStack>
 				);
 			case 'avatar':

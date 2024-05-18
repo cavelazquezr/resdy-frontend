@@ -27,7 +27,7 @@ import resdyLogoPrimary from '../../assets/Resdy.svg';
 import resdyForRestaurant from '../../assets/ResdyForRestaurant.svg';
 import { SuperLink } from '../../common/components/SuperLink/SuperLink';
 import { useAppSelector } from '../../store/store';
-import { UserOutput } from '../../types/user';
+import { UserRecord } from '../../types/user';
 import { breakpointLayoutWidth } from '../Layout/utils/styles';
 
 export const Topbar: React.FC = () => {
@@ -76,7 +76,7 @@ export const Topbar: React.FC = () => {
 	);
 };
 
-const UserMenu: React.FC<{ user: UserOutput }> = (props) => {
+const UserMenu: React.FC<{ user: UserRecord }> = (props) => {
 	const { user } = props;
 	const handleLogout = () => {
 		localStorage.removeItem('accessToken');

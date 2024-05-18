@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { VStack, Text, Divider, Grid, GridItem, HStack, Icon, Avatar, Box } from '@chakra-ui/react';
-import { FiBookOpen, FiBookmark, FiMessageSquare, FiUser } from 'react-icons/fi';
+import { FiBookOpen, FiBookmark, FiMessageSquare, FiShield, FiUser } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
 
+import { ChangePasswordView } from './ChangePasswordView';
 import { InformationView } from './InformationView';
 import { ListsView } from './ListsView';
 import { RatingsView } from './RatingsView';
@@ -21,6 +22,14 @@ const sections = [
 		description: 'Actualiza la información de tu perfil a enviar al restaurante al hacer una reserva',
 		component: InformationView,
 		path: '/userpanel/information',
+	},
+	{
+		name: 'password',
+		label: 'Cambiar contraseña',
+		icon: FiShield,
+		description: 'Por seguridad, en esta sección podrás cambiar la contraseña.',
+		component: ChangePasswordView,
+		path: '/userpanel/password',
 	},
 	{
 		name: 'bookings',

@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { Text, Box, Center, HStack, VStack } from '@chakra-ui/react';
+import { Box, HStack, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 
 import { getMyReservations } from '../../../api/reservation';
+import MapBox from '../../../common/components/MapBox/MapBox';
 import { NotFoundMessage } from '../../../common/components/NotFoundMessage/NotFoundMessage';
 import { RestaurantCard } from '../../../common/components/RestaurantCard/RestaurantCard';
 import { SearchBar } from '../../../common/components/SearchBar/SearchBar';
@@ -74,9 +75,9 @@ export const ReservationsView: React.FC = () => {
 						<NotFoundMessage />
 					</Box>
 				)}
-				<Center w="100%" h="100%" bg="brand-gray.200" borderRadius="0.75rem">
-					<Text>Mapa en desarrollo</Text>
-				</Center>
+				<Box w="100%" h="100%" borderRadius="0.75rem" overflow="hidden">
+					<MapBox />
+				</Box>
 			</HStack>
 			{isLoading && !myReservations.length && <>Loading</>}
 		</VStack>

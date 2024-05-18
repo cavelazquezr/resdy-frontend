@@ -17,8 +17,8 @@ import { FiEye, FiEyeOff, FiInfo } from 'react-icons/fi';
 import { InputErrorMessage } from '../InputErrorMessage/InputErrorMessage';
 
 interface IProps extends InputProps {
-	label: string;
 	type: 'text' | 'password';
+	label?: string;
 	tooltip?: string;
 	error?: string;
 }
@@ -29,16 +29,18 @@ export const NewInput: React.FC<IProps> = (props): React.ReactNode => {
 
 	return (
 		<VStack spacing="0.5rem" align="stretch" w="inherit">
-			<HStack>
-				<Text textStyle="body2" color="gray.900">
-					{inputProps.label}
-				</Text>
-				{tooltip && (
-					<Tooltip label={tooltip} hasArrow>
-						<Icon as={FiInfo} />
-					</Tooltip>
-				)}
-			</HStack>
+			{inputProps.label && (
+				<HStack>
+					<Text textStyle="body2" color="gray.900">
+						{inputProps.label}
+					</Text>
+					{tooltip && (
+						<Tooltip label={tooltip} hasArrow>
+							<Icon as={FiInfo} />
+						</Tooltip>
+					)}
+				</HStack>
+			)}
 			<InputGroup>
 				<Input type={showPassword ? 'text' : 'password'} {...inputProps} />
 				{type === 'password' && (
