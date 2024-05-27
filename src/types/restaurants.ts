@@ -5,6 +5,8 @@
  * 3. Everytime that schemas are updated in the ´´schema.prisma´´ file, the 'Output' types must be updated in the front-end
  */
 
+import { MapBoundsRecord } from './map';
+
 type RestaurantOutput = {
 	id: string;
 	name: string;
@@ -77,3 +79,16 @@ export type GetRestaurantsQueryParams = {
 	restaurant_type?: string;
 	country?: string;
 };
+
+export interface GetDiscoveryRestaurantsQueryParams {
+	city?: string;
+	country?: string;
+	swLat?: number;
+	swLng?: number;
+	neLat?: number;
+	neLng?: number;
+	restaurant_type?: string;
+	sortBy?: SortRestaurantBy;
+}
+
+export type SortRestaurantBy = 'rating' | 'visits' | 'new' | null;

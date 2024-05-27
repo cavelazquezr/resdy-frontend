@@ -27,3 +27,9 @@ export type WithHide<T> = T & {
 export type WithUserInfo<T> = T & {
 	user: UserInfo;
 };
+
+export type ResultsSummary<T> = {
+	count: number;
+	options: Array<string>;
+	results: Array<T>;
+};

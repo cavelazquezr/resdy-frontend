@@ -14,10 +14,14 @@ interface IProps {
 	category: string;
 	icon: IconType;
 	data: Array<RestaurantCardRecord>;
+	isLoading?: boolean;
 }
 
 export const VerticalRestaurantStackByCategory: React.FC<IProps> = (props) => {
-	const { category, icon, data } = props;
+	const { category, icon, data, isLoading } = props;
+	if (isLoading) {
+		return <>Loading</>;
+	}
 	return (
 		<Box position="relative" w="100%">
 			<Flex position="absolute" w="100%" justifyContent="center">

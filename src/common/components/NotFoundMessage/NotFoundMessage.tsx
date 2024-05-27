@@ -19,8 +19,8 @@ export const NotFoundMessage: React.FC<IProps> = ({ title, body }) => {
 						{title ? title : '¡Ups! No hemos encontrado lo que buscas'}
 					</Text>
 					{body && (
-						<Text textStyle="body1" color="gray.500">
-							¡Ups! No hemos encontrado lo que buscas
+						<Text textStyle="body2" color="gray.500" textAlign="center">
+							{body}
 						</Text>
 					)}
 				</VStack>

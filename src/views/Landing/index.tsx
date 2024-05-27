@@ -31,7 +31,7 @@ export const LandingView: React.FC = () => {
 		city: 'Madrid',
 	});
 	// Queries
-	const { data } = useQuery({
+	const { data, isLoading } = useQuery({
 		queryKey: ['landingRestaurants', filters],
 		queryFn: () => getLandingRestaurants(filters),
 	});
@@ -75,9 +75,11 @@ export const LandingView: React.FC = () => {
 									Comenzar
 								</Button>
 							</SuperLink>
-							<Button size="md" variant="default-light" w="fit-content">
-								Descubrir
-							</Button>
+							<SuperLink to={'/discover'} w="fit-content">
+								<Button size="md" variant="default-light" w="fit-content">
+									Descubrir
+								</Button>
+							</SuperLink>
 						</HStack>
 					</VStack>
 				</Flex>
@@ -159,7 +161,13 @@ export const LandingView: React.FC = () => {
 					<Box className="gradient-divider" />
 					<HStack width={breakpointLayoutWidth} justifyContent="space-between" mt="2rem" spacing="2rem" zIndex={2}>
 						{[mostVisitedRestaurants, mostRatedRestaurants, newRestaurants].map(({ icon, data, category }, index) => (
-							<VerticalRestaurantStackByCategory category={category} icon={icon} data={data} key={index} />
+							<VerticalRestaurantStackByCategory
+								category={category}
+								icon={icon}
+								data={data}
+								key={index}
+								isLoading={isLoading}
+							/>
 						))}
 					</HStack>
 				</Flex>

@@ -34,13 +34,16 @@ export const Topbar: React.FC = () => {
 	const authenticatedUser = useAppSelector((state) => state.user.userData?.data);
 	const location = useLocation();
 	const isRestautantView = location.pathname.includes('/restaurant');
+	const isDiscoverView = location.pathname.includes('/discover');
 
 	return (
 		<Flex w="100%" justifyContent="center" py="0.5rem" bg={isRestautantView ? 'brand-primary.default' : 'white'}>
 			<HStack py="0.75rem" justifyContent="space-between" w={breakpointLayoutWidth}>
-				<SuperLink to="/">
-					<Img src={isRestautantView ? resdyForRestaurant : resdyLogoPrimary} />
-				</SuperLink>
+				{!isDiscoverView && (
+					<SuperLink to="/">
+						<Img src={isRestautantView ? resdyForRestaurant : resdyLogoPrimary} />
+					</SuperLink>
+				)}
 				<Flex position="fixed" justifyContent="center" zIndex={3} top="0.5rem">
 					<Flex width={breakpointLayoutWidth} justify="end">
 						<HStack

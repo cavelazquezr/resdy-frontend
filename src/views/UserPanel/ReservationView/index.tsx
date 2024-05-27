@@ -4,7 +4,7 @@ import { Box, HStack, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 
 import { getMyReservations } from '../../../api/reservation';
-import MapBox from '../../../common/components/MapBox/MapBox';
+import { MapBox, MarkerProps } from '../../../common/components/MapBox/MapBox';
 import { NotFoundMessage } from '../../../common/components/NotFoundMessage/NotFoundMessage';
 import { RestaurantCard } from '../../../common/components/RestaurantCard/RestaurantCard';
 import { SearchBar } from '../../../common/components/SearchBar/SearchBar';
@@ -18,10 +18,27 @@ type MyReservationsRecord = RestaurantCardOutput<ReservationDetailOutput>;
 export const ReservationsView: React.FC = () => {
 	const [filters, setFilters] = React.useState<MyReservationsQueryParams | undefined>();
 	const [myReservations, setMyReservations] = React.useState<Array<MyReservationsRecord>>([]);
+	const [hoveredCard, setHoveredCard] = React.useState<string | undefined>();
 	const { data, isLoading } = useQuery({
 		queryKey: ['myReservationsQuery', filters],
 		queryFn: () => getMyReservations(filters ? filters : {}),
 	});
+
+	const handleHover = (id: string | undefined) => {
+		setHoveredCard(id);
+	};
+
+	const markers = React.useMemo<Array<MarkerProps>>(() => {
+		return myReservations.map((reservation) => {
+			const { location } = reservation;
+			return {
+				detail: reservation,
+				latitude: location.coordinates[1],
+				longitude: location.coordinates[0],
+				hovered: hoveredCard === reservation.id,
+			};
+		});
+	}, [myReservations, hoveredCard]);
 
 	const handleSetSearchFilter = (input: MyReservationsQueryParams) => {
 		const { city, search, start_date, end_date } = input;
@@ -66,7 +83,13 @@ export const ReservationsView: React.FC = () => {
 					<Box w="100%" h="100%" pe="1rem" overflowY="scroll">
 						<VStack spacing="1rem" align="stretch" h="100%" px="0.75rem" py="0.5rem">
 							{myReservations.map((reservation, index) => (
-								<RestaurantCard key={index} record={reservation} navigateToRestaurantView showStatus />
+								<RestaurantCard
+									key={index}
+									record={reservation}
+									navigateToRestaurantView
+									onHover={handleHover}
+									showStatus
+								/>
 							))}
 						</VStack>
 					</Box>
@@ -76,7 +99,7 @@ export const ReservationsView: React.FC = () => {
 					</Box>
 				)}
 				<Box w="100%" h="100%" borderRadius="0.75rem" overflow="hidden">
-					<MapBox />
+					<MapBox markersCoordinates={markers} />
 				</Box>
 			</HStack>
 			{isLoading && !myReservations.length && <>Loading</>}
