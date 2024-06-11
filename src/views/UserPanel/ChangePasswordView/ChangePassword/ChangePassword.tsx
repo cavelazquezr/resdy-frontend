@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
 	Divider,
@@ -12,6 +12,8 @@ import {
 	Box,
 } from '@chakra-ui/react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+
+import { updateUser } from 'api/authentication';
 interface InputConfiguration {
 	id: string;
 	label: string;
@@ -24,6 +26,7 @@ interface FormErrors {
 	'confirm-password'?: string;
 }
 export const ChangePassword: React.FC = () => {
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const fields: InputConfiguration[] = [
 		{
 			id: 'password',
@@ -52,8 +55,9 @@ export const ChangePassword: React.FC = () => {
 		}
 		if (!values['new-password']) {
 			errors['new-password'] = 'La nueva contraseña es obligatoria';
-		} else if (values['new-password'].length < 8) {
-			errors['new-password'] = 'La nueva contraseña debe tener al menos 8 caracteres';
+		} else if (values['new-password'].length < 6) {
+			errors['new-password'] =
+				'La contraseña no es lo suficientemente segura. La contraseña debe tener por lo menos 10 caracteres';
 		}
 		if (!values['confirm-password']) {
 			errors['confirm-password'] = 'Debes confirmar tu nueva contraseña';
@@ -67,8 +71,11 @@ export const ChangePassword: React.FC = () => {
 		<Formik
 			initialValues={{ password: '', 'new-password': '', 'confirm-password': '' }}
 			validate={validate}
-			onSubmit={(values) => {
-				console.log(values);
+			onSubmit={async (values, actions) => {
+				setIsSubmitting(true);
+				await updateUser({ password: values['new-password'] });
+				actions.resetForm();
+				setIsSubmitting(false);
 			}}
 		>
 			{({ errors, touched }) => (
@@ -90,7 +97,14 @@ export const ChangePassword: React.FC = () => {
 								<Divider mt={4} />
 							</FormControl>
 						))}
-						<Button mt={4} colorScheme="teal" type="submit" disabled={Object.keys(errors).length > 0} w="10%">
+						<Button
+							mt={4}
+							colorScheme="teal"
+							type="submit"
+							isLoading={isSubmitting}
+							disabled={Object.keys(errors).length > 0 && isSubmitting}
+							w="10%"
+						>
 							Guardar cambios
 						</Button>
 					</Flex>
