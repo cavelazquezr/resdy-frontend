@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useId } from 'react';
 
 import {
 	Divider,
@@ -10,6 +10,7 @@ import {
 	Button,
 	Flex,
 	Box,
+	useToast,
 } from '@chakra-ui/react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 
@@ -48,6 +49,7 @@ const validateChangePassword = (values: FormErrors) => {
 
 export const ChangePasswordView: React.FC = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const toast = useToast();
 	const fields: InputConfiguration[] = [
 		{
 			id: 'password',
@@ -78,8 +80,22 @@ export const ChangePasswordView: React.FC = () => {
 					setIsSubmitting(true);
 					await updateUser({ password: values['newPassword'] });
 					actions.resetForm();
+					toast({
+						position: 'top',
+						description: `Tu clave ha sido actualizada correctamente.`,
+						status: 'success',
+						duration: 4000,
+						isClosable: true,
+					});
 					setIsSubmitting(false);
 				} catch (error) {
+					toast({
+						position: 'top',
+						description: `Ha habido un error al actualizar tu clave.`,
+						status: 'error',
+						duration: 4000,
+						isClosable: true,
+					});
 					setIsSubmitting(false);
 				}
 			}}
@@ -105,7 +121,9 @@ export const ChangePasswordView: React.FC = () => {
 						))}
 						<Button
 							mt={4}
+							p={4}
 							colorScheme="teal"
+							opacity={Object.keys(errors).length > 0 ? 0.5 : 1}
 							type="submit"
 							isLoading={isSubmitting}
 							disabled={Object.keys(errors).length > 0 && isSubmitting}
