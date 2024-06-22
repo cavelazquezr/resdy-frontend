@@ -6,12 +6,12 @@ import { useNavigate } from 'react-router-dom';
 
 import resdyLogoPrimary from '../../../../assets/Resdy.svg';
 import { InputErrorMessage } from '../../../../common/components/InputErrorMessage/InputErrorMessage';
-import { NewInput } from '../../../../common/components/NewInput/NewInput';
+import { NewInput } from '../../../../common/forms/NewInput/NewInput';
 import { SuperLink } from '../../../../common/components/SuperLink/SuperLink';
 import { getFormikInitialValues } from '../../../../common/utils/getFormikInitialValues';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { postNewUserThunk } from '../../../../store/user/thunk';
-import { InputConfiguration } from '../../../../types/input';
+import { FormField } from '../../../../types/form';
 import { UserCreateInput } from '../../../../types/user';
 import { registerSchema as schema } from '../../schemas';
 
@@ -40,7 +40,7 @@ export const RegisterForm: React.FC = () => {
 		onSubmit,
 		validationSchema: schema,
 	});
-	const fields: InputConfiguration[] = [
+	const fields: FormField[] = [
 		{
 			id: 'firstname',
 			label: 'Nombre',

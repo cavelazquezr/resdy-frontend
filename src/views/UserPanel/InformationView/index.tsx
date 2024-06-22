@@ -2,10 +2,10 @@ import React from 'react';
 
 import { Divider, VStack } from '@chakra-ui/react';
 
-import { EditableInput } from '../../../common/components/EditableInput/EditableInput';
+import { EditableInput } from '../../../common/forms/EditableInput/EditableInput';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { updateUserThunk } from '../../../store/user/thunk';
-import { InputConfiguration, InputValueType } from '../../../types/input';
+import { FormField, FieldValue } from '../../../types/form';
 
 export const InformationView: React.FC = () => {
 	const userData = useAppSelector((state) => state.user.userData?.data);
@@ -13,7 +13,7 @@ export const InformationView: React.FC = () => {
 	const dispatch = useAppDispatch();
 
 	const handleUpdateInfo = React.useCallback(
-		async (id: string, value: InputValueType) => {
+		async (id: string, value: FieldValue) => {
 			const response = dispatch(updateUserThunk({ [id]: value }));
 			return response;
 		},
@@ -22,7 +22,7 @@ export const InformationView: React.FC = () => {
 
 	const [editingField, setEditingField] = React.useState<string | undefined>(undefined);
 
-	const fields: InputConfiguration[] = [
+	const fields: FormField[] = [
 		{
 			id: 'avatar_url',
 			description: 'Imagen que se mostrará en tu perfil.',

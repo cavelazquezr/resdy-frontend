@@ -5,7 +5,8 @@
  * 3. Everytime that schemas are updated in the ´´schema.prisma´´ file, the 'Output' types must be updated in the front-end
  */
 
-import { MapBoundsRecord } from './map';
+import { NonNullableProperties } from '.';
+import { UserProps } from './user';
 
 type RestaurantOutput = {
 	id: string;
@@ -25,6 +26,7 @@ type CustomizationOutput = {
 type InformationOutput = {
 	phone: string;
 	address: string;
+	postal_code: string;
 	city: string;
 	country: string;
 	social_media: Record<string, string>;
@@ -35,6 +37,10 @@ type InformationOutput = {
 	updated_at: Date;
 	restaurant_id: string;
 };
+
+export type RestaurantProps = NonNullableProperties<RestaurantOutput>;
+export type CustomizationProps = NonNullableProperties<CustomizationOutput>;
+export type InformationProps = NonNullableProperties<InformationOutput>;
 
 export interface RestaurantRecord
 	extends Pick<
@@ -66,6 +72,18 @@ export type RestaurantCardRecord = Pick<
 export type LandingRestaurantInfo = {
 	[category: string]: Array<RestaurantCardRecord>;
 };
+
+//For restaurant creation
+type AdministratorInput = Pick<UserProps, 'email' | 'password'>;
+type RestaurantInput = Pick<RestaurantProps, 'name'>;
+type InformationInput = Pick<
+	InformationProps,
+	'phone' | 'address' | 'country' | 'city' | 'restaurant_type' | 'postal_code'
+>;
+
+export type RestaurantCreateInput = AdministratorInput &
+	RestaurantInput &
+	InformationInput & { brand_name: CustomizationOutput['name'] };
 
 export type RestaurantSummary = {
 	rating: number;

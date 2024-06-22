@@ -13,6 +13,8 @@ import { SuperLink } from '../../common/components/SuperLink/SuperLink';
 import { Footer } from '../../components/Footer/Footer';
 import { breakpointLayoutWidth } from '../../components/Layout/utils/styles';
 import './styles.css';
+import { actions as mapNavigationActions } from '../../store/mapNavigation/reducer';
+import { useAppDispatch } from '../../store/store';
 import { GetRestaurantsQueryParams, RestaurantCardRecord } from '../../types/restaurants';
 
 const cityBackground: Record<string, string> = {
@@ -24,6 +26,7 @@ type RestaurantStackItem = {
 	category: string;
 	icon: IconType;
 	data: Array<RestaurantCardRecord>;
+	onViewAll?: () => void;
 };
 
 export const LandingView: React.FC = () => {
@@ -36,23 +39,38 @@ export const LandingView: React.FC = () => {
 		queryFn: () => getLandingRestaurants(filters),
 	});
 
+	const dispatch = useAppDispatch();
+
 	const landingRestaurants = data?.data ?? {};
 
 	const mostVisitedRestaurants: RestaurantStackItem = {
 		category: 'Más visitados',
 		icon: FiAward,
 		data: landingRestaurants.most_visited ?? [],
+		onViewAll: () => {
+			dispatch(mapNavigationActions.setSortRestaurantsBy('visits'));
+		},
 	};
 	const mostRatedRestaurants: RestaurantStackItem = {
 		category: 'Mejor calificados',
 		icon: FiThumbsUp,
 		data: landingRestaurants.best_rated ?? [],
+		onViewAll: () => {
+			dispatch(mapNavigationActions.setSortRestaurantsBy('rating'));
+		},
 	};
 	const newRestaurants: RestaurantStackItem = {
 		category: 'Nuevos en Resdy',
 		icon: FiSmile,
 		data: landingRestaurants.new_restaurants ?? [],
+		onViewAll: () => {
+			dispatch(mapNavigationActions.setSortRestaurantsBy('new'));
+		},
 	};
+
+	React.useEffect(() => {
+		dispatch(mapNavigationActions.setSortRestaurantsBy(null));
+	}, []);
 
 	return (
 		<React.Fragment>
@@ -105,6 +123,7 @@ export const LandingView: React.FC = () => {
 										color="brand-primary.default"
 										fontWeight="medium"
 										_hover={{ color: 'brand-primary.800' }}
+										onClick={() => dispatch(mapNavigationActions.setSortRestaurantsBy('visits'))}
 									>
 										Más visitados
 									</SuperLink>
@@ -114,6 +133,7 @@ export const LandingView: React.FC = () => {
 										color="brand-primary.default"
 										fontWeight="medium"
 										_hover={{ color: 'brand-primary.800' }}
+										onClick={() => dispatch(mapNavigationActions.setSortRestaurantsBy('rating'))}
 									>
 										Más valorados
 									</SuperLink>
@@ -123,6 +143,7 @@ export const LandingView: React.FC = () => {
 										color="brand-primary.default"
 										fontWeight="medium"
 										_hover={{ color: 'brand-primary.800' }}
+										onClick={() => dispatch(mapNavigationActions.setSortRestaurantsBy('new'))}
 									>
 										Nuevos en Resdy
 									</SuperLink>
@@ -160,15 +181,18 @@ export const LandingView: React.FC = () => {
 				<Flex w="100%" position="relative" justifyContent="center" mt="2rem">
 					<Box className="gradient-divider" />
 					<HStack width={breakpointLayoutWidth} justifyContent="space-between" mt="2rem" spacing="2rem" zIndex={2}>
-						{[mostVisitedRestaurants, mostRatedRestaurants, newRestaurants].map(({ icon, data, category }, index) => (
-							<VerticalRestaurantStackByCategory
-								category={category}
-								icon={icon}
-								data={data}
-								key={index}
-								isLoading={isLoading}
-							/>
-						))}
+						{[mostVisitedRestaurants, mostRatedRestaurants, newRestaurants].map(
+							({ icon, data, category, onViewAll }, index) => (
+								<VerticalRestaurantStackByCategory
+									category={category}
+									icon={icon}
+									data={data}
+									key={index}
+									isLoading={isLoading}
+									onClickViewAll={onViewAll}
+								/>
+							),
+						)}
 					</HStack>
 				</Flex>
 				<Flex w="100%" position="relative" justifyContent="center" mt="2rem">

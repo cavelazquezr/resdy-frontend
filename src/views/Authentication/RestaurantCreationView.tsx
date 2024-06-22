@@ -8,7 +8,7 @@ import { ContentContainer } from '../../common/components/ContentContainer/Conte
 export const RestaurantCreationView: React.FC = () => {
 	return (
 		<Flex w="100%" h="100vh" alignItems="center" justifyContent="center" bg="gray.50">
-			<ContentContainer>
+			<ContentContainer w="-moz-fit-content" p="2rem">
 				<RestaurantCreationForm />
 			</ContentContainer>
 		</Flex>

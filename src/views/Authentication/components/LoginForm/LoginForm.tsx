@@ -7,12 +7,12 @@ import { useNavigate } from 'react-router-dom';
 
 import resdyLogoPrimary from '../../../../assets/Resdy.svg';
 import { InputErrorMessage } from '../../../../common/components/InputErrorMessage/InputErrorMessage';
-import { NewInput } from '../../../../common/components/NewInput/NewInput';
 import { SuperLink } from '../../../../common/components/SuperLink/SuperLink';
+import { NewInput } from '../../../../common/forms/NewInput/NewInput';
 import { getFormikInitialValues } from '../../../../common/utils/getFormikInitialValues';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { getAccessTokenThunk } from '../../../../store/user/thunk';
-import { InputConfiguration } from '../../../../types/input';
+import { FormField } from '../../../../types/form';
 import { UserCredentials } from '../../../../types/user';
 import { loginSchema as schema } from '../../schemas';
 
@@ -34,7 +34,7 @@ export const LoginForm: React.FC = () => {
 		validationSchema: schema,
 	});
 
-	const fields: InputConfiguration[] = [
+	const fields: FormField[] = [
 		{
 			id: 'email',
 			label: 'Correo electrónico',
