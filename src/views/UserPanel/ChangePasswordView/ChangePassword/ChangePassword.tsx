@@ -25,6 +25,27 @@ interface FormErrors {
 	'new-password'?: string;
 	'confirm-password'?: string;
 }
+
+const validateChangePassword = (values: FormErrors) => {
+	const minCharactersInNewPassword = 6;
+	const errors: FormErrors = {};
+	if (!values.password) {
+		errors.password = 'La contraseña actual es obligatoria';
+	}
+	if (!values['new-password']) {
+		errors['new-password'] = 'La nueva contraseña es obligatoria';
+	} else if (values['new-password'].length < minCharactersInNewPassword) {
+		errors['new-password'] =
+			'La contraseña no es lo suficientemente segura. La contraseña debe tener por lo menos 6 caracteres';
+	}
+	if (!values['confirm-password']) {
+		errors['confirm-password'] = 'Debes confirmar tu nueva contraseña';
+	} else if (values['confirm-password'] !== values['new-password']) {
+		errors['confirm-password'] = 'Las contraseñas no coinciden';
+	}
+	return errors;
+};
+
 export const ChangePassword: React.FC = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const fields: InputConfiguration[] = [
@@ -48,34 +69,19 @@ export const ChangePassword: React.FC = () => {
 		},
 	];
 
-	const validate = (values: FormErrors) => {
-		const errors: FormErrors = {};
-		if (!values.password) {
-			errors.password = 'La contraseña actual es obligatoria';
-		}
-		if (!values['new-password']) {
-			errors['new-password'] = 'La nueva contraseña es obligatoria';
-		} else if (values['new-password'].length < 6) {
-			errors['new-password'] =
-				'La contraseña no es lo suficientemente segura. La contraseña debe tener por lo menos 10 caracteres';
-		}
-		if (!values['confirm-password']) {
-			errors['confirm-password'] = 'Debes confirmar tu nueva contraseña';
-		} else if (values['confirm-password'] !== values['new-password']) {
-			errors['confirm-password'] = 'Las contraseñas no coinciden';
-		}
-		return errors;
-	};
-
 	return (
 		<Formik
 			initialValues={{ password: '', 'new-password': '', 'confirm-password': '' }}
-			validate={validate}
+			validate={validateChangePassword}
 			onSubmit={async (values, actions) => {
-				setIsSubmitting(true);
-				await updateUser({ password: values['new-password'] });
-				actions.resetForm();
-				setIsSubmitting(false);
+				try {
+					setIsSubmitting(true);
+					await updateUser({ password: values['new-password'] });
+					actions.resetForm();
+					setIsSubmitting(false);
+				} catch (error) {
+					setIsSubmitting(false);
+				}
 			}}
 		>
 			{({ errors, touched }) => (
