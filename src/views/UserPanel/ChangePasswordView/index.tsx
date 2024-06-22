@@ -1,4 +1,4 @@
-import { useState, useId } from 'react';
+import { useState } from 'react';
 
 import {
 	Divider,
@@ -91,7 +91,7 @@ export const ChangePasswordView: React.FC = () => {
 				} catch (error) {
 					toast({
 						position: 'top',
-						description: `Ha habido un error al actualizar tu clave.`,
+						description: `Ha habido un error al actualizar tu clave ${error}. intenta de nuevo`,
 						status: 'error',
 						duration: 4000,
 						isClosable: true,
