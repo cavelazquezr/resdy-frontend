@@ -78,7 +78,7 @@ export const ChangePasswordView: React.FC = () => {
 			onSubmit={async (values, actions) => {
 				try {
 					setIsSubmitting(true);
-					await updateUser({ password: values['newPassword'] });
+					await updateUser({ password: values['newPassword'], old_password: values['password'] });
 					actions.resetForm();
 					toast({
 						position: 'top',
@@ -89,9 +89,10 @@ export const ChangePasswordView: React.FC = () => {
 					});
 					setIsSubmitting(false);
 				} catch (error) {
+					//add error message to toast
 					toast({
 						position: 'top',
-						description: `Ha habido un error al actualizar tu clave ${error}. intenta de nuevo`,
+						description: `Ha habido un error al actualizar tu clave verifica tus contraseñas. intenta de nuevo`,
 						status: 'error',
 						duration: 4000,
 						isClosable: true,

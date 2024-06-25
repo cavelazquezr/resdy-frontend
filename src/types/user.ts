@@ -12,6 +12,7 @@ type UserOutput = {
 	lastname: string | null;
 	avatar_url: string | null;
 	password: string;
+	old_password?: string;
 	phone: string | null;
 	created_at: Date;
 	is_active: boolean;
@@ -21,7 +22,9 @@ type UserOutput = {
 export type UserRecord = Omit<UserOutput, 'password'>;
 export type UserProps = Partial<UserOutput>;
 export type UserCreateInput = Pick<UserOutput, 'email' | 'firstname' | 'lastname' | 'password' | 'is_owner'>;
-export type UserUpdateInput = Partial<Pick<UserOutput, 'email' | 'firstname' | 'lastname' | 'password' | 'phone'>>;
+export type UserUpdateInput = Partial<
+	Pick<UserOutput, 'email' | 'firstname' | 'lastname' | 'old_password' | 'phone' | 'password'>
+>;
 export type UserInfo = Pick<UserOutput, 'firstname' | 'lastname' | 'avatar_url'>;
 
 export interface UserCredentials {
