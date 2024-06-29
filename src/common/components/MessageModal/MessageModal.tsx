@@ -5,16 +5,22 @@ import { FiCheckCircle } from 'react-icons/fi';
 
 import { ModalTemplate as Modal } from '../ModalTemplate/ModalTemplate';
 
+type SimpleActionButton = {
+	title: string;
+	action: () => void;
+};
 interface IProps {
 	title: string;
 	bodyText: string;
 	isOpen: boolean;
+	firstActionButton?: SimpleActionButton;
+	secondActionButton?: SimpleActionButton;
 	onClose: () => void;
 	handleToggle: () => void;
 }
 
 export const MessageModal: React.FC<IProps> = (props) => {
-	const { title, bodyText, handleToggle, ...modalProps } = props;
+	const { title, bodyText, handleToggle, firstActionButton, secondActionButton, ...modalProps } = props;
 
 	return (
 		<Modal {...modalProps} hideCloseButton size="sm">
@@ -26,9 +32,20 @@ export const MessageModal: React.FC<IProps> = (props) => {
 				<Text textStyle="body1" color="gray.500" textAlign="center">
 					{bodyText}
 				</Text>
-				<Button size="md" w="100%" variant="solidDefault" onClick={handleToggle}>
-					Cerrar
-				</Button>
+				{firstActionButton ? (
+					<Button size="md" w="100%" variant="primary" onClick={firstActionButton.action}>
+						{firstActionButton.title}
+					</Button>
+				) : (
+					<Button size="md" w="100%" variant="default-light" onClick={handleToggle}>
+						Cerrar
+					</Button>
+				)}
+				{secondActionButton && (
+					<Button size="md" w="100%" variant="default-light" onClick={secondActionButton.action}>
+						{secondActionButton.title}
+					</Button>
+				)}
 			</VStack>
 		</Modal>
 	);

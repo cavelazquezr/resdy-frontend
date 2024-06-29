@@ -15,10 +15,11 @@ interface IProps {
 	icon: IconType;
 	data: Array<RestaurantCardRecord>;
 	isLoading?: boolean;
+	onClickViewAll?: () => void;
 }
 
 export const VerticalRestaurantStackByCategory: React.FC<IProps> = (props) => {
-	const { category, icon, data, isLoading } = props;
+	const { category, icon, data, isLoading, onClickViewAll } = props;
 	if (isLoading) {
 		return <>Loading</>;
 	}
@@ -76,7 +77,12 @@ export const VerticalRestaurantStackByCategory: React.FC<IProps> = (props) => {
 								</SuperLink>
 							))}
 							<Divider color="brand-gray.200" />
-							<SuperLink textStyle="heading6" to={'/discover'} _hover={{ color: 'brand-primary.default' }}>
+							<SuperLink
+								onClick={onClickViewAll}
+								textStyle="heading6"
+								to={'/discover'}
+								_hover={{ color: 'brand-primary.default' }}
+							>
 								Ver más
 							</SuperLink>
 						</VStack>

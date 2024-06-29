@@ -8,6 +8,7 @@ import {
 	GetDiscoveryRestaurantsQueryParams,
 	GetRestaurantsQueryParams,
 	LandingRestaurantInfo,
+	RestaurantCreateInput,
 	RestaurantRecord,
 } from '../types/restaurants';
 
@@ -46,6 +47,19 @@ export const getDiscoverRestaurants: CustomAxiosRequest<
 		method: 'GET',
 		url,
 		params,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	};
+	return axios(config);
+};
+
+export const createRestaurant: CustomAxiosRequest<RestaurantCreateInput, { token: string }> = (data) => {
+	const url = `${envConfig.API_URL}/restaurant`;
+	const config: AxiosRequestConfig<RestaurantCreateInput> = {
+		method: 'POST',
+		url,
+		data,
 		headers: {
 			'Content-Type': 'application/json',
 		},
