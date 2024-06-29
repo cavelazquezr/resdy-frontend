@@ -16,7 +16,8 @@ type FieldTypes =
 	| 'avatar'
 	| 'dragAndDrop'
 	| 'autoComplete'
-	| 'inlineGroup';
+	| 'inlineGroup'
+	| 'formStack';
 
 export type FieldValue = string | number | boolean | Date | null;
 
@@ -31,10 +32,14 @@ export type FormField = {
 	choices?: Array<FieldChoice>;
 	children?: FormField[];
 	tooltip?: string;
+	stack?: 'horizontal' | 'vertical';
 	blocked?: boolean;
 	groupId?: string;
 	dependsOn?: Array<string>;
 	dependsOnGroup?: Array<string>;
 	error?: string;
 	isDisabled?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	dispatcher?: React.Dispatch<React.SetStateAction<any>>;
+	keyPrefix?: string; // Used to generate unique keys for files to be uploaded
 };

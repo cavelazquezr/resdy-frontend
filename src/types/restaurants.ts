@@ -8,7 +8,7 @@
 import { NonNullableProperties } from '.';
 import { UserProps } from './user';
 
-type RestaurantOutput = {
+export type RestaurantOutput = {
 	id: string;
 	name: string;
 	created_at: Date;
@@ -74,7 +74,7 @@ export type LandingRestaurantInfo = {
 };
 
 //For restaurant creation
-type AdministratorInput = Pick<UserProps, 'email' | 'password'>;
+type AdministratorInput = Pick<UserProps, 'email' | 'password' | 'avatar_url'>;
 type RestaurantInput = Pick<RestaurantProps, 'name'>;
 type InformationInput = Pick<
 	InformationProps,

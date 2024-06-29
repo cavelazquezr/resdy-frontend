@@ -8,8 +8,8 @@ import * as yup from 'yup';
 
 import { putRating } from '../../../../api/rating';
 import { MessageModal } from '../../../../common/components/MessageModal/MessageModal';
-import { NewInput } from '../../../../common/forms/NewInput/NewInput';
 import { NewTextArea } from '../../../../common/components/NewTextArea/NewTextArea';
+import { NewInput } from '../../../../common/forms/NewInput/NewInput';
 import { getFormikInitialValues } from '../../../../common/utils/getFormikInitialValues';
 import { RatingUpdateRecord } from '../../../../types/rating';
 

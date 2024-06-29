@@ -7,6 +7,7 @@ import { NewForm } from '../NewForm';
 
 interface IProps {
 	field: FormField;
+	isDisabled?: boolean;
 	isSubmitting?: boolean;
 	onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
 	onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
@@ -14,7 +15,7 @@ interface IProps {
 }
 
 export const InlineForm: React.FC<IProps> = (props) => {
-	const { field, ...restProps } = props;
+	const { field, isDisabled, isSubmitting, ...restProps } = props;
 	const { label, description, children } = field;
 	return (
 		<VStack align="stretch" spacing="1rem">
@@ -24,7 +25,7 @@ export const InlineForm: React.FC<IProps> = (props) => {
 			<Text textStyle="body1" color="gray.500" opacity={field.isDisabled ? '0.5' : '1'}>
 				{description}
 			</Text>
-			<NewForm fields={children ?? []} {...restProps} isDisabled={field.isDisabled} />
+			<NewForm fields={children ?? []} {...restProps} isDisabled={field.isDisabled || isDisabled || isSubmitting} />
 		</VStack>
 	);
 };

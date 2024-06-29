@@ -4,6 +4,7 @@ import { GridItem, VStack } from '@chakra-ui/react';
 
 import { AutoCompleteInput } from './AutoCompleteInput/AutoCompleteInput';
 import { DragAndDrop } from './DragAndDrop/DragAndDrop';
+import { FormStack } from './FormStack/FormStack';
 import { InlineForm } from './InlineForm/InlineForm';
 import { NewInput } from './NewInput/NewInput';
 import { NewSelect } from './NewSelect/NewSelect';
@@ -69,10 +70,34 @@ export const NewForm: React.FC<IProps> = (props): React.ReactNode => {
 							/>
 						</GridItem>
 					);
+				case 'formStack':
+					return (
+						<FormStack
+							key={index}
+							fields={field.children ?? []}
+							isDisabled={field.isDisabled || isSubmitting || isDisabled}
+							{...restProps}
+						/>
+					);
 				case 'inlineGroup':
-					return <InlineForm key={index} field={field} {...restProps} />;
+					return (
+						<InlineForm
+							key={index}
+							field={field}
+							isDisabled={field.isDisabled || isSubmitting || isDisabled}
+							{...restProps}
+						/>
+					);
 				case 'dragAndDrop':
-					return <DragAndDrop key={index} />;
+					return (
+						<DragAndDrop
+							key={index}
+							id={field.id}
+							field={field}
+							isDisabled={field.isDisabled || isSubmitting || isDisabled}
+							{...restProps}
+						/>
+					);
 				case 'autoComplete':
 					return (
 						<AutoCompleteInput

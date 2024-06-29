@@ -47,5 +47,5 @@ export const adminRegisterSchema = yup.object({
 	address: yup.string().required(ErrorMessages.FIELD_REQUIRED),
 	phone: yup.string().required(ErrorMessages.FIELD_REQUIRED),
 	restaurant_type: yup.string().required(ErrorMessages.FIELD_REQUIRED),
-	brand_name: yup.string().required(ErrorMessages.FIELD_REQUIRED),
+	brand_name: yup.string(),
 });

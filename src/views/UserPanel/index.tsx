@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { VStack, Text, Divider, Grid, GridItem, HStack, Icon, Avatar, Box } from '@chakra-ui/react';
+import { VStack, Text, Divider, Grid, GridItem, HStack, Icon, Box } from '@chakra-ui/react';
 import { FiBookOpen, FiBookmark, FiMessageSquare, FiShield, FiUser } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import { RatingsView } from './RatingsView';
 import { ReservationsView } from './ReservationView';
 import { IconBadge } from '../../common/components/IconBadge/IconBadge';
 import { SuperLink } from '../../common/components/SuperLink/SuperLink';
+import { UserAvatar } from '../../common/components/UserAvatar/UserAvatar';
 import { useCustomParams } from '../../hooks/useCustomParams';
 import { useAppSelector } from '../../store/store';
 
@@ -102,7 +103,7 @@ const Sidebar: React.FC = () => {
 			h="100%"
 		>
 			<HStack minH="3rem">
-				<Avatar size="md" src={userData?.avatar_url ?? undefined} />
+				<UserAvatar avatarPath={userData?.avatar_url} size="md" />
 				<VStack align="stretch" spacing={0}>
 					<Text textStyle="body1" fontWeight="medium" color="gray.900">
 						{`¡Hola, ${userData?.firstname}!`}

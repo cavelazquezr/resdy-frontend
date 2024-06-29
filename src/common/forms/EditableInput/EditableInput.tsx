@@ -124,13 +124,7 @@ export const EditableInput: React.FC<IProps> = (props) => {
 					</VStack>
 				);
 			case 'avatar':
-				return (
-					<UploadAvatarInput
-						currentAvatar={field.value as string}
-						isDisabled={isDisabled ?? false}
-						isSubmitting={isSubmitting}
-					/>
-				);
+				return <UploadAvatarInput isDisabled={isDisabled ?? false} isSubmitting={isSubmitting} />;
 		}
 	};
 

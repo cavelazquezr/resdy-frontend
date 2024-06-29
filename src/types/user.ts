@@ -18,7 +18,7 @@ type UserOutput = {
 	is_owner: boolean;
 };
 
-export type UserRecord = Omit<UserOutput, 'password'>;
+export type UserRecord = UserOutput;
 export type UserProps = Partial<UserOutput>;
 export type UserCreateInput = Pick<UserOutput, 'email' | 'firstname' | 'lastname' | 'password' | 'is_owner'>;
 export type UserUpdateInput = Partial<Pick<UserOutput, 'email' | 'firstname' | 'lastname' | 'password' | 'phone'>>;

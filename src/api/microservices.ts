@@ -17,6 +17,10 @@ export const uploadAvatar: CustomAxiosRequest<FormData, void> = (args) => {
 	return axios(config);
 };
 
+export const getSignedUrl = async (key: string) => {
+	return await axios.post<string>(`${envConfig.API_URL}/microservices/getSignedUrl`, { key });
+};
+
 const getUploadSignedUrls = async (files: IAttachedFile[]) => {
 	return await axios
 		.post<{ [key: string]: string }>(
@@ -33,7 +37,6 @@ const getUploadSignedUrls = async (files: IAttachedFile[]) => {
 export const uploadFiles = async (files: IAttachedFile[]) => {
 	const signedUrls = await getUploadSignedUrls(files);
 
-	console.log('signedUrls: ', signedUrls);
 	return Promise.all(
 		files.map((it) => {
 			if (it.id !== undefined && it.file !== undefined) {
@@ -45,4 +48,8 @@ export const uploadFiles = async (files: IAttachedFile[]) => {
 			}
 		}),
 	);
+};
+
+export const deleteFile = async (key: string) => {
+	return await axios.post(`${envConfig.API_URL}/microservices/deleteObject`, { key });
 };
