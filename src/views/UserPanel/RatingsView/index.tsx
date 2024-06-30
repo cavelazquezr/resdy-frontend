@@ -74,7 +74,6 @@ export const RatingsView: React.FC = () => {
 			setEditingRating(myRatings[0]);
 		}
 	}, [myRatings, editingRating]);
-	console.log('editingRating', editingRating);
 
 	return (
 		<VStack align="stretch" w="100%" h="100%" spacing="1rem" pb="9rem">

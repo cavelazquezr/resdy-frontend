@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Text, HStack, Icon } from '@chakra-ui/react';
+import { Text, HStack, Icon, TextProps } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
 
-interface IProps {
+interface IProps extends TextProps {
 	children: React.ReactNode;
 	isDisabled?: boolean;
 	colorScheme?: string;
@@ -51,7 +51,7 @@ export const LinkText: React.FC<IProps> = (props) => {
 					transition="all 0.3s"
 				/>
 			)}
-			<Text textStyle="body1" color={isHovered ? `${color}.300` : `${color}.500`} transition="all 0.3s">
+			<Text textStyle="body1" color={isHovered ? `${color}.300` : `${color}.500`} transition="all 0.3s" {...props}>
 				{children}
 			</Text>
 			{rightIcon && (

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import resdyLogoPrimary from '../../../../assets/Resdy.svg';
 import { InputErrorMessage } from '../../../../common/components/InputErrorMessage/InputErrorMessage';
+import { LinkText } from '../../../../common/components/LinkText/LinkText';
 import { SuperLink } from '../../../../common/components/SuperLink/SuperLink';
 import { NewInput } from '../../../../common/forms/NewInput/NewInput';
 import { getFormikInitialValues } from '../../../../common/utils/getFormikInitialValues';
@@ -130,9 +131,7 @@ export const LoginForm: React.FC = () => {
 					¿No tienes cuenta?
 				</Text>
 				<SuperLink to="/register">
-					<Text textStyle="body1" fontWeight="bold" color="gray.700">
-						Regístrate
-					</Text>
+					<LinkText fontWeight="medium">Regístrate</LinkText>
 				</SuperLink>
 			</HStack>
 		</VStack>

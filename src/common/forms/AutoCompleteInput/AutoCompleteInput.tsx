@@ -35,8 +35,6 @@ export const AutoCompleteInput: React.FC<IProps> = (props) => {
 	const { id, label, value, choices, error, ...inputProps } = props;
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	console.log('ERROR', error);
-
 	const [inputValue, setInputValue] = React.useState<string>('');
 	const [selectedResult, setSelectedResult] = React.useState<string | undefined>(undefined);
 
@@ -47,12 +45,6 @@ export const AutoCompleteInput: React.FC<IProps> = (props) => {
 			onClose();
 		}
 	}, [inputValue, onOpen, onClose]);
-
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		console.log('foo');
-		setInputValue(e.target.value);
-		inputProps.onChange && inputProps.onChange(e);
-	};
 
 	const handleSelectOption = (value: string) => {
 		const valueParts = value.split(',');
