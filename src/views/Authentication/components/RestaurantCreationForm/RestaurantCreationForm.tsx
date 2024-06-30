@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
-import { VStack, Img, Divider, HStack, Button, useDisclosure } from '@chakra-ui/react';
+import { VStack, Img, Divider, HStack, Button, useDisclosure, useToast } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAddressOptions } from '../../../../api/mapbox';
 import { deleteFile, uploadFiles } from '../../../../api/microservices';
 import { createRestaurant } from '../../../../api/restautants';
+import { checkIfEmailIsUsed, checkIfRestaurantNameIsUsed } from '../../../../api/verification';
 import resdyLogoPrimary from '../../../../assets/Resdy.svg';
 import { MessageModal } from '../../../../common/components/MessageModal/MessageModal';
 import { NewForm } from '../../../../common/forms/NewForm';
@@ -22,6 +23,7 @@ import { adminRegisterSchema as schema } from '../../schemas';
 export const RestaurantCreationForm: React.FC = () => {
 	const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
 	const [files, setFiles] = React.useState<FileList>();
+	const [customErrors, setCustomErrors] = React.useState<{ [field: string]: string | undefined } | undefined>();
 
 	const {
 		isOpen: isMessageModalOpen,
@@ -32,6 +34,7 @@ export const RestaurantCreationForm: React.FC = () => {
 
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+	const toast = useToast();
 
 	const onSubmit = async () => {
 		setIsSubmitting(true);
@@ -66,9 +69,15 @@ export const RestaurantCreationForm: React.FC = () => {
 				onMessageModalOpen();
 			})
 			.catch(async (error) => {
-				console.error(error);
+				const errorMessage = error.response.data.message;
+				toast({
+					position: 'top',
+					description: errorMessage,
+					status: 'error',
+					duration: 4000,
+					isClosable: true,
+				});
 				if (files) {
-					console.log('deletes file');
 					await deleteFile(input.avatar_url ?? `restaurants/${values.name}/${values.name}-logo`);
 				}
 			})
@@ -115,8 +124,66 @@ export const RestaurantCreationForm: React.FC = () => {
 		return [];
 	}, [addressOptionsQuery]);
 
-	const firstStepValidated = isFirstStepValid(errors, touched);
+	const firstStepValidated = isFirstStepValid(errors, touched) && !customErrors?.email;
 	const secondStepValidated = isSecondStepValid(errors, touched, firstStepValidated);
+
+	const handleEmailCheck = React.useCallback(async () => {
+		if (values['email']) {
+			await checkIfEmailIsUsed({ email: values['email'] })
+				.then((res) => {
+					if (res.data === true) {
+						setCustomErrors({ email: undefined });
+					}
+				})
+				.catch((error) => {
+					const message = error.response.data.message;
+					setCustomErrors({ email: message });
+				});
+		}
+	}, [values['email'], errors['email'], touched['email']]);
+
+	const handleRestaurantNameCheck = React.useCallback(async () => {
+		if (values['email']) {
+			await checkIfRestaurantNameIsUsed({ name: values['name'] })
+				.then((res) => {
+					if (res.data === true) {
+						setCustomErrors({ name: undefined });
+					}
+				})
+				.catch((error) => {
+					const message = error.response.data.message;
+					setCustomErrors({ name: message });
+				});
+		}
+	}, [values['name'], errors['name'], touched['name']]);
+
+	React.useEffect(() => {
+		if (touched['email']) {
+			handleEmailCheck();
+		}
+	}, [values['email'], errors['email'], touched['email']]);
+
+	React.useEffect(() => {
+		if (touched['name']) {
+			handleRestaurantNameCheck();
+		}
+	}, [values['name'], errors['name'], touched['name']]);
+
+	const emailError = React.useMemo(() => {
+		if (customErrors?.email !== undefined) {
+			return customErrors.email;
+		} else {
+			return touched['email'] && errors.email;
+		}
+	}, [customErrors, errors.email, touched.email]);
+
+	const nameError = React.useMemo(() => {
+		if (customErrors?.name !== undefined) {
+			return customErrors.name;
+		} else {
+			return touched['name'] && errors.name;
+		}
+	}, [customErrors, errors.name, touched.name]);
 
 	const formFields: Array<FormField> = [
 		{
@@ -139,8 +206,8 @@ export const RestaurantCreationForm: React.FC = () => {
 							type: 'text',
 							colSpan: 2,
 							value: formValues.email,
-							//TODO: Fix this any type
-							error: !!(errors['email'] && touched['email']) && (errors['email'] as any),
+							// Use the custom error if present, otherwise fallback to Formik error
+							error: emailError as any,
 						},
 						{
 							id: 'password',
@@ -177,7 +244,7 @@ export const RestaurantCreationForm: React.FC = () => {
 							colSpan: 2,
 							value: formValues.name,
 							//TODO: Fix this any type
-							error: errors['name'] && touched['name'] && (errors['name'] as any),
+							error: nameError as any,
 						},
 						{
 							id: 'country',
@@ -280,8 +347,8 @@ export const RestaurantCreationForm: React.FC = () => {
 				<HStack justifyContent="space-between">
 					<Img src={resdyLogoPrimary} h="2rem" w="fit-content" />
 					<HStack>
-						<Button variant="default-light" isDisabled={isSubmitting}>
-							Volver a inicio
+						<Button variant="default-light" isDisabled={isSubmitting} onClick={() => navigate('/')}>
+							Volver al inicio
 						</Button>
 						<Button
 							variant="primary"

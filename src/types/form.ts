@@ -41,5 +41,6 @@ export type FormField = {
 	isDisabled?: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	dispatcher?: React.Dispatch<React.SetStateAction<any>>;
+	onBlur?: () => void;
 	keyPrefix?: string; // Used to generate unique keys for files to be uploaded
 };

@@ -5,6 +5,7 @@ import { Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import { LoginForm } from './components/LoginForm/LoginForm';
 import { RegisterForm } from './components/RegisterForm/RegisterForm';
 import { ContentContainer } from '../../common/components/ContentContainer/ContentContainer';
+import { LinkText } from '../../common/components/LinkText/LinkText';
 import { SuperLink } from '../../common/components/SuperLink/SuperLink';
 
 interface IProps {
@@ -22,9 +23,7 @@ export const AuthenticationView: React.FC<IProps> = (props) => {
 							¿Eres dueño de restaurante?
 						</Text>
 						<SuperLink to="/register-restaurant">
-							<Text textStyle="body1" fontWeight="bold" color="brand-secondary.default">
-								Registrar restaurante
-							</Text>
+							<LinkText fontWeight="medium">Registrar restaurante</LinkText>
 						</SuperLink>
 					</HStack>
 				</VStack>

@@ -18,7 +18,5 @@ export const UserAvatar: React.FC<IProps> = (props) => {
 		}
 	}, [avatarPath]);
 
-	console.log('url', url);
-
 	return <Avatar size={size} src={url} />;
 };
