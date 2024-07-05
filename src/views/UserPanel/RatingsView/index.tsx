@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, HStack, VStack, Flex, SkeletonText, Skeleton } from '@chakra-ui/react';
+import { Box, HStack, VStack, Flex } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 
 import { Conversation } from './components/Conversation';
@@ -8,6 +8,7 @@ import { UploadRatingForm } from './components/UploadRatingForm';
 import { getMyRatings } from '../../../api/rating';
 import { NotFoundMessage } from '../../../common/components/NotFoundMessage/NotFoundMessage';
 import { RestaurantCard } from '../../../common/components/RestaurantCard/RestaurantCard';
+import { RestaurantCardSkeleton } from '../../../common/components/RestaurantCard/RestaurantCardSkeleton';
 import { SearchBar } from '../../../common/components/SearchBar/SearchBar';
 import { StatusMenuFilter } from '../../../common/components/StatusMenuFilter/StatusMenuFilter';
 import { QueryFilter } from '../../../types';
@@ -73,7 +74,6 @@ export const RatingsView: React.FC = () => {
 			setEditingRating(myRatings[0]);
 		}
 	}, [myRatings, editingRating]);
-	console.log('editingRating', editingRating);
 
 	return (
 		<VStack align="stretch" w="100%" h="100%" spacing="1rem" pb="9rem">
@@ -111,17 +111,7 @@ export const RatingsView: React.FC = () => {
 						)}
 					</React.Fragment>
 				) : (
-					<VStack align="stretch" w="100%" spacing="1rem">
-						{Array.from({ length: 5 }, (_, i) => i + 1).map((_, index) => (
-							<HStack key={index} alignItems="start" h="100%" spacing="1rem">
-								<Skeleton w="10rem" h="10rem" borderRadius="0.5rem" />
-								<VStack align="stretch">
-									<Skeleton w="6rem" h="1rem" />
-									<SkeletonText w="15rem" mt="4" noOfLines={3} spacing="4" skeletonHeight="2" />
-								</VStack>
-							</HStack>
-						))}
-					</VStack>
+					<RestaurantCardSkeleton noOfRows={5} />
 				)}
 				{requestFinished && myRatings.length > 0 && (
 					<Flex w="100%" h="100%">

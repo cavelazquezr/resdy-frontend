@@ -24,6 +24,23 @@ export type WithHide<T> = T & {
 	hide?: boolean;
 };
 
+export type NonNullableProperties<T> = {
+	[P in keyof T]: NonNullable<T[P]>;
+};
+
 export type WithUserInfo<T> = T & {
 	user: UserInfo;
 };
+
+export type ResultsSummary<T> = {
+	count: number;
+	options: Array<string>;
+	results: Array<T>;
+};
+
+export interface IAttachedFile {
+	id?: string;
+	name: string;
+	file?: File;
+	type?: string;
+}

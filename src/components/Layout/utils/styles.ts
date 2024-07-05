@@ -1,5 +1,5 @@
 export const breakpointLayoutWidth = {
-	xs: '100%',
+	xs: '840px',
 	sm: '840px',
 	md: '1024px',
 	lg: '1140px',

@@ -3,7 +3,6 @@ import React from 'react';
 import './styles.css';
 
 import {
-	Avatar,
 	Button,
 	Flex,
 	Text,
@@ -26,6 +25,7 @@ import { useLocation } from 'react-router-dom';
 import resdyLogoPrimary from '../../assets/Resdy.svg';
 import resdyForRestaurant from '../../assets/ResdyForRestaurant.svg';
 import { SuperLink } from '../../common/components/SuperLink/SuperLink';
+import { UserAvatar } from '../../common/components/UserAvatar/UserAvatar';
 import { useAppSelector } from '../../store/store';
 import { UserRecord } from '../../types/user';
 import { breakpointLayoutWidth } from '../Layout/utils/styles';
@@ -34,13 +34,16 @@ export const Topbar: React.FC = () => {
 	const authenticatedUser = useAppSelector((state) => state.user.userData?.data);
 	const location = useLocation();
 	const isRestautantView = location.pathname.includes('/restaurant');
+	const isDiscoverView = location.pathname.includes('/discover');
 
 	return (
 		<Flex w="100%" justifyContent="center" py="0.5rem" bg={isRestautantView ? 'brand-primary.default' : 'white'}>
 			<HStack py="0.75rem" justifyContent="space-between" w={breakpointLayoutWidth}>
-				<SuperLink to="/">
-					<Img src={isRestautantView ? resdyForRestaurant : resdyLogoPrimary} />
-				</SuperLink>
+				{!isDiscoverView && (
+					<SuperLink to="/">
+						<Img src={isRestautantView ? resdyForRestaurant : resdyLogoPrimary} />
+					</SuperLink>
+				)}
 				<Flex position="fixed" justifyContent="center" zIndex={3} top="0.5rem">
 					<Flex width={breakpointLayoutWidth} justify="end">
 						<HStack
@@ -108,11 +111,11 @@ const UserMenu: React.FC<{ user: UserRecord }> = (props) => {
 		<Box position="relative" zIndex="2">
 			<Menu placement="bottom-end">
 				<MenuButton>
-					<Avatar size="sm" src={user.avatar_url ?? 'https://bit.ly/broken-link'} />
+					<UserAvatar size="sm" avatarPath={user.avatar_url ?? 'https://bit.ly/broken-link'} />
 				</MenuButton>
 				<MenuList w="fit-content" p="1rem">
 					<VStack>
-						<Avatar size="md" src={user.avatar_url ?? 'https://bit.ly/broken-link'} />
+						<UserAvatar size="md" avatarPath={user.avatar_url ?? 'https://bit.ly/broken-link'} />
 						<Text textStyle="body1" color="gray.700">{`${user.firstname} ${user.lastname}`}</Text>
 					</VStack>
 					<Box mx="-1rem">

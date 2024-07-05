@@ -5,7 +5,10 @@
  * 3. Everytime that schemas are updated in the ´´schema.prisma´´ file, the 'Output' types must be updated in the front-end
  */
 
-type RestaurantOutput = {
+import { NonNullableProperties } from '.';
+import { UserProps } from './user';
+
+export type RestaurantOutput = {
 	id: string;
 	name: string;
 	created_at: Date;
@@ -23,6 +26,7 @@ type CustomizationOutput = {
 type InformationOutput = {
 	phone: string;
 	address: string;
+	postal_code: string;
 	city: string;
 	country: string;
 	social_media: Record<string, string>;
@@ -33,6 +37,10 @@ type InformationOutput = {
 	updated_at: Date;
 	restaurant_id: string;
 };
+
+export type RestaurantProps = NonNullableProperties<RestaurantOutput>;
+export type CustomizationProps = NonNullableProperties<CustomizationOutput>;
+export type InformationProps = NonNullableProperties<InformationOutput>;
 
 export interface RestaurantRecord
 	extends Pick<
@@ -65,6 +73,18 @@ export type LandingRestaurantInfo = {
 	[category: string]: Array<RestaurantCardRecord>;
 };
 
+//For restaurant creation
+type AdministratorInput = Pick<UserProps, 'email' | 'password' | 'avatar_url'>;
+type RestaurantInput = Pick<RestaurantProps, 'name'>;
+type InformationInput = Pick<
+	InformationProps,
+	'phone' | 'address' | 'country' | 'city' | 'restaurant_type' | 'postal_code'
+>;
+
+export type RestaurantCreateInput = AdministratorInput &
+	RestaurantInput &
+	InformationInput & { brand_name: CustomizationOutput['name'] };
+
 export type RestaurantSummary = {
 	rating: number;
 	rating_count: number;
@@ -77,3 +97,16 @@ export type GetRestaurantsQueryParams = {
 	restaurant_type?: string;
 	country?: string;
 };
+
+export interface GetDiscoveryRestaurantsQueryParams {
+	city?: string;
+	country?: string;
+	swLat?: number;
+	swLng?: number;
+	neLat?: number;
+	neLng?: number;
+	restaurant_type?: string;
+	sortBy?: SortRestaurantBy;
+}
+
+export type SortRestaurantBy = 'rating' | 'visits' | 'new' | null;

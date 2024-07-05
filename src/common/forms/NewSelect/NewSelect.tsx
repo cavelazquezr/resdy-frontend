@@ -2,7 +2,7 @@ import React from 'react';
 
 import { SelectProps, Select, Text, VStack } from '@chakra-ui/react';
 
-import { InputErrorMessage } from '../InputErrorMessage/InputErrorMessage';
+import { InputErrorMessage } from '../../components/InputErrorMessage/InputErrorMessage';
 
 interface IProps extends SelectProps {
 	label: string;
@@ -15,7 +15,7 @@ export const NewSelect: React.FC<IProps> = (props): React.ReactNode => {
 
 	return (
 		<VStack spacing="0.5rem" align="stretch" w="100%">
-			<Text textStyle="body2" color="gray.900">
+			<Text textStyle="body2" color="gray.900" opacity={inputProps.isDisabled ? '0.5' : '1'}>
 				{inputProps.label}
 			</Text>
 			<Select {...inputProps}>{choices}</Select>

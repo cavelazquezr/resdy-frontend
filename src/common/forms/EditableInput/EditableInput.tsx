@@ -3,15 +3,15 @@ import React from 'react';
 import { Text, Grid, GridItem, VStack, HStack, Icon, Input, Flex, useToast, Spinner } from '@chakra-ui/react';
 import { FiChevronRight, FiLock } from 'react-icons/fi';
 
-import { InputConfiguration, InputValueType } from '../../../types/input';
-import { UploadAvatarInput } from '../UploadAvatarInput/UploadAvatarInput';
+import { FormField, FieldValue } from '../../../types/form';
+import { UploadAvatarInput } from '../../components/UploadAvatarInput/UploadAvatarInput';
 
 interface IProps {
-	field: InputConfiguration;
+	field: FormField;
 	isDisabled?: boolean;
 	labelingCol?: number;
 	inputCol?: number;
-	handleSubmit?: (id: string, value: InputValueType) => void;
+	handleSubmit?: (id: string, value: FieldValue) => void;
 	setEditingField?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
@@ -24,7 +24,7 @@ export const EditableInput: React.FC<IProps> = (props) => {
 	const [isHovered, setIsHovered] = React.useState<boolean>(false);
 	const [isEditing, setIsEditing] = React.useState<boolean>(false);
 	const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
-	const [value, setValue] = React.useState<InputValueType>(field.value ?? null);
+	const [value, setValue] = React.useState<FieldValue>(field.value ?? null);
 
 	const onFinishEditing = async () => {
 		try {
@@ -124,13 +124,7 @@ export const EditableInput: React.FC<IProps> = (props) => {
 					</VStack>
 				);
 			case 'avatar':
-				return (
-					<UploadAvatarInput
-						currentAvatar={field.value as string}
-						isDisabled={isDisabled ?? false}
-						isSubmitting={isSubmitting}
-					/>
-				);
+				return <UploadAvatarInput isDisabled={isDisabled ?? false} isSubmitting={isSubmitting} />;
 		}
 	};
 

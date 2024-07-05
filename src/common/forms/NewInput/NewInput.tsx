@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { FiEye, FiEyeOff, FiInfo } from 'react-icons/fi';
 
-import { InputErrorMessage } from '../InputErrorMessage/InputErrorMessage';
+import { InputErrorMessage } from '../../components/InputErrorMessage/InputErrorMessage';
 
 interface IProps extends InputProps {
 	type: 'text' | 'password';
@@ -31,7 +31,7 @@ export const NewInput: React.FC<IProps> = (props): React.ReactNode => {
 		<VStack spacing="0.5rem" align="stretch" w="inherit">
 			{inputProps.label && (
 				<HStack>
-					<Text textStyle="body2" color="gray.900">
+					<Text textStyle="body2" color="gray.900" opacity={inputProps.isDisabled ? '0.5' : '1'}>
 						{inputProps.label}
 					</Text>
 					{tooltip && (
@@ -48,6 +48,7 @@ export const NewInput: React.FC<IProps> = (props): React.ReactNode => {
 						<IconButton
 							aria-label="Show/hide password"
 							size="sm"
+							variant="ghost"
 							me="0.5rem"
 							color="gray.500"
 							icon={!showPassword ? <FiEye /> : <FiEyeOff />}

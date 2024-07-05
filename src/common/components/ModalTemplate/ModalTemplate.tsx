@@ -23,7 +23,7 @@ export const ModalTemplate: React.FC<IProps> = (props) => {
 	return (
 		<Modal {...modalProps} isCentered motionPreset="slideInBottom">
 			<ModalOverlay />
-			<ModalContent p="2rem">
+			<ModalContent p="2rem" border="1px solid" borderColor="brand-gray.200">
 				<ModalHeader p="0rem">
 					<HStack>
 						{title && <Text textStyle="heading6">{title}</Text>}

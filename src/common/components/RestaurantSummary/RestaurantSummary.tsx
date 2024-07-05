@@ -22,7 +22,7 @@ export const RestaurantSummary: React.FC<IProps> = (props) => {
 				<HStack spacing={0} alignItems="center">
 					<Icon me="0.25rem" as={FaStar} color="brand-primary.default" />
 					<Text textStyle="body2" color="brand-primary.default">
-						{rating}
+						{Number(rating).toFixed(1)}
 					</Text>
 					<Text textStyle="body2" color="gray.500">
 						{`(${ratingCount})`}

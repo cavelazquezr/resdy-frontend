@@ -9,10 +9,15 @@ import { RestaurantCardRecord } from '../../../types/restaurants';
 
 interface IProps {
 	data: Array<RestaurantCardRecord>;
+	isLoading?: boolean;
 }
 
 export const HorizontalRestaurantStack: React.FC<IProps> = (props) => {
-	const { data } = props;
+	const { data, isLoading } = props;
+
+	if (isLoading) {
+		return <>Loading</>;
+	}
 
 	return (
 		<HStack>
