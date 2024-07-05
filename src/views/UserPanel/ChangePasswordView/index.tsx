@@ -12,6 +12,7 @@ import {
 	Box,
 	useToast,
 } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 
 import { updateUser } from 'api/authentication';
@@ -89,14 +90,21 @@ export const ChangePasswordView: React.FC = () => {
 					});
 					setIsSubmitting(false);
 				} catch (error) {
-					//add error message to toast
-					toast({
-						position: 'top',
-						description: `Ha habido un error al actualizar tu clave verifica tus contraseñas. intenta de nuevo`,
-						status: 'error',
-						duration: 4000,
-						isClosable: true,
-					});
+					//add error message to
+					console.error(error);
+					if (error instanceof AxiosError) {
+						console.error(error.response?.data.message);
+						toast({
+							position: 'top',
+							description: `Ha habido un error ${error.response?.data.message}.Por favor intenta de nuevo`,
+							status: 'error',
+							duration: 4000,
+							isClosable: true,
+							containerStyle: {
+								fontSize: '1.3em',
+							},
+						});
+					}
 					setIsSubmitting(false);
 				}
 			}}
