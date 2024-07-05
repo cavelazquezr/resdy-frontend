@@ -5,8 +5,16 @@
 		"lib": ["ES2020", "DOM", "DOM.Iterable"],
 		"module": "ESNext",
 		"skipLibCheck": true,
-		"baseUrl": "./src",
+		"baseUrl": "./",
 		"noImplicitAny": false,
+		"paths": {
+			"@/*": ["./src/*"],
+			"config/*": ["./src/config/*"],
+			"hooks/*": ["./src/hooks/*"],
+			"types/*": ["./src/types/*"],
+			"common/*": ["./src/common/*"],
+			"api/*": ["./src/api/*"]
+		},
 
 		/* Bundler mode */
 		"moduleResolution": "node",
