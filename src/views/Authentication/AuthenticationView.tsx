@@ -16,7 +16,7 @@ export const AuthenticationView: React.FC<IProps> = (props) => {
 	return (
 		<Flex w="100%" h="100vh" alignItems="center" justifyContent="center" bg="gray.50">
 			<ContentContainer w="fit-content" padding="2rem">
-				<VStack w="100%" spacing="1rem">
+				<VStack spacing="1rem" w="27rem">
 					{loginView ? <LoginForm /> : <RegisterForm />}
 					<HStack justifyContent="center">
 						<Text textStyle="body1" color="gray.500">

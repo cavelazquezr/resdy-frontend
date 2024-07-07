@@ -10,8 +10,8 @@ export const loginSchema = yup.object({
 });
 
 export const registerSchema = yup.object({
-	firstname: yup.string().required(ErrorMessages.FIELD_REQUIRED),
-	lastname: yup.string().required(ErrorMessages.FIELD_REQUIRED),
+	firstname: yup.string(),
+	lastname: yup.string(),
 	email: yup.string().email(ErrorMessages.INVALID_EMAIL).required(ErrorMessages.FIELD_REQUIRED),
 	password: yup
 		.string()
@@ -19,7 +19,7 @@ export const registerSchema = yup.object({
 		.max(20, ErrorMessages.LONG_PASSWORD)
 		.matches(passwordRules, { message: ErrorMessages.WEAK_PASSWORD })
 		.required(ErrorMessages.FIELD_REQUIRED),
-	repeatPassword: yup
+	repeat_password: yup
 		.string()
 		.oneOf([yup.ref('password')], ErrorMessages.PASSWORD_DOESNT_MATCH)
 		.required(ErrorMessages.FIELD_REQUIRED),

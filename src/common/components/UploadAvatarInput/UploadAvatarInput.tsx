@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Button, HStack, Input, InputGroup, useToast } from '@chakra-ui/react';
 
+import { updateUser } from '../../../api/authentication';
 import { uploadFiles } from '../../../api/microservices';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { getCurrentUserThunk } from '../../../store/user/thunk';
@@ -33,8 +34,11 @@ export const UploadAvatarInput: React.FC<IProps> = (props) => {
 			}));
 			setIsUploading(true);
 			await uploadFiles(attachedFiles)
-				.then(() => {
-					dispatch(getCurrentUserThunk());
+				.then(async () => {
+					if (userData && userData.avatar_url === null) {
+						await updateUser({ avatar_url: `users/${userData.id}/${userData.id}-avatar` });
+					}
+					await dispatch(getCurrentUserThunk());
 					toast({
 						position: 'top',
 						description: `Tu avatar ha sido actualizado correctamente.`,

@@ -19,9 +19,11 @@ export const InlineForm: React.FC<IProps> = (props) => {
 	const { label, description, children } = field;
 	return (
 		<VStack align="stretch" spacing="1rem">
-			<Text textStyle="heading6" color="gray.900" opacity={field.isDisabled ? '0.5' : '1'}>
-				{label}
-			</Text>
+			{label && (
+				<Text textStyle="heading6" color="gray.900" opacity={field.isDisabled ? '0.5' : '1'}>
+					{label}
+				</Text>
+			)}
 			<Text textStyle="body1" color="gray.500" opacity={field.isDisabled ? '0.5' : '1'}>
 				{description}
 			</Text>
