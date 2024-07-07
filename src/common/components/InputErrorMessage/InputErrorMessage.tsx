@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { HStack, Icon, Text } from '@chakra-ui/react';
+import { FormErrorMessage, HStack, Icon } from '@chakra-ui/react';
 import { FiAlertTriangle } from 'react-icons/fi';
 
 interface IProps {
@@ -10,11 +10,11 @@ interface IProps {
 export const InputErrorMessage: React.FC<IProps> = (props) => {
 	const { error } = props;
 	return (
-		<HStack w="inherit">
-			<Icon color="red.500" as={FiAlertTriangle} />
-			<Text textStyle="body2" color="red.500">
+		<HStack w="inherit" alignItems="center" mt="0.5rem">
+			<Icon color="red.500" as={FiAlertTriangle} h="100%" />
+			<FormErrorMessage m={0} w="100%">
 				{error}
-			</Text>
+			</FormErrorMessage>
 		</HStack>
 	);
 };

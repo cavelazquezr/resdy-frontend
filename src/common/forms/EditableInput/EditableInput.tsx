@@ -1,69 +1,66 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
-import { Text, Grid, GridItem, VStack, HStack, Icon, Input, Flex, useToast, Spinner } from '@chakra-ui/react';
-import { FiChevronRight, FiLock } from 'react-icons/fi';
+import {
+	Text,
+	Grid,
+	GridItem,
+	VStack,
+	HStack,
+	Icon,
+	Input,
+	Spinner,
+	FormControl,
+	FormLabel,
+	IconButton,
+} from '@chakra-ui/react';
+import { FiCheck, FiChevronRight, FiLock, FiX } from 'react-icons/fi';
 
-import { FormField, FieldValue } from '../../../types/form';
+import { FormField } from '../../../types/form';
+import { InputErrorMessage } from '../../components/InputErrorMessage/InputErrorMessage';
 import { UploadAvatarInput } from '../../components/UploadAvatarInput/UploadAvatarInput';
 
 interface IProps {
+	formId?: string;
 	field: FormField;
+	isSubmitting?: boolean;
 	isDisabled?: boolean;
 	labelingCol?: number;
 	inputCol?: number;
-	handleSubmit?: (id: string, value: FieldValue) => void;
+	error?: string;
+	customSubmitHandler?: (args: any) => void;
+	onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
+	onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
+	onKeyDown?: React.KeyboardEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
 	setEditingField?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 export const EditableInput: React.FC<IProps> = (props) => {
-	const { field, isDisabled, labelingCol = 1, inputCol = 1, handleSubmit, setEditingField } = props;
+	const {
+		formId,
+		field,
+		isSubmitting,
+		isDisabled,
+		labelingCol = 1,
+		inputCol = 1,
+		error,
+		customSubmitHandler,
+		setEditingField,
+		onBlur,
+		onChange,
+		onKeyDown,
+		...restProps
+	} = props;
 	const ref = React.useRef<HTMLDivElement>(null);
-
-	const toast = useToast();
 
 	const [isHovered, setIsHovered] = React.useState<boolean>(false);
 	const [isEditing, setIsEditing] = React.useState<boolean>(false);
-	const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
-	const [value, setValue] = React.useState<FieldValue>(field.value ?? null);
 
-	const onFinishEditing = async () => {
-		try {
-			setIsSubmitting(true);
-			setIsHovered(false);
-			setIsEditing(false);
-			let response;
-			if (handleSubmit) {
-				response = await handleSubmit(field.id, value);
-			}
-			if (!response.error) {
-				toast({
-					position: 'top',
-					description: `Tu información de ${field.label} ha sido actualizada correctamente.`,
-					status: 'success',
-					duration: 4000,
-					isClosable: true,
-				});
-				setValue(field.value ?? null);
-				setEditingField && setEditingField(undefined);
-				setIsSubmitting(false);
-			} else {
-				throw new Error('Error updating user information');
-			}
-		} catch (error) {
-			console.error('Error:', error);
-			toast({
-				position: 'top',
-				description: `Ha habido un error al actualizar tu información de ${field.label}.`,
-				status: 'error',
-				duration: 4000,
-				isClosable: true,
-			});
-			setIsSubmitting(false);
-			setValue(field.value ?? null);
-			setIsHovered(false);
-			setIsEditing(false);
-			setEditingField && setEditingField(undefined);
-		}
+	const onFinishEditing = () => {
+		customSubmitHandler && customSubmitHandler({ [field.id]: (field.value as any).toString() });
+		setIsEditing(false);
+		setIsHovered(false);
+		setEditingField && setEditingField(undefined);
 	};
 
 	const onEditClick = () => {
@@ -79,8 +76,8 @@ export const EditableInput: React.FC<IProps> = (props) => {
 				return (
 					<VStack spacing="0.25rem" align="stretch">
 						<HStack>
-							<Text textStyle="body1" color={!field.value || field.blocked ? 'gray.500' : 'gray.900'}>
-								{field.value?.toString() ?? 'No especificado'}
+							<Text textStyle="body1" color={!field.defaultValue || field.blocked ? 'gray.500' : 'gray.900'}>
+								{field.defaultValue?.toString() ?? 'No especificado'}
 							</Text>
 							{isSubmitting && (
 								<Spinner
@@ -124,7 +121,7 @@ export const EditableInput: React.FC<IProps> = (props) => {
 					</VStack>
 				);
 			case 'avatar':
-				return <UploadAvatarInput isDisabled={isDisabled ?? false} isSubmitting={isSubmitting} />;
+				return <UploadAvatarInput isDisabled={isDisabled ?? false} isSubmitting={isSubmitting ?? false} />;
 		}
 	};
 
@@ -134,22 +131,45 @@ export const EditableInput: React.FC<IProps> = (props) => {
 			case 'number':
 			case 'text':
 				return (
-					<Flex alignItems="center" h="100%">
-						<Input
-							type={field.type}
-							defaultValue={value as string}
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								const { value } = e.target;
-								setValue(value);
-							}}
-							onBlur={onFinishEditing}
-							onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-								if (e.key === 'Enter') {
-									onFinishEditing();
-								}
-							}}
-						/>
-					</Flex>
+					<VStack alignItems="stretch" h="100%" maxW="20rem" spacing="0rem">
+						<HStack>
+							<Input
+								id={field.id}
+								type={field.type}
+								defaultValue={field.value as string}
+								onBlur={onBlur}
+								onKeyDown={onKeyDown}
+								onChange={onChange}
+								{...restProps}
+							/>
+							<IconButton
+								isDisabled={field.value === '' || !!error}
+								aria-label="submit-edit"
+								type="submit"
+								form={formId}
+								variant="default-light"
+								size="sm"
+								borderRadius="0.5rem"
+								icon={<FiCheck />}
+								color="gray.500"
+								onClick={onFinishEditing}
+							/>
+							<IconButton
+								aria-label="cancel-edit"
+								variant="default-light"
+								size="sm"
+								borderRadius="0.5rem"
+								icon={<FiX />}
+								color="gray.500"
+								onClick={() => {
+									setIsEditing(false);
+									setIsHovered(false);
+									setEditingField && setEditingField(undefined);
+								}}
+							/>
+						</HStack>
+						{error && <InputErrorMessage error={error} />}
+					</VStack>
 				);
 		}
 	};
@@ -166,20 +186,22 @@ export const EditableInput: React.FC<IProps> = (props) => {
 		}
 	};
 	return (
-		<Grid w="100%" templateColumns={`repeat(${labelingCol + inputCol}, 1fr)`}>
-			<GridItem colSpan={labelingCol}>
-				<VStack spacing="0.25rem" align="stretch">
-					<Text textStyle="body1" color="gray.900" fontWeight="medium">
-						{field.label}
-					</Text>
-					<Text textStyle="body1" color="gray.500">
-						{field.description}
-					</Text>
-				</VStack>
-			</GridItem>
-			<GridItem colSpan={inputCol}>
-				{isEditing ? renderEditableByType(field.type) : renderInputByType(field.type)}
-			</GridItem>
-		</Grid>
+		<FormControl isInvalid={!!field.error ?? false}>
+			<Grid w="100%" templateColumns={`repeat(${labelingCol + inputCol}, 1fr)`}>
+				<GridItem colSpan={labelingCol}>
+					<VStack spacing="0.25rem" align="stretch">
+						<FormLabel m={0} htmlFor={field.id}>
+							{field.label}
+						</FormLabel>
+						<Text textStyle="body1" color="gray.500">
+							{field.description}
+						</Text>
+					</VStack>
+				</GridItem>
+				<GridItem colSpan={inputCol}>
+					{isEditing ? renderEditableByType(field.type) : renderInputByType(field.type)}
+				</GridItem>
+			</Grid>
+		</FormControl>
 	);
 };

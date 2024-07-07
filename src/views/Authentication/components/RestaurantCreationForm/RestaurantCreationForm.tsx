@@ -136,7 +136,8 @@ export const RestaurantCreationForm: React.FC = () => {
 					}
 				})
 				.catch((error) => {
-					const message = error.response.data.message;
+					console.log('error', error);
+					const message = error.response.data.details.email.message;
 					setCustomErrors({ email: message });
 				});
 		}

@@ -41,14 +41,6 @@ const sections = [
 		path: '/userpanel/bookings',
 	},
 	{
-		name: 'list',
-		label: 'Guardados',
-		icon: FiBookmark,
-		description: 'Aquí podrás gestionar tus restaurantes guardados',
-		component: ListsView,
-		path: '/userpanel/list',
-	},
-	{
 		name: 'ratings',
 		label: 'Mis reseñas',
 		icon: FiMessageSquare,

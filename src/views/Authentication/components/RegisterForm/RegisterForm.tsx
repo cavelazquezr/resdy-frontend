@@ -4,11 +4,11 @@ import { VStack, Img, Text, HStack, Button, useToast } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
+import { checkIfEmailIsUsed } from '../../../../api/verification';
 import resdyLogoPrimary from '../../../../assets/Resdy.svg';
-import { InputErrorMessage } from '../../../../common/components/InputErrorMessage/InputErrorMessage';
-import { NewInput } from '../../../../common/forms/NewInput/NewInput';
+import { LinkText } from '../../../../common/components/LinkText/LinkText';
 import { SuperLink } from '../../../../common/components/SuperLink/SuperLink';
-import { getFormikInitialValues } from '../../../../common/utils/getFormikInitialValues';
+import { NewForm } from '../../../../common/forms/NewForm';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { postNewUserThunk } from '../../../../store/user/thunk';
 import { FormField } from '../../../../types/form';
@@ -16,7 +16,8 @@ import { UserCreateInput } from '../../../../types/user';
 import { registerSchema as schema } from '../../schemas';
 
 export const RegisterForm: React.FC = () => {
-	const { userData: user, error: authError } = useAppSelector((state) => state.user);
+	const { userData: user } = useAppSelector((state) => state.user);
+	const [customErrors, setCustomErrors] = React.useState<{ [field: string]: string | undefined } | undefined>();
 
 	// Declare hooks
 	const dispatch = useAppDispatch();
@@ -24,7 +25,7 @@ export const RegisterForm: React.FC = () => {
 	const toast = useToast();
 
 	const onSubmit = async () => {
-		const { email, firstname, lastname, password } = values as UserCreateInput;
+		const { email, firstname, lastname, password } = values as Omit<UserCreateInput, 'is_owner'>;
 		const newUser: UserCreateInput = {
 			email,
 			firstname,
@@ -36,42 +37,22 @@ export const RegisterForm: React.FC = () => {
 	};
 
 	const { values, errors, touched, isSubmitting, isValid, handleBlur, handleChange, handleSubmit } = useFormik({
-		initialValues: getFormikInitialValues(schema),
+		initialValues: {
+			firstname: '',
+			lastname: '',
+			email: '',
+			password: '',
+			repeat_password: '',
+		},
 		onSubmit,
 		validationSchema: schema,
 	});
-	const fields: FormField[] = [
-		{
-			id: 'firstname',
-			label: 'Nombre',
-			type: 'text',
-		},
-		{
-			id: 'lastname',
-			label: 'Apellidos',
-			type: 'text',
-		},
-		{
-			id: 'email',
-			label: 'Correo electrónico',
-			type: 'text',
-		},
-		{
-			id: 'password',
-			label: 'Contraseña',
-			type: 'password',
-		},
-		{
-			id: 'repeatPassword',
-			label: 'Repetir contraseña',
-			type: 'password',
-		},
-	];
 
-	const isFormValid = isValid && !Object.values(values).some((value) => value === '');
+	const isFormValid =
+		!Object.values(values).every((value) => value === '') && isValid && customErrors?.email === undefined;
 
 	React.useEffect(() => {
-		if (user?.data && !authError) {
+		if (user?.data) {
 			navigate('/');
 			toast({
 				position: 'top',
@@ -81,56 +62,113 @@ export const RegisterForm: React.FC = () => {
 				isClosable: true,
 			});
 		}
-	}, [user, authError]);
+	}, [user]);
+
+	const handleEmailCheck = React.useCallback(async () => {
+		if (values['email']) {
+			await checkIfEmailIsUsed({ email: values['email'] })
+				.then((res) => {
+					if (res.data === true) {
+						setCustomErrors({ email: undefined });
+					}
+				})
+				.catch((error) => {
+					const message = error.response.data.details.email.message;
+					setCustomErrors({ email: message });
+				});
+		}
+	}, [values['email'], errors['email'], touched['email']]);
+
+	React.useEffect(() => {
+		if (touched['email']) {
+			handleEmailCheck();
+		}
+	}, [values['email'], errors['email'], touched['email']]);
+
+	const emailError = React.useMemo(() => {
+		if (customErrors?.email !== undefined) {
+			return customErrors.email;
+		} else {
+			return touched['email'] && errors.email;
+		}
+	}, [customErrors, errors.email, touched.email]);
+
+	const fields: FormField[] = [
+		{
+			id: 'userInfo',
+			groupId: 'userInfoGroup',
+			type: 'inlineGroup',
+			isDisabled: isSubmitting,
+			children: [
+				{
+					id: 'firstname',
+					label: 'Nombre',
+					type: 'text',
+				},
+				{
+					id: 'lastname',
+					label: 'Apellidos',
+					type: 'text',
+				},
+				{
+					id: 'email',
+					label: 'Correo electrónico',
+					type: 'text',
+					value: values.email,
+					isRequired: true,
+					// Use the custom error if present, otherwise fallback to Formik error
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					error: emailError && touched.email ? (emailError as string) : undefined,
+				},
+				{
+					id: 'password',
+					label: 'Contraseña',
+					type: 'password',
+					isRequired: true,
+					error: errors.password && touched.password ? errors.password : undefined,
+				},
+				{
+					id: 'repeat_password',
+					label: 'Repetir contraseña',
+					type: 'password',
+					isRequired: true,
+					error: errors.repeat_password && touched.repeat_password ? errors.repeat_password : undefined,
+				},
+			],
+		},
+	];
 
 	return (
-		<VStack spacing="1.5rem" align="stretch">
+		<VStack spacing="1.5rem" align="stretch" w="100%">
 			<Img src={resdyLogoPrimary} h="2rem" w="fit-content" />
 			<VStack spacing="0.5rem" align="stretch">
 				<Text textStyle="heading5" fontWeight="bold" color="gray.900">
 					Ingresa los datos para crear tu cuenta
 				</Text>
 			</VStack>
-			<form onSubmit={handleSubmit} noValidate>
-				<VStack spacing="1.5rem" align="stretch">
-					{fields.map((field, index) => (
-						<NewInput
-							key={index}
-							label={field.label}
-							type={field.type as 'password' | 'text'}
-							id={field.id}
-							size="md"
-							value={values[field.id]}
-							error={errors[field.id] && touched[field.id] && errors[field.id]}
-							isInvalid={!!(errors[field.id] && touched[field.id])}
-							isDisabled={isSubmitting}
-							onBlur={handleBlur}
-							onChange={handleChange}
-						/>
-					))}
-					{authError && <InputErrorMessage error={authError} />}
-					<VStack spacing="1rem" align="stretch">
-						<Button
-							variant="default-light"
-							size="lg"
-							type="submit"
-							isDisabled={!isFormValid}
-							isLoading={isSubmitting}
-							loadingText={'Registrando'}
-						>
-							Registrar usuario
-						</Button>
-					</VStack>
-				</VStack>
+			<form id="create-user" onSubmit={handleSubmit} noValidate>
+				<NewForm fields={fields} onChange={handleChange} onBlur={handleBlur} isSubmitting={isSubmitting} />
 			</form>
+			<VStack spacing="1rem" align="stretch">
+				<Button
+					variant="default-light"
+					size="lg"
+					type="submit"
+					form="create-user"
+					isDisabled={!isFormValid}
+					isLoading={isSubmitting}
+					loadingText={'Registrando'}
+				>
+					Registrar usuario
+				</Button>
+			</VStack>
+
 			<HStack justifyContent="center">
 				<Text textStyle="body1" color="gray.500">
 					¿Ya tienes cuenta?
 				</Text>
 				<SuperLink to="/login">
-					<Text textStyle="body1" fontWeight="bold" color="gray.700">
-						Ingresa
-					</Text>
+					<LinkText fontWeight="medium">Ingresa</LinkText>
 				</SuperLink>
 			</HStack>
 		</VStack>

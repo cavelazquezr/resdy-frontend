@@ -23,12 +23,13 @@ export type FieldValue = string | number | boolean | Date | null;
 
 export type FormField = {
 	id: string;
-	label: string;
+	label?: string;
 	type: FieldTypes;
 	description?: string;
 	placeholder?: string;
 	colSpan?: number;
 	value?: FieldValue;
+	defaultValue?: FieldValue;
 	choices?: Array<FieldChoice>;
 	children?: FormField[];
 	tooltip?: string;
@@ -39,6 +40,8 @@ export type FormField = {
 	dependsOnGroup?: Array<string>;
 	error?: string;
 	isDisabled?: boolean;
+	isRequired?: boolean;
+	isEditable?: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	dispatcher?: React.Dispatch<React.SetStateAction<any>>;
 	onBlur?: () => void;

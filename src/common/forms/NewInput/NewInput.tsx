@@ -1,18 +1,7 @@
 import React from 'react';
 
-import {
-	HStack,
-	Icon,
-	IconButton,
-	Input,
-	InputGroup,
-	InputProps,
-	InputRightElement,
-	Text,
-	Tooltip,
-	VStack,
-} from '@chakra-ui/react';
-import { FiEye, FiEyeOff, FiInfo } from 'react-icons/fi';
+import { FormControl, FormLabel, IconButton, Input, InputGroup, InputProps, InputRightElement } from '@chakra-ui/react';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 import { InputErrorMessage } from '../../components/InputErrorMessage/InputErrorMessage';
 
@@ -24,23 +13,12 @@ interface IProps extends InputProps {
 }
 
 export const NewInput: React.FC<IProps> = (props): React.ReactNode => {
-	const { error, type, tooltip, ...inputProps } = props;
+	const { error, type, tooltip, label, ...inputProps } = props;
 	const [showPassword, setShowPassword] = React.useState<boolean>(type !== 'password');
 
 	return (
-		<VStack spacing="0.5rem" align="stretch" w="inherit">
-			{inputProps.label && (
-				<HStack>
-					<Text textStyle="body2" color="gray.900" opacity={inputProps.isDisabled ? '0.5' : '1'}>
-						{inputProps.label}
-					</Text>
-					{tooltip && (
-						<Tooltip label={tooltip} hasArrow>
-							<Icon as={FiInfo} />
-						</Tooltip>
-					)}
-				</HStack>
-			)}
+		<FormControl isInvalid={!!error} isRequired={inputProps.isRequired}>
+			{label && <FormLabel htmlFor={inputProps.id}>{label}</FormLabel>}
 			<InputGroup>
 				<Input type={showPassword ? 'text' : 'password'} {...inputProps} />
 				{type === 'password' && (
@@ -58,6 +36,6 @@ export const NewInput: React.FC<IProps> = (props): React.ReactNode => {
 				)}
 			</InputGroup>
 			{error && <InputErrorMessage error={error} />}
-		</VStack>
+		</FormControl>
 	);
 };
