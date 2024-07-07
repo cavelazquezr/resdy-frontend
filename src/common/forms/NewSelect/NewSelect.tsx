@@ -1,25 +1,25 @@
 import React from 'react';
 
-import { SelectProps, Select, Text, VStack } from '@chakra-ui/react';
+import { SelectProps, Select, FormControl, FormLabel } from '@chakra-ui/react';
 
 import { InputErrorMessage } from '../../components/InputErrorMessage/InputErrorMessage';
 
 interface IProps extends SelectProps {
-	label: string;
+	label?: string;
 	error?: string;
 	choices: React.ReactNode;
 }
 
 export const NewSelect: React.FC<IProps> = (props): React.ReactNode => {
-	const { error, choices, ...inputProps } = props;
+	const { error, choices, label, ...inputProps } = props;
 
 	return (
-		<VStack spacing="0.5rem" align="stretch" w="100%">
-			<Text textStyle="body2" color="gray.900" opacity={inputProps.isDisabled ? '0.5' : '1'}>
-				{inputProps.label}
-			</Text>
+		<FormControl isInvalid={!!error} isRequired={inputProps.isRequired}>
+			<FormLabel textStyle="body2" fontWeight="normal">
+				{label}
+			</FormLabel>
 			<Select {...inputProps}>{choices}</Select>
 			{error && <InputErrorMessage error={error} />}
-		</VStack>
+		</FormControl>
 	);
 };

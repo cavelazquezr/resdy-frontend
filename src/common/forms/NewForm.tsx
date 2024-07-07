@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { GridItem, VStack } from '@chakra-ui/react';
+import { Divider, VStack } from '@chakra-ui/react';
 
 import { AutoCompleteInput } from './AutoCompleteInput/AutoCompleteInput';
 import { DragAndDrop } from './DragAndDrop/DragAndDrop';
+import { EditableInput } from './EditableInput/EditableInput';
 import { FormStack } from './FormStack/FormStack';
 import { InlineForm } from './InlineForm/InlineForm';
 import { NewInput } from './NewInput/NewInput';
@@ -12,8 +13,11 @@ import { FormField } from '../../types/form';
 
 interface IProps {
 	fields: Array<FormField>;
+	formId?: string;
 	isSubmitting?: boolean;
 	isDisabled?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	customSubmitHandler?: (args: any) => void;
 	onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
 	onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
 	onKeyDown?: React.KeyboardEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
@@ -25,11 +29,31 @@ export const NewForm: React.FC<IProps> = (props): React.ReactNode => {
 
 	const renderFields = (fields: FormField[]) => {
 		return fields.map((field, index) => {
-			switch (field.type) {
-				case 'text':
-				case 'password':
-					return (
-						<GridItem key={index} colSpan={field.colSpan ?? 2}>
+			if (field.isEditable) {
+				return (
+					<React.Fragment key={index}>
+						<EditableInput
+							formId={restProps.formId}
+							field={field}
+							labelingCol={3}
+							inputCol={5}
+							isDisabled={field.isDisabled || isSubmitting || isDisabled}
+							isSubmitting={isSubmitting}
+							customSubmitHandler={restProps.customSubmitHandler}
+							setEditingField={field.dispatcher}
+							error={field.error}
+							onBlur={onBlur}
+							onChange={onChange}
+							onKeyDown={onKeyDown}
+						/>
+						<Divider borderColor="brand-gray.200" />
+					</React.Fragment>
+				);
+			} else {
+				switch (field.type) {
+					case 'text':
+					case 'password':
+						return (
 							<NewInput
 								key={index}
 								autoComplete="on"
@@ -42,15 +66,14 @@ export const NewForm: React.FC<IProps> = (props): React.ReactNode => {
 								error={field.error}
 								isInvalid={!!field.error}
 								isDisabled={field.isDisabled || isSubmitting || isDisabled}
+								isRequired={field.isRequired}
 								onBlur={onBlur}
 								onChange={onChange}
 								onKeyDown={onKeyDown}
 							/>
-						</GridItem>
-					);
-				case 'select':
-					return (
-						<GridItem key={index} colSpan={field.colSpan ?? 2}>
+						);
+					case 'select':
+						return (
 							<NewSelect
 								key={index}
 								label={field.label}
@@ -66,53 +89,54 @@ export const NewForm: React.FC<IProps> = (props): React.ReactNode => {
 								error={field.error}
 								isInvalid={!!field.error}
 								isDisabled={field.isDisabled || isSubmitting || isDisabled}
+								isRequired={field.isRequired}
 								onChange={onChange}
 							/>
-						</GridItem>
-					);
-				case 'formStack':
-					return (
-						<FormStack
-							key={index}
-							fields={field.children ?? []}
-							isDisabled={field.isDisabled || isSubmitting || isDisabled}
-							{...restProps}
-						/>
-					);
-				case 'inlineGroup':
-					return (
-						<InlineForm
-							key={index}
-							field={field}
-							isDisabled={field.isDisabled || isSubmitting || isDisabled}
-							{...restProps}
-						/>
-					);
-				case 'dragAndDrop':
-					return (
-						<DragAndDrop
-							key={index}
-							id={field.id}
-							field={field}
-							isDisabled={field.isDisabled || isSubmitting || isDisabled}
-							{...restProps}
-						/>
-					);
-				case 'autoComplete':
-					return (
-						<AutoCompleteInput
-							key={index}
-							label={field.label}
-							id={field.id}
-							choices={field.choices}
-							size="md"
-							value={field.value as string}
-							error={field.error}
-							isInvalid={!!field.error}
-							isDisabled={field.isDisabled || isSubmitting || isDisabled}
-							onChange={onChange}
-						/>
-					);
+						);
+					case 'formStack':
+						return (
+							<FormStack
+								key={index}
+								fields={field.children ?? []}
+								isDisabled={field.isDisabled || isSubmitting || isDisabled}
+								{...restProps}
+							/>
+						);
+					case 'inlineGroup':
+						return (
+							<InlineForm
+								key={index}
+								field={field}
+								isDisabled={field.isDisabled || isSubmitting || isDisabled}
+								{...restProps}
+							/>
+						);
+					case 'dragAndDrop':
+						return (
+							<DragAndDrop
+								key={index}
+								id={field.id}
+								field={field}
+								isDisabled={field.isDisabled || isSubmitting || isDisabled}
+								{...restProps}
+							/>
+						);
+					case 'autoComplete':
+						return (
+							<AutoCompleteInput
+								key={index}
+								label={field.label}
+								id={field.id}
+								choices={field.choices}
+								size="md"
+								value={field.value as string}
+								error={field.error}
+								isInvalid={!!field.error}
+								isDisabled={field.isDisabled || isSubmitting || isDisabled}
+								onChange={onChange}
+							/>
+						);
+				}
 			}
 		});
 	};

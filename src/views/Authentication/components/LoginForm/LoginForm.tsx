@@ -1,24 +1,26 @@
 import React from 'react';
 
-import { VStack, Img, Text, HStack, Checkbox, Button, useToast, Divider } from '@chakra-ui/react';
+import { VStack, Img, Text, HStack, Checkbox, Button, useToast, Divider, Icon } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { FcGoogle } from 'react-icons/fc';
+import { FiAlertTriangle } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
+import { getAccessToken } from '../../../../api/authentication';
 import resdyLogoPrimary from '../../../../assets/Resdy.svg';
-import { InputErrorMessage } from '../../../../common/components/InputErrorMessage/InputErrorMessage';
 import { LinkText } from '../../../../common/components/LinkText/LinkText';
 import { SuperLink } from '../../../../common/components/SuperLink/SuperLink';
-import { NewInput } from '../../../../common/forms/NewInput/NewInput';
+import { NewForm } from '../../../../common/forms/NewForm';
 import { getFormikInitialValues } from '../../../../common/utils/getFormikInitialValues';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
-import { getAccessTokenThunk } from '../../../../store/user/thunk';
+import { getCurrentUserThunk } from '../../../../store/user/thunk';
 import { FormField } from '../../../../types/form';
 import { UserCredentials } from '../../../../types/user';
 import { loginSchema as schema } from '../../schemas';
 
 export const LoginForm: React.FC = () => {
-	const { userData: user, error: authError } = useAppSelector((state) => state.user);
+	const { userData: user } = useAppSelector((state) => state.user);
+	const [error, setError] = React.useState<string | undefined>();
 
 	// Declare hooks
 	const dispatch = useAppDispatch();
@@ -26,7 +28,15 @@ export const LoginForm: React.FC = () => {
 	const toast = useToast();
 
 	const onSubmit = async () => {
-		await dispatch(getAccessTokenThunk(values as UserCredentials));
+		await getAccessToken(values as UserCredentials)
+			.then((response) => {
+				localStorage.setItem('accessToken', response.data.token);
+				dispatch(getCurrentUserThunk());
+			})
+			.catch((err) => {
+				console.error('Authentication failed:', err);
+				setError(err.response.data.details.credentials.message);
+			});
 	};
 
 	const { values, errors, touched, isSubmitting, isValid, handleBlur, handleChange, handleSubmit } = useFormik({
@@ -37,21 +47,32 @@ export const LoginForm: React.FC = () => {
 
 	const fields: FormField[] = [
 		{
-			id: 'email',
-			label: 'Correo electrónico',
-			type: 'text',
-		},
-		{
-			id: 'password',
-			label: 'Contraseña',
-			type: 'password',
+			id: 'userInfo',
+			groupId: 'userInfoGroup',
+			type: 'inlineGroup',
+			children: [
+				{
+					id: 'email',
+					label: 'Correo electrónico',
+					type: 'text',
+					value: values['email'],
+					error: errors['email'] && touched['email'] && errors['email'],
+				},
+				{
+					id: 'password',
+					label: 'Contraseña',
+					type: 'password',
+					value: values['password'],
+					error: errors['password'] && touched['password'] && errors['password'],
+				},
+			],
 		},
 	];
 
 	const isFormValid = isValid && !Object.values(values).some((value) => value === '');
 
 	React.useEffect(() => {
-		if (user?.data && !authError) {
+		if (user?.data) {
 			navigate('/');
 			toast({
 				position: 'top',
@@ -61,71 +82,75 @@ export const LoginForm: React.FC = () => {
 				isClosable: true,
 			});
 		}
-	}, [user, authError]);
+	}, [user]);
+
+	React.useEffect(() => {
+		setError(undefined);
+	}, [values]);
 
 	return (
-		<VStack spacing="1.5rem" align="stretch">
+		<VStack spacing="1.5rem" align="stretch" w="100%">
 			<Img src={resdyLogoPrimary} h="2rem" w="fit-content" />
 			<Text textStyle="heading5" fontWeight="bold" color="gray.900">
 				Inicia sesión en tu cuenta
 			</Text>
-			<form onSubmit={handleSubmit} noValidate>
-				<VStack spacing="1.5rem" align="stretch">
-					<Button variant="default-light" size="lg" leftIcon={<FcGoogle />} isDisabled={isSubmitting}>
-						Ingresar con Google
+			<VStack spacing="1.5rem" align="stretch">
+				<Button variant="default-light" size="lg" leftIcon={<FcGoogle />} isDisabled={isSubmitting}>
+					Ingresar con Google
+				</Button>
+				<HStack>
+					<Divider />
+					<Text textStyle="body1" color="gray.500">
+						o
+					</Text>
+					<Divider />
+				</HStack>
+				<form id="login" onSubmit={handleSubmit} noValidate>
+					<NewForm
+						formId="login"
+						fields={fields}
+						onChange={handleChange}
+						onBlur={handleBlur}
+						isSubmitting={isSubmitting}
+					/>
+				</form>
+				{error && (
+					<HStack w="inherit" alignItems="center">
+						<Icon color="red.500" as={FiAlertTriangle} h="100%" />
+						<Text color="red.500" w="100%">
+							{error}
+						</Text>
+					</HStack>
+				)}
+				<HStack justifyContent="space-between">
+					<Checkbox
+						size="md"
+						colorScheme="brand-primary"
+						id="remember"
+						value={values['remember']}
+						isDisabled={isSubmitting}
+						onChange={handleChange}
+					>
+						Recuérdame
+					</Checkbox>
+					<Text textStyle="body1" fontWeight="bold" color="gray.700">
+						¿No recuerdas la contraseña?
+					</Text>
+				</HStack>
+				<VStack spacing="1rem" align="stretch">
+					<Button
+						variant="default-light"
+						size="lg"
+						type="submit"
+						form="login"
+						isDisabled={!isFormValid}
+						isLoading={isSubmitting}
+						loadingText={'Ingresando'}
+					>
+						Ingresar
 					</Button>
-					<HStack>
-						<Divider />
-						<Text textStyle="body1" color="gray.500">
-							o
-						</Text>
-						<Divider />
-					</HStack>
-					{fields.map((field, index) => (
-						<NewInput
-							key={index}
-							label={field.label}
-							type={field.type as 'text' | 'password'}
-							id={field.id}
-							size="md"
-							value={values[field.id]}
-							error={errors[field.id] && touched[field.id] && errors[field.id]}
-							isInvalid={!!(errors[field.id] && touched[field.id])}
-							isDisabled={isSubmitting}
-							onBlur={handleBlur}
-							onChange={handleChange}
-						/>
-					))}
-					{authError && <InputErrorMessage error={authError} />}
-					<HStack justifyContent="space-between">
-						<Checkbox
-							size="md"
-							colorScheme="brand-primary"
-							id="remember"
-							value={values['remember']}
-							isDisabled={isSubmitting}
-							onChange={handleChange}
-						>
-							Recuérdame
-						</Checkbox>
-						<Text textStyle="body1" fontWeight="bold" color="gray.700">
-							¿No recuerdas la contraseña?
-						</Text>
-					</HStack>
-					<VStack spacing="1rem" align="stretch">
-						<Button
-							variant="default-light"
-							size="lg"
-							type="submit"
-							isDisabled={!isFormValid}
-							isLoading={isSubmitting}
-							loadingText={'Ingresando'}
-						>
-							Ingresar
-						</Button>
-					</VStack>
 				</VStack>
-			</form>
+			</VStack>
 			<HStack justifyContent="center">
 				<Text textStyle="body1" color="gray.500">
 					¿No tienes cuenta?

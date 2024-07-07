@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Text, Divider, Img, VStack, IconButton, HStack, Skeleton, Button } from '@chakra-ui/react';
-import { FiAward, FiCalendar, FiChevronLeft, FiSmile, FiThumbsUp } from 'react-icons/fi';
+import { Text, Divider, Img, VStack, IconButton, HStack, Skeleton } from '@chakra-ui/react';
+import { FiAward, FiChevronLeft, FiSmile, FiThumbsUp } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 
 import resdyLogoPrimary from '../../../assets/Resdy.svg';
