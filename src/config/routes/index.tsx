@@ -5,11 +5,10 @@ import { Outlet, Route, Routes } from 'react-router-dom';
 import { Layout } from '../../components/Layout';
 import { RequireAuth } from '../../components/RequireAuth/RequireAuth';
 import { AuthenticationView } from '../../views/Authentication/AuthenticationView';
-import { RestaurantCreationView } from '../../views/Authentication/RestaurantCreationView';
 import { DiscoverView } from '../../views/Discover';
 import { LandingView } from '../../views/Landing';
 import { RestaurantLayout } from '../../views/Restaurant';
-import { UserPanelLayout } from '../../views/UserPanel';
+import { SettingsPanelLayout } from '../../views/SettingsPanel';
 
 export const Router: React.FC = () => {
 	return (
@@ -25,17 +24,17 @@ export const Router: React.FC = () => {
 				{/* Public routes */}
 				<Route path="/" element={<LandingView />} />
 				<Route path="/discover" element={<DiscoverView />} />
-				<Route path="/login" element={<AuthenticationView loginView />} />
+				<Route path="/login" element={<AuthenticationView />} />
 				<Route path="/register" element={<AuthenticationView />} />
-				<Route path="/register-restaurant" element={<RestaurantCreationView />} />
+				<Route path="/create-restaurant" element={<AuthenticationView />} />
 				{/* Restaurant views */}
 				<Route path="/restaurant" element={<Outlet />}>
 					<Route path=":restaurantName/:restaurantSection" element={<RestaurantLayout />} />
 				</Route>
 				{/* Protected routes */}
 				<Route element={<RequireAuth />}>
-					<Route path="userpanel" element={<Outlet />}>
-						<Route path=":panelSection" element={<UserPanelLayout />} />
+					<Route path="admin" element={<Outlet />}>
+						<Route path=":panelSection" element={<SettingsPanelLayout />} />
 					</Route>
 				</Route>
 			</Route>

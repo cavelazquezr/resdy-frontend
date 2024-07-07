@@ -380,7 +380,7 @@ export const RestaurantCreationForm: React.FC = () => {
 				firstActionButton={{
 					title: 'Ir al panel de administración',
 					action: () => {
-						navigate('/userpanel/information');
+						navigate('/admin/information');
 						onMessageModalClose();
 					},
 				}}

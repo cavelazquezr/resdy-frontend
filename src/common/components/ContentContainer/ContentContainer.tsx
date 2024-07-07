@@ -10,6 +10,7 @@ export const ContentContainer: React.FC<IProps> = (props) => {
 	return (
 		<Flex
 			bg="white"
+			opacity="1"
 			h="fit-content"
 			border="1px solid"
 			borderColor="brand-gray.200"

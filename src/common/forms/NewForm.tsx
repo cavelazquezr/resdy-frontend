@@ -9,6 +9,7 @@ import { FormStack } from './FormStack/FormStack';
 import { InlineForm } from './InlineForm/InlineForm';
 import { NewInput } from './NewInput/NewInput';
 import { NewSelect } from './NewSelect/NewSelect';
+import { NewTextarea } from './NewTextarea/NewTextarea';
 import { FormField } from '../../types/form';
 
 interface IProps {
@@ -18,9 +19,9 @@ interface IProps {
 	isDisabled?: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	customSubmitHandler?: (args: any) => void;
-	onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
-	onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
-	onKeyDown?: React.KeyboardEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
+	onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | undefined;
+	onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | undefined;
+	onKeyDown?: React.KeyboardEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | undefined;
 }
 
 export const NewForm: React.FC<IProps> = (props): React.ReactNode => {
@@ -91,6 +92,24 @@ export const NewForm: React.FC<IProps> = (props): React.ReactNode => {
 								isDisabled={field.isDisabled || isSubmitting || isDisabled}
 								isRequired={field.isRequired}
 								onChange={onChange}
+							/>
+						);
+					case 'textarea':
+						return (
+							<NewTextarea
+								key={index}
+								label={field.label}
+								id={field.id}
+								tooltip={field.tooltip ?? undefined}
+								limit={field.limit}
+								value={field.value as string}
+								error={field.error}
+								isInvalid={!!field.error}
+								isDisabled={field.isDisabled || isSubmitting || isDisabled}
+								isRequired={field.isRequired}
+								onBlur={onBlur}
+								onChange={onChange}
+								onKeyDown={onKeyDown}
 							/>
 						);
 					case 'formStack':

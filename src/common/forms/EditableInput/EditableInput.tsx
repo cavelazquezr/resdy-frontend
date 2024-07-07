@@ -8,7 +8,6 @@ import {
 	VStack,
 	HStack,
 	Icon,
-	Input,
 	Spinner,
 	FormControl,
 	FormLabel,
@@ -17,8 +16,9 @@ import {
 import { FiCheck, FiChevronRight, FiLock, FiX } from 'react-icons/fi';
 
 import { FormField } from '../../../types/form';
-import { InputErrorMessage } from '../../components/InputErrorMessage/InputErrorMessage';
 import { UploadAvatarInput } from '../../components/UploadAvatarInput/UploadAvatarInput';
+import { NewInput } from '../NewInput/NewInput';
+import { NewTextarea } from '../NewTextarea/NewTextarea';
 
 interface IProps {
 	formId?: string;
@@ -29,9 +29,9 @@ interface IProps {
 	inputCol?: number;
 	error?: string;
 	customSubmitHandler?: (args: any) => void;
-	onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
-	onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
-	onKeyDown?: React.KeyboardEventHandler<HTMLInputElement | HTMLSelectElement> | undefined;
+	onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | undefined;
+	onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | undefined;
+	onKeyDown?: React.KeyboardEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | undefined;
 	setEditingField?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
@@ -54,7 +54,7 @@ export const EditableInput: React.FC<IProps> = (props) => {
 	const ref = React.useRef<HTMLDivElement>(null);
 
 	const [isHovered, setIsHovered] = React.useState<boolean>(false);
-	const [isEditing, setIsEditing] = React.useState<boolean>(false);
+	const [isEditing, setIsEditing] = React.useState<boolean>(field.type === 'password');
 
 	const onFinishEditing = () => {
 		customSubmitHandler && customSubmitHandler({ [field.id]: (field.value as any).toString() });
@@ -72,6 +72,8 @@ export const EditableInput: React.FC<IProps> = (props) => {
 		switch (type) {
 			case 'number':
 			case 'date':
+			case 'password':
+			case 'textarea':
 			case 'text':
 				return (
 					<VStack spacing="0.25rem" align="stretch">
@@ -129,19 +131,69 @@ export const EditableInput: React.FC<IProps> = (props) => {
 		switch (type) {
 			case 'date':
 			case 'number':
+			case 'password':
 			case 'text':
 				return (
 					<VStack alignItems="stretch" h="100%" maxW="20rem" spacing="0rem">
 						<HStack>
-							<Input
+							<NewInput
 								id={field.id}
-								type={field.type}
+								error={field.error}
+								type={field.type as 'text' | 'password'}
+								value={field.value as string}
 								defaultValue={field.value as string}
 								onBlur={onBlur}
 								onKeyDown={onKeyDown}
 								onChange={onChange}
 								{...restProps}
 							/>
+							{field.type !== 'password' && (
+								<React.Fragment>
+									<IconButton
+										isDisabled={field.value === '' || !!error}
+										aria-label="submit-edit"
+										type="submit"
+										form={formId}
+										variant="default-light"
+										size="sm"
+										borderRadius="0.5rem"
+										icon={<FiCheck />}
+										color="gray.500"
+										onClick={onFinishEditing}
+									/>
+									<IconButton
+										aria-label="cancel-edit"
+										variant="default-light"
+										size="sm"
+										borderRadius="0.5rem"
+										icon={<FiX />}
+										color="gray.500"
+										onClick={() => {
+											setIsEditing(false);
+											setIsHovered(false);
+											setEditingField && setEditingField(undefined);
+										}}
+									/>
+								</React.Fragment>
+							)}
+						</HStack>
+					</VStack>
+				);
+			case 'textarea':
+				return (
+					<VStack alignItems="stretch" h="100%" maxW="20rem" spacing="0.5rem">
+						<NewTextarea
+							id={field.id}
+							error={field.error}
+							limit={field.limit}
+							value={field.value as string}
+							defaultValue={field.value as string}
+							onBlur={onBlur}
+							onKeyDown={onKeyDown}
+							onChange={onChange}
+							{...restProps}
+						/>
+						<HStack>
 							<IconButton
 								isDisabled={field.value === '' || !!error}
 								aria-label="submit-edit"
@@ -168,7 +220,6 @@ export const EditableInput: React.FC<IProps> = (props) => {
 								}}
 							/>
 						</HStack>
-						{error && <InputErrorMessage error={error} />}
 					</VStack>
 				);
 		}

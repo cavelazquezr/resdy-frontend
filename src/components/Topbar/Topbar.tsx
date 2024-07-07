@@ -19,7 +19,16 @@ import {
 	Select,
 	Input,
 } from '@chakra-ui/react';
-import { FiBookOpen, FiBookmark, FiLogOut, FiMessageSquare, FiUser } from 'react-icons/fi';
+import {
+	FiBookOpen,
+	FiBookmark,
+	FiClipboard,
+	FiImage,
+	FiInfo,
+	FiLogOut,
+	FiMessageSquare,
+	FiUser,
+} from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
 
 import resdyLogoPrimary from '../../assets/Resdy.svg';
@@ -85,28 +94,58 @@ const UserMenu: React.FC<{ user: UserRecord }> = (props) => {
 		localStorage.removeItem('accessToken');
 		window.location.reload();
 	};
-	const menuItems = [
+	const userMenuItems = [
 		{
 			label: 'Información personal',
 			icon: FiUser,
-			path: '/userpanel/information',
+			path: '/admin/information',
 		},
 		{
 			label: 'Mis reservas',
 			icon: FiBookOpen,
-			path: '/userpanel/bookings',
+			path: '/admin/bookings',
 		},
 		{
 			label: 'Guardados',
 			icon: FiBookmark,
-			path: '/userpanel/list',
+			path: '/admin/list',
 		},
 		{
 			label: 'Mis reseñas',
 			icon: FiMessageSquare,
-			path: '/userpanel/ratings',
+			path: '/admin/ratings',
 		},
 	];
+	const adminMenuItems = [
+		{
+			label: 'Información',
+			icon: FiInfo,
+			path: '/admin/information',
+		},
+		{
+			label: 'Personalización',
+			icon: FiImage,
+			path: '/admin/password',
+		},
+		{
+			label: 'Reservas',
+			icon: FiBookOpen,
+			path: '/admin/bookings',
+		},
+		{
+			label: 'Reseñas',
+			icon: FiMessageSquare,
+			path: '/admin/ratings',
+		},
+		{
+			label: 'Menú',
+			icon: FiClipboard,
+			path: '/admin/menu',
+		},
+	];
+
+	const menuItems = user.is_owner ? adminMenuItems : userMenuItems;
+
 	return (
 		<Box position="relative" zIndex="2">
 			<Menu placement="bottom-end">
@@ -116,7 +155,7 @@ const UserMenu: React.FC<{ user: UserRecord }> = (props) => {
 				<MenuList w="fit-content" p="1rem">
 					<VStack>
 						<UserAvatar size="md" avatarPath={user.avatar_url ?? 'https://bit.ly/broken-link'} />
-						<Text textStyle="body1" color="gray.700">{`${user.firstname} ${user.lastname}`}</Text>
+						<Text textStyle="body1" color="gray.700">{`${user.firstname} ${user.lastname ?? ''}`}</Text>
 					</VStack>
 					<Box mx="-1rem">
 						<MenuDivider />

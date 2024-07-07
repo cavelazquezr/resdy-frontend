@@ -12,6 +12,7 @@ import { LinkText } from '../../../../common/components/LinkText/LinkText';
 import { SuperLink } from '../../../../common/components/SuperLink/SuperLink';
 import { NewForm } from '../../../../common/forms/NewForm';
 import { getFormikInitialValues } from '../../../../common/utils/getFormikInitialValues';
+import { getMyRestaurantThunk } from '../../../../store/restaurant/thunk';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { getCurrentUserThunk } from '../../../../store/user/thunk';
 import { FormField } from '../../../../types/form';
@@ -29,9 +30,11 @@ export const LoginForm: React.FC = () => {
 
 	const onSubmit = async () => {
 		await getAccessToken(values as UserCredentials)
-			.then((response) => {
+			.then(async (response) => {
 				localStorage.setItem('accessToken', response.data.token);
-				dispatch(getCurrentUserThunk());
+				await dispatch(getCurrentUserThunk());
+				console.log('response', response);
+				await dispatch(getMyRestaurantThunk());
 			})
 			.catch((err) => {
 				console.error('Authentication failed:', err);

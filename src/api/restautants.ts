@@ -10,6 +10,7 @@ import {
 	LandingRestaurantInfo,
 	RestaurantCreateInput,
 	RestaurantRecord,
+	UpdateRestaurantInput,
 } from '../types/restaurants';
 
 export const getRestaurants: CustomAxiosRequest<GetRestaurantsQueryParams, RestaurantRecord[]> = (params) => {
@@ -20,6 +21,39 @@ export const getRestaurants: CustomAxiosRequest<GetRestaurantsQueryParams, Resta
 		params,
 		headers: {
 			'Content-Type': 'application/json',
+		},
+	};
+	return axios(config);
+};
+
+export const getMyRestaurant = () => {
+	const token = localStorage.getItem('accessToken');
+	const url = `${envConfig.API_URL}/restaurant/myRestaurant`;
+	const config = {
+		method: 'GET',
+		url,
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`,
+		},
+	};
+	return axios(config);
+};
+
+export const updateRestaurant: CustomAxiosRequest<
+	UpdateRestaurantInput & { restaurant_id: string },
+	RestaurantRecord
+> = (params) => {
+	const { restaurant_id, ...data } = params;
+	const token = localStorage.getItem('accessToken');
+	const url = `${envConfig.API_URL}/restaurant/${restaurant_id}`;
+	const config: AxiosRequestConfig<UpdateRestaurantInput> = {
+		method: 'PUT',
+		url,
+		data,
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`,
 		},
 	};
 	return axios(config);

@@ -31,6 +31,7 @@ export type FormField = {
 	value?: FieldValue;
 	defaultValue?: FieldValue;
 	choices?: Array<FieldChoice>;
+	limit?: number;
 	children?: FormField[];
 	tooltip?: string;
 	stack?: 'horizontal' | 'vertical';

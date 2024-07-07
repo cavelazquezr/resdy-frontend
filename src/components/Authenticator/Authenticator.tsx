@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { getMyRestaurantThunk } from '../../store/restaurant/thunk';
 import { useAppDispatch } from '../../store/store';
 import { logoutUser } from '../../store/user/reducer';
 import { getCurrentUserThunk } from '../../store/user/thunk';
@@ -24,6 +25,7 @@ export const Authenticator: React.FC<IProps> = (props) => {
 		if (storedToken) {
 			// Dispatch an action or perform any logic to authenticate using the stored token
 			dispatch(getCurrentUserThunk());
+			dispatch(getMyRestaurantThunk());
 		}
 	}, [dispatch]);
 

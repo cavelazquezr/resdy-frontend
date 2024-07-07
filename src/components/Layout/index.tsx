@@ -13,19 +13,21 @@ interface IProps {
 export const Layout: React.FC<IProps> = (props) => {
 	const location = useLocation();
 	const isAuthenticationForm: boolean =
-		location.pathname.startsWith('/login') || location.pathname.startsWith('/register');
+		location.pathname.startsWith('/login') ||
+		location.pathname.startsWith('/register') ||
+		location.pathname.startsWith('/create-restaurant');
 
-	const isControlPanel: boolean = location.pathname.includes('/userpanel');
+	const isSettingsPanel: boolean = location.pathname.includes('/admin');
 
 	const disableBreakpointLayoutWidth: boolean =
-		isControlPanel ||
+		isSettingsPanel ||
 		location.pathname.startsWith('/restaurant') ||
 		isAuthenticationForm ||
 		location.pathname.endsWith('/');
 
 	return (
 		<Flex h="100%" w="100%" direction="column">
-			{!(isAuthenticationForm || isControlPanel) && <Topbar />}
+			{!(isAuthenticationForm || isSettingsPanel) && <Topbar />}
 			<Flex w="100%" h="100%" mb="2rem" justifyContent="center">
 				<Box w={!disableBreakpointLayoutWidth ? breakpointLayoutWidth : '100%'}>{props.children}</Box>
 			</Flex>
