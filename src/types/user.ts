@@ -12,6 +12,7 @@ type UserOutput = {
 	lastname: string | null;
 	avatar_url: string | null;
 	password: string;
+	old_password?: string;
 	phone: string | null;
 	created_at: Date;
 	is_active: boolean;
