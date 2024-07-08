@@ -13,11 +13,13 @@ import {
 	FormLabel,
 	IconButton,
 } from '@chakra-ui/react';
+import { FaInstagram, FaTiktok, FaTwitter } from 'react-icons/fa';
 import { FiCheck, FiChevronRight, FiLock, FiX } from 'react-icons/fi';
 
 import { FormField } from '../../../types/form';
 import { UploadAvatarInput } from '../../components/UploadAvatarInput/UploadAvatarInput';
 import { NewInput } from '../NewInput/NewInput';
+import { NewSelect } from '../NewSelect/NewSelect';
 import { NewTextarea } from '../NewTextarea/NewTextarea';
 
 interface IProps {
@@ -74,6 +76,7 @@ export const EditableInput: React.FC<IProps> = (props) => {
 			case 'date':
 			case 'password':
 			case 'textarea':
+			case 'select':
 			case 'text':
 				return (
 					<VStack spacing="0.25rem" align="stretch">
@@ -124,6 +127,69 @@ export const EditableInput: React.FC<IProps> = (props) => {
 				);
 			case 'avatar':
 				return <UploadAvatarInput isDisabled={isDisabled ?? false} isSubmitting={isSubmitting ?? false} />;
+			case 'socialMedia':
+				return (
+					<VStack spacing="0.5rem" align="stretch">
+						<VStack align="stretch">
+							<HStack>
+								<Icon as={FaTiktok} color="gray.900" />
+								<Text
+									textStyle="body1"
+									color={(field.defaultValue as Record<string, string>).tiktok ? 'gray.900' : 'gray.500'}
+								>
+									{(field.defaultValue as Record<string, string>).tiktok ?? 'No especificado'}
+								</Text>
+							</HStack>
+							<HStack>
+								<Icon as={FaInstagram} />
+								<Text
+									textStyle="body1"
+									color={(field.defaultValue as Record<string, string>).instagram ? 'gray.900' : 'gray.500'}
+								>
+									{(field.defaultValue as Record<string, string>).instagram ?? 'No especificado'}
+								</Text>
+							</HStack>
+							<HStack>
+								<Icon as={FaTwitter} color="gray.900" />
+								<Text
+									textStyle="body1"
+									color={(field.defaultValue as Record<string, string>).twitter ? 'gray.900' : 'gray.500'}
+								>
+									{(field.defaultValue as Record<string, string>).twitter ?? 'No especificado'}
+								</Text>
+							</HStack>
+						</VStack>
+						{!field.blocked ? (
+							<HStack
+								ref={ref}
+								cursor={isDisabled || isSubmitting ? 'default' : 'pointer'}
+								w="fit-content"
+								opacity={isDisabled || isSubmitting ? 0.5 : 1}
+								alignItems="center"
+								spacing="0.15rem"
+								onMouseEnter={!(isDisabled || isSubmitting) ? handleMouseEnter : undefined}
+								onMouseLeave={!(isDisabled || isSubmitting) ? handleMouseLeave : undefined}
+								onClick={!(isDisabled || isSubmitting) ? () => onEditClick() : undefined}
+							>
+								<Text
+									textStyle="body1"
+									color={isHovered ? 'brand-primary.300' : 'brand-primary.default'}
+									transition="all 0.3s"
+								>
+									Editar
+								</Text>
+								<Icon
+									as={FiChevronRight}
+									color={isHovered ? 'brand-primary.300' : 'brand-primary.default'}
+									ms={isHovered ? '0.25rem' : '0'}
+									transition="all 0.3s"
+								/>
+							</HStack>
+						) : (
+							<Icon as={FiLock} color="gray.500" />
+						)}
+					</VStack>
+				);
 		}
 	};
 
@@ -135,11 +201,58 @@ export const EditableInput: React.FC<IProps> = (props) => {
 			case 'text':
 				return (
 					<VStack alignItems="stretch" h="100%" maxW="20rem" spacing="0rem">
-						<HStack>
+						<HStack alignItems="start">
 							<NewInput
 								id={field.id}
 								error={field.error}
 								type={field.type as 'text' | 'password'}
+								value={field.value as string}
+								defaultValue={field.value as string}
+								onBlur={onBlur}
+								onKeyDown={onKeyDown}
+								onChange={onChange}
+								{...restProps}
+							/>
+							{field.type !== 'password' && (
+								<React.Fragment>
+									<IconButton
+										isDisabled={field.value === '' || !!error}
+										aria-label="submit-edit"
+										type="submit"
+										form={formId}
+										variant="default-light"
+										size="sm"
+										borderRadius="0.5rem"
+										icon={<FiCheck />}
+										color="gray.500"
+										onClick={onFinishEditing}
+									/>
+									<IconButton
+										aria-label="cancel-edit"
+										variant="default-light"
+										size="sm"
+										borderRadius="0.5rem"
+										icon={<FiX />}
+										color="gray.500"
+										onClick={() => {
+											setIsEditing(false);
+											setIsHovered(false);
+											setEditingField && setEditingField(undefined);
+										}}
+									/>
+								</React.Fragment>
+							)}
+						</HStack>
+					</VStack>
+				);
+			case 'select':
+				return (
+					<VStack alignItems="stretch" h="100%" maxW="20rem" spacing="0rem">
+						<HStack alignItems="start">
+							<NewSelect
+								id={field.id}
+								error={field.error}
+								choices={field.choices ?? []}
 								value={field.value as string}
 								defaultValue={field.value as string}
 								onBlur={onBlur}
@@ -238,7 +351,7 @@ export const EditableInput: React.FC<IProps> = (props) => {
 	};
 	return (
 		<FormControl isInvalid={!!field.error ?? false}>
-			<Grid w="100%" templateColumns={`repeat(${labelingCol + inputCol}, 1fr)`}>
+			<Grid w="100%" templateColumns={`repeat(${labelingCol + inputCol}, 1fr)`} columnGap="0.5rem">
 				<GridItem colSpan={labelingCol}>
 					<VStack spacing="0.25rem" align="stretch">
 						<FormLabel m={0} htmlFor={field.id}>

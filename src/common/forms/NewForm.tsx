@@ -79,11 +79,7 @@ export const NewForm: React.FC<IProps> = (props): React.ReactNode => {
 								key={index}
 								label={field.label}
 								id={field.id}
-								choices={(field.choices ?? []).map((choice) => (
-									<option key={choice.value} value={choice.value}>
-										{choice.label}
-									</option>
-								))}
+								choices={field.choices ?? []}
 								placeholder={field.placeholder}
 								size="md"
 								value={field.value as string}

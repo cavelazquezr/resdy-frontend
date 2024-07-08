@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { VStack, Text, Divider, Grid, GridItem, HStack, Icon, Box } from '@chakra-ui/react';
-import { FiBookOpen, FiClipboard, FiImage, FiInfo, FiMessageSquare } from 'react-icons/fi';
+import { FiBookOpen, FiClipboard, FiImage, FiInfo, FiMessageSquare, FiShield } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
 
 import { InformationView } from './InformationView';
@@ -10,6 +10,7 @@ import { SuperLink } from '../../../common/components/SuperLink/SuperLink';
 import { UserAvatar } from '../../../common/components/UserAvatar/UserAvatar';
 import { useCustomParams } from '../../../hooks/useCustomParams';
 import { useAppSelector } from '../../../store/store';
+import { ChangePasswordView } from '../UserPanel/ChangePasswordView';
 
 const sections = [
 	{
@@ -19,6 +20,14 @@ const sections = [
 		description: 'Información general y adicional de tu restaurante',
 		component: InformationView,
 		path: '/admin/information',
+	},
+	{
+		name: 'password',
+		label: 'Cambiar contraseña',
+		icon: FiShield,
+		description: 'Por seguridad, en esta sección podrás cambiar la contraseña.',
+		component: ChangePasswordView,
+		path: '/admin/password',
 	},
 	{
 		name: 'customization',

@@ -8,6 +8,7 @@ type FieldTypes =
 	| 'number'
 	| 'textarea'
 	| 'select'
+	| 'socialMedia'
 	| 'password'
 	| 'checkbox'
 	| 'radio'
@@ -19,7 +20,7 @@ type FieldTypes =
 	| 'inlineGroup'
 	| 'formStack';
 
-export type FieldValue = string | number | boolean | Date | null;
+export type FieldValue = string | number | boolean | Date | null | Record<string, unknown> | Array<string> | undefined;
 
 export type FormField = {
 	id: string;

@@ -12,8 +12,11 @@ export const updateRestaurantInfoSchema = yup.object({
 		.string()
 		.max(500, 'La descripción no puede tener más de 500 caracteres.')
 		.required(ErrorMessages.FIELD_REQUIRED),
-	extra_info: yup
+	extra_description: yup
 		.string()
 		.max(500, 'La descripción no puede tener más de 500 caracteres.')
 		.required(ErrorMessages.FIELD_REQUIRED),
+	twitter: yup.string().optional(),
+	instagram: yup.string().optional(),
+	tiktok: yup.string().optional(),
 });

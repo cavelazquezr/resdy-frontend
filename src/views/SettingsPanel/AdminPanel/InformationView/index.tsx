@@ -8,7 +8,7 @@ import { NewForm } from '../../../../common/forms/NewForm';
 import { getMyRestaurantThunk } from '../../../../store/restaurant/thunk';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { FormField } from '../../../../types/form';
-import { RestaurantRecord, UpdateRestaurantInput } from '../../../../types/restaurants';
+import { UpdateRestaurantInput } from '../../../../types/restaurants';
 import { updateRestaurantInfoSchema as schema } from '../schemas';
 
 export const InformationView: React.FC = () => {
@@ -48,7 +48,7 @@ export const InformationView: React.FC = () => {
 			});
 	};
 
-	const { values, errors, touched, handleBlur, handleChange } = useFormik<Partial<RestaurantRecord>>({
+	const { values, errors, touched, handleBlur, handleChange } = useFormik({
 		initialValues: {
 			phone: restaurantData?.phone || '',
 			restaurant_type: restaurantData?.restaurant_type || '',
@@ -56,6 +56,11 @@ export const InformationView: React.FC = () => {
 			postal_code: restaurantData?.postal_code || '',
 			address: restaurantData?.address || '',
 			description: restaurantData?.description || '',
+			extra_description:
+				(restaurantData?.extra_information && restaurantData?.extra_information.extra_description) || '',
+			twitter: (restaurantData?.extra_information && restaurantData?.extra_information.twitter) || '',
+			instagram: (restaurantData?.extra_information && restaurantData?.extra_information.instagram) || '',
+			tiktok: (restaurantData?.extra_information && restaurantData?.extra_information.tiktok) || '',
 		},
 		onSubmit: () => {},
 		validationSchema: schema,
@@ -74,23 +79,17 @@ export const InformationView: React.FC = () => {
 					label: 'Información básica',
 					children: [
 						{
-							id: 'name',
-							description: 'Nombre para crear el enlace a tu restaurante.',
-							label: 'Nombre',
-							type: 'text',
-							value: values.name,
-							defaultValue: restaurantData?.name,
-							blocked: true,
-							isEditable: true,
-						},
-
-						{
 							id: 'restaurant_type',
 							label: 'Tipo de comida',
 							description: 'Tipo de comida que sirve tu restaurante.',
-							type: 'text',
+							type: 'select',
 							value: values.restaurant_type,
 							defaultValue: restaurantData?.restaurant_type,
+							choices: [
+								{ label: 'Española', value: 'Española' },
+								{ label: 'Italiana', value: 'Italiana' },
+								{ label: 'Mexicana', value: 'Mexicana' },
+							],
 							isEditable: true,
 							error: errors.restaurant_type && touched.restaurant_type ? errors.restaurant_type : undefined,
 							isDisabled: !!(editingField && editingField !== 'restaurant_type'),
@@ -176,12 +175,12 @@ export const InformationView: React.FC = () => {
 					label: 'Información adicional',
 					children: [
 						{
-							id: 'extra_info',
+							id: 'extra_description',
 							description: 'Se mostrará en la página de inicio como información relevante adicional',
 							label: 'Descripción adicional',
-							type: 'text',
-							value: 'foo',
-							defaultValue: 'foo',
+							type: 'textarea',
+							value: values.extra_description,
+							defaultValue: restaurantData?.extra_information?.extra_description,
 							isEditable: true,
 							// error: errors.extra_info && touched.extra_info ? errors.extra_info : undefined,
 							isDisabled: !!(editingField && editingField !== 'extra_info'),
@@ -191,8 +190,12 @@ export const InformationView: React.FC = () => {
 							id: 'social_media',
 							description: 'Gestiona las cuentas de tu restaurante en diferentes redes sociales',
 							label: 'Redes sociales',
-							type: 'text',
-							value: 'foo',
+							type: 'socialMedia',
+							value: {
+								twitter: values.twitter,
+								instagram: values.instagram,
+								tiktok: values.tiktok,
+							},
 							defaultValue: 'foo',
 							isEditable: true,
 							// error: errors.extra_info && touched.extra_info ? errors.extra_info : undefined,

@@ -45,7 +45,16 @@ export type InformationProps = NonNullableProperties<InformationOutput>;
 export interface RestaurantRecord
 	extends Pick<
 			InformationOutput,
-			'phone' | 'address' | 'country' | 'city' | 'restaurant_type' | 'description' | 'location' | 'postal_code'
+			| 'phone'
+			| 'address'
+			| 'country'
+			| 'city'
+			| 'restaurant_type'
+			| 'description'
+			| 'location'
+			| 'postal_code'
+			| 'extra_information'
+			| 'social_media'
 		>,
 		Pick<RestaurantOutput, 'name' | 'id'>,
 		Pick<CustomizationOutput, 'header_url'> {
@@ -87,6 +96,10 @@ export type RestaurantCreateInput = AdministratorInput &
 
 export interface UpdateRestaurantInput extends AdministratorInput, RestaurantInput, InformationInput {
 	brand_name?: string;
+	extra_description?: string;
+	twitter?: string;
+	instagram?: string;
+	facebook?: string;
 }
 
 export type RestaurantSummary = {

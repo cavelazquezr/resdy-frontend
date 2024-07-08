@@ -7,7 +7,10 @@ import { InputErrorMessage } from '../../components/InputErrorMessage/InputError
 interface IProps extends SelectProps {
 	label?: string;
 	error?: string;
-	choices: React.ReactNode;
+	choices: Array<{
+		label: string;
+		value: string;
+	}>;
 }
 
 export const NewSelect: React.FC<IProps> = (props): React.ReactNode => {
@@ -18,7 +21,13 @@ export const NewSelect: React.FC<IProps> = (props): React.ReactNode => {
 			<FormLabel textStyle="body2" fontWeight="normal">
 				{label}
 			</FormLabel>
-			<Select {...inputProps}>{choices}</Select>
+			<Select {...inputProps}>
+				{choices.map((it) => (
+					<option key={it.value} value={it.value}>
+						{it.label}
+					</option>
+				))}
+			</Select>
 			{error && <InputErrorMessage error={error} />}
 		</FormControl>
 	);
