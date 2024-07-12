@@ -19,4 +19,5 @@ export const updateRestaurantInfoSchema = yup.object({
 	twitter: yup.string().optional(),
 	instagram: yup.string().optional(),
 	tiktok: yup.string().optional(),
+	facebook: yup.string().optional(),
 });

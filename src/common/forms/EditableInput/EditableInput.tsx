@@ -13,9 +13,10 @@ import {
 	FormLabel,
 	IconButton,
 } from '@chakra-ui/react';
-import { FaInstagram, FaTiktok, FaTwitter } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaTiktok, FaTwitter } from 'react-icons/fa';
 import { FiCheck, FiChevronRight, FiLock, FiX } from 'react-icons/fi';
 
+import { SaveCancelButtons } from './components/SaveCancelButtons';
 import { FormField } from '../../../types/form';
 import { UploadAvatarInput } from '../../components/UploadAvatarInput/UploadAvatarInput';
 import { NewInput } from '../NewInput/NewInput';
@@ -60,6 +61,12 @@ export const EditableInput: React.FC<IProps> = (props) => {
 
 	const onFinishEditing = () => {
 		customSubmitHandler && customSubmitHandler({ [field.id]: (field.value as any).toString() });
+		setIsEditing(false);
+		setIsHovered(false);
+		setEditingField && setEditingField(undefined);
+	};
+
+	const onCancelEditing = () => {
 		setIsEditing(false);
 		setIsHovered(false);
 		setEditingField && setEditingField(undefined);
@@ -137,7 +144,10 @@ export const EditableInput: React.FC<IProps> = (props) => {
 									textStyle="body1"
 									color={(field.defaultValue as Record<string, string>).tiktok ? 'gray.900' : 'gray.500'}
 								>
-									{(field.defaultValue as Record<string, string>).tiktok ?? 'No especificado'}
+									{(field.defaultValue as Record<string, string>).tiktok &&
+									(field.defaultValue as Record<string, string>).tiktok !== ''
+										? (field.defaultValue as Record<string, string>).tiktok
+										: 'No especificado'}
 								</Text>
 							</HStack>
 							<HStack>
@@ -146,7 +156,10 @@ export const EditableInput: React.FC<IProps> = (props) => {
 									textStyle="body1"
 									color={(field.defaultValue as Record<string, string>).instagram ? 'gray.900' : 'gray.500'}
 								>
-									{(field.defaultValue as Record<string, string>).instagram ?? 'No especificado'}
+									{(field.defaultValue as Record<string, string>).instagram &&
+									(field.defaultValue as Record<string, string>).instagram !== ''
+										? (field.defaultValue as Record<string, string>).instagram
+										: 'No especificado'}
 								</Text>
 							</HStack>
 							<HStack>
@@ -155,7 +168,22 @@ export const EditableInput: React.FC<IProps> = (props) => {
 									textStyle="body1"
 									color={(field.defaultValue as Record<string, string>).twitter ? 'gray.900' : 'gray.500'}
 								>
-									{(field.defaultValue as Record<string, string>).twitter ?? 'No especificado'}
+									{(field.defaultValue as Record<string, string>).twitter &&
+									(field.defaultValue as Record<string, string>).twitter !== ''
+										? (field.defaultValue as Record<string, string>).twitter
+										: 'No especificado'}
+								</Text>
+							</HStack>
+							<HStack>
+								<Icon as={FaFacebook} color="gray.900" />
+								<Text
+									textStyle="body1"
+									color={(field.defaultValue as Record<string, string>).facebook ? 'gray.900' : 'gray.500'}
+								>
+									{(field.defaultValue as Record<string, string>).facebook &&
+									(field.defaultValue as Record<string, string>).facebook !== ''
+										? (field.defaultValue as Record<string, string>).facebook
+										: 'No especificado'}
 								</Text>
 							</HStack>
 						</VStack>
@@ -214,33 +242,12 @@ export const EditableInput: React.FC<IProps> = (props) => {
 								{...restProps}
 							/>
 							{field.type !== 'password' && (
-								<React.Fragment>
-									<IconButton
-										isDisabled={field.value === '' || !!error}
-										aria-label="submit-edit"
-										type="submit"
-										form={formId}
-										variant="default-light"
-										size="sm"
-										borderRadius="0.5rem"
-										icon={<FiCheck />}
-										color="gray.500"
-										onClick={onFinishEditing}
-									/>
-									<IconButton
-										aria-label="cancel-edit"
-										variant="default-light"
-										size="sm"
-										borderRadius="0.5rem"
-										icon={<FiX />}
-										color="gray.500"
-										onClick={() => {
-											setIsEditing(false);
-											setIsHovered(false);
-											setEditingField && setEditingField(undefined);
-										}}
-									/>
-								</React.Fragment>
+								<SaveCancelButtons
+									isDisabled={field.value === '' || !!error}
+									formId={formId ?? ''}
+									handleSubmit={onFinishEditing}
+									handleCancel={onCancelEditing}
+								/>
 							)}
 						</HStack>
 					</VStack>
@@ -261,33 +268,12 @@ export const EditableInput: React.FC<IProps> = (props) => {
 								{...restProps}
 							/>
 							{field.type !== 'password' && (
-								<React.Fragment>
-									<IconButton
-										isDisabled={field.value === '' || !!error}
-										aria-label="submit-edit"
-										type="submit"
-										form={formId}
-										variant="default-light"
-										size="sm"
-										borderRadius="0.5rem"
-										icon={<FiCheck />}
-										color="gray.500"
-										onClick={onFinishEditing}
-									/>
-									<IconButton
-										aria-label="cancel-edit"
-										variant="default-light"
-										size="sm"
-										borderRadius="0.5rem"
-										icon={<FiX />}
-										color="gray.500"
-										onClick={() => {
-											setIsEditing(false);
-											setIsHovered(false);
-											setEditingField && setEditingField(undefined);
-										}}
-									/>
-								</React.Fragment>
+								<SaveCancelButtons
+									isDisabled={field.value === '' || !!error}
+									formId={formId ?? ''}
+									handleSubmit={onFinishEditing}
+									handleCancel={onCancelEditing}
+								/>
 							)}
 						</HStack>
 					</VStack>
@@ -306,33 +292,73 @@ export const EditableInput: React.FC<IProps> = (props) => {
 							onChange={onChange}
 							{...restProps}
 						/>
-						<HStack>
-							<IconButton
-								isDisabled={field.value === '' || !!error}
-								aria-label="submit-edit"
-								type="submit"
-								form={formId}
-								variant="default-light"
-								size="sm"
-								borderRadius="0.5rem"
-								icon={<FiCheck />}
-								color="gray.500"
-								onClick={onFinishEditing}
-							/>
-							<IconButton
-								aria-label="cancel-edit"
-								variant="default-light"
-								size="sm"
-								borderRadius="0.5rem"
-								icon={<FiX />}
-								color="gray.500"
-								onClick={() => {
-									setIsEditing(false);
-									setIsHovered(false);
-									setEditingField && setEditingField(undefined);
-								}}
-							/>
-						</HStack>
+						<SaveCancelButtons
+							isDisabled={field.value === '' || !!error}
+							formId={formId ?? ''}
+							handleSubmit={onFinishEditing}
+							handleCancel={onCancelEditing}
+						/>
+					</VStack>
+				);
+			case 'socialMedia':
+				return (
+					<VStack alignItems="stretch" h="100%" maxW="20rem" spacing="0.5rem">
+						<VStack align="stretch">
+							<HStack>
+								<Icon as={FaTiktok} color="gray.900" />
+								<NewInput
+									id="tiktok"
+									type="text"
+									value={(field.value as Record<string, string>).tiktok}
+									onBlur={onBlur}
+									onKeyDown={onKeyDown}
+									onChange={onChange}
+									{...restProps}
+								/>
+							</HStack>
+							<HStack>
+								<Icon as={FaInstagram} />
+								<NewInput
+									id="instagram"
+									type="text"
+									value={(field.value as Record<string, string>).instagram}
+									onBlur={onBlur}
+									onKeyDown={onKeyDown}
+									onChange={onChange}
+									{...restProps}
+								/>
+							</HStack>
+							<HStack>
+								<Icon as={FaTwitter} color="gray.900" />
+								<NewInput
+									id="twitter"
+									type="text"
+									value={(field.value as Record<string, string>).twitter}
+									onBlur={onBlur}
+									onKeyDown={onKeyDown}
+									onChange={onChange}
+									{...restProps}
+								/>
+							</HStack>
+							<HStack>
+								<Icon as={FaFacebook} color="gray.900" />
+								<NewInput
+									id="facebook"
+									type="text"
+									value={(field.value as Record<string, string>).facebook}
+									onBlur={onBlur}
+									onKeyDown={onKeyDown}
+									onChange={onChange}
+									{...restProps}
+								/>
+							</HStack>
+						</VStack>
+						<SaveCancelButtons
+							isDisabled={field.value === '' || !!error}
+							formId={formId ?? ''}
+							handleSubmit={onFinishEditing}
+							handleCancel={onCancelEditing}
+						/>
 					</VStack>
 				);
 		}

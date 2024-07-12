@@ -18,9 +18,11 @@ export const NewSelect: React.FC<IProps> = (props): React.ReactNode => {
 
 	return (
 		<FormControl isInvalid={!!error} isRequired={inputProps.isRequired}>
-			<FormLabel textStyle="body2" fontWeight="normal">
-				{label}
-			</FormLabel>
+			{label && (
+				<FormLabel textStyle="body2" fontWeight="normal">
+					{label}
+				</FormLabel>
+			)}
 			<Select {...inputProps}>
 				{choices.map((it) => (
 					<option key={it.value} value={it.value}>
