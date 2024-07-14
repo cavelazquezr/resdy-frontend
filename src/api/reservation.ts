@@ -2,9 +2,12 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 import { CustomAxiosRequest } from '.';
 import { envConfig } from '../config/env';
-import { MyReservationsQueryParams, ReservationRecord } from '../types/reservation';
+import { RestaurantCardOutput } from '../types/common';
+import { MyReservationsQueryParams, ReservationDetailOutput, ReservationRecord } from '../types/reservation';
 
-export const getMyReservations: CustomAxiosRequest<MyReservationsQueryParams, ReservationRecord[]> = (params) => {
+type MyReservationsRecord = RestaurantCardOutput<ReservationDetailOutput>;
+
+export const getMyReservations: CustomAxiosRequest<MyReservationsQueryParams, MyReservationsRecord[]> = (params) => {
 	const token = localStorage.getItem('accessToken');
 	const url = `${envConfig.API_URL}/reservation/myReservations`;
 	const config: AxiosRequestConfig<ReservationRecord[]> = {
