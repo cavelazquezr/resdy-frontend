@@ -4,11 +4,11 @@ import { VStack, Text, Box, HStack, Card, Image, Stack, Heading, Icon } from '@c
 import { FaStar } from 'react-icons/fa';
 
 import { SuperLink } from '../../../common/components/SuperLink/SuperLink';
-import { RestaurantOutput } from '../../../types/restaurants';
+import { RestaurantRecord } from '../../../types/restaurants';
 
 interface IRestaurantCardSliderProps {
 	title: string;
-	restaurants?: RestaurantOutput[];
+	restaurants?: RestaurantRecord[];
 	isLoading?: boolean;
 }
 
@@ -29,7 +29,7 @@ export const RestaurantCardSlider: React.FC<IRestaurantCardSliderProps> = (props
 	);
 };
 
-const RestaurantCard: React.FC<{ restaurant: RestaurantOutput }> = (props) => {
+const RestaurantCard: React.FC<{ restaurant: RestaurantRecord }> = (props) => {
 	const { name, brand_name, price_average, address, rating, rating_count, restaurant_type, header_url } =
 		props.restaurant;
 
@@ -49,7 +49,7 @@ const RestaurantCard: React.FC<{ restaurant: RestaurantOutput }> = (props) => {
 				transition="transform 0.4s, box-shadow 0.4s" // Transition for scaling only
 			>
 				<Box position="relative" h="25vh" overflow="hidden">
-					<Image src={header_url} alt="header" objectFit="cover" w="100%" h="100%" />
+					<Image src={header_url ?? ''} alt="header" objectFit="cover" w="100%" h="100%" />
 				</Box>
 				<Stack spacing="0.5rem" p="1rem">
 					<HStack>

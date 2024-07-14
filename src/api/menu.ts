@@ -2,9 +2,9 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 import { CustomAxiosRequest } from '.';
 import { envConfig } from '../config/env';
-import { MenuOutput } from '../types/menu';
+import { MenuRecord } from '../types/menu';
 
-export const getMenu: CustomAxiosRequest<string, MenuOutput[]> = (restaurantName) => {
+export const getMenu: CustomAxiosRequest<string, MenuRecord[]> = (restaurantName) => {
 	const url = `${envConfig.API_URL}/menu/${restaurantName}`;
 	const config: AxiosRequestConfig = {
 		method: 'GET',

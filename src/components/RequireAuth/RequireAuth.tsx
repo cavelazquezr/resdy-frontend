@@ -12,13 +12,10 @@ export const RequireAuth: React.FC = () => {
 
 	const renderPrivateView = async () => {
 		setIsLoading(true);
-		const storedToken = localStorage.getItem('accessToken');
-		if (storedToken) {
-			const currentUser = await getCurrentUser(storedToken);
-			setIsLoading(false);
-			if (currentUser) {
-				setAuthenticated(true);
-			}
+		const currentUser = await getCurrentUser(undefined);
+		setIsLoading(false);
+		if (currentUser) {
+			setAuthenticated(true);
 		}
 		setIsLoading(false);
 	};

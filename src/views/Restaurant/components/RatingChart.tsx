@@ -16,11 +16,13 @@ interface IProps {
 
 export const RatingChart: React.FC<IProps> = (props) => {
 	const { stats, colorScheme } = props;
-	const totalRating = Object.entries(stats.stats).reduce((sum, [rating, count]) => {
-		return sum + parseInt(rating, 10) * count;
-	}, 0);
+	const totalRating =
+		stats.stats &&
+		Object.entries(stats.stats).reduce((sum, [rating, count]) => {
+			return sum + parseInt(rating, 10) * count;
+		}, 0);
 	const maxRating = stats.rating_count * 5;
-	const remainingRating = maxRating - totalRating;
+	const remainingRating = maxRating - (totalRating ?? 0);
 
 	const [brandSecondary100, brandSecondaryDefault] = useToken('colors', [
 		`${colorScheme ? colorScheme : 'brand-secondary'}.100`,
@@ -74,7 +76,7 @@ export const RatingChart: React.FC<IProps> = (props) => {
 					<Doughnut data={dataSet} options={options} />
 				</Box>
 			</Box>
-			<HorizontalBars stats={stats.stats} colorScheme={colorScheme} />
+			{stats.stats && <HorizontalBars stats={stats.stats} colorScheme={colorScheme} />}
 		</Flex>
 	);
 };

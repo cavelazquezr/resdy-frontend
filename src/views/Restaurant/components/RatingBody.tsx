@@ -2,10 +2,10 @@ import React from 'react';
 
 import { Avatar, HStack, VStack, Text, Box } from '@chakra-ui/react';
 
-import { RatingOutput } from '../../../types/rating';
+import { RatingRecord } from '../../../types/rating';
 
 interface IProps {
-	rating: RatingOutput;
+	rating: RatingRecord;
 }
 
 export const RatingBody: React.FC<IProps> = (props) => {
