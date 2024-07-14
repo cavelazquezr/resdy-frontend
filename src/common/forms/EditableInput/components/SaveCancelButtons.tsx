@@ -5,19 +5,21 @@ import { FiCheck, FiX } from 'react-icons/fi';
 
 interface IProps {
 	isDisabled: boolean;
-	formId: string;
+	formId?: string;
 	handleSubmit: () => void;
 	handleCancel: () => void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	isNotFromForm?: boolean;
 }
 
 export const SaveCancelButtons: React.FC<IProps> = (props) => {
-	const { isDisabled, formId, handleSubmit, handleCancel } = props;
+	const { isDisabled, formId, handleSubmit, handleCancel, isNotFromForm } = props;
 	return (
 		<HStack>
 			<IconButton
 				isDisabled={isDisabled}
 				aria-label="submit-edit"
-				type="submit"
+				type={isNotFromForm ? 'button' : 'submit'}
 				form={formId}
 				variant="default-light"
 				size="sm"

@@ -62,6 +62,7 @@ export interface RestaurantRecord
 	price_average: number;
 	rating: number;
 	rating_count: number;
+	headers: string[];
 }
 
 export type RestaurantCardRecord = Pick<
@@ -94,13 +95,14 @@ export type RestaurantCreateInput = AdministratorInput &
 	RestaurantInput &
 	InformationInput & { brand_name: CustomizationOutput['name'] };
 
-export interface UpdateRestaurantInput extends AdministratorInput, RestaurantInput, InformationInput {
+export interface UpdateRestaurantInput extends AdministratorInput, Partial<RestaurantInput>, Partial<InformationInput> {
 	brand_name?: string;
 	extra_description?: string;
 	twitter?: string;
 	instagram?: string;
 	tiktok?: string;
 	facebook?: string;
+	headers?: string[];
 }
 
 export type RestaurantSummary = {

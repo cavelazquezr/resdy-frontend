@@ -15,6 +15,7 @@ type FieldTypes =
 	| 'date'
 	| 'time'
 	| 'avatar'
+	| 'headers'
 	| 'dragAndDrop'
 	| 'autoComplete'
 	| 'inlineGroup'

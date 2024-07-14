@@ -1,24 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
-import {
-	Text,
-	Grid,
-	GridItem,
-	VStack,
-	HStack,
-	Icon,
-	Spinner,
-	FormControl,
-	FormLabel,
-	IconButton,
-} from '@chakra-ui/react';
+import { Text, Grid, GridItem, VStack, HStack, Icon, Spinner, FormControl, FormLabel } from '@chakra-ui/react';
 import { FaFacebook, FaInstagram, FaTiktok, FaTwitter } from 'react-icons/fa';
-import { FiCheck, FiChevronRight, FiLock, FiX } from 'react-icons/fi';
+import { FiChevronRight, FiLock } from 'react-icons/fi';
 
+import { HeaderThumbnails } from './components/HeaderThumbnails';
 import { SaveCancelButtons } from './components/SaveCancelButtons';
 import { FormField } from '../../../types/form';
+import { LinkText } from '../../components/LinkText/LinkText';
 import { UploadAvatarInput } from '../../components/UploadAvatarInput/UploadAvatarInput';
+import { DragAndDrop } from '../DragAndDrop/DragAndDrop';
 import { NewInput } from '../NewInput/NewInput';
 import { NewSelect } from '../NewSelect/NewSelect';
 import { NewTextarea } from '../NewTextarea/NewTextarea';
@@ -54,21 +46,17 @@ export const EditableInput: React.FC<IProps> = (props) => {
 		onKeyDown,
 		...restProps
 	} = props;
-	const ref = React.useRef<HTMLDivElement>(null);
 
-	const [isHovered, setIsHovered] = React.useState<boolean>(false);
 	const [isEditing, setIsEditing] = React.useState<boolean>(field.type === 'password');
 
 	const onFinishEditing = () => {
 		customSubmitHandler && customSubmitHandler({ [field.id]: (field.value as any).toString() });
 		setIsEditing(false);
-		setIsHovered(false);
 		setEditingField && setEditingField(undefined);
 	};
 
 	const onCancelEditing = () => {
 		setIsEditing(false);
-		setIsHovered(false);
 		setEditingField && setEditingField(undefined);
 	};
 
@@ -102,31 +90,13 @@ export const EditableInput: React.FC<IProps> = (props) => {
 							)}
 						</HStack>
 						{!field.blocked ? (
-							<HStack
-								ref={ref}
-								cursor={isDisabled || isSubmitting ? 'default' : 'pointer'}
-								w="fit-content"
-								opacity={isDisabled || isSubmitting ? 0.5 : 1}
-								alignItems="center"
-								spacing="0.15rem"
-								onMouseEnter={!(isDisabled || isSubmitting) ? handleMouseEnter : undefined}
-								onMouseLeave={!(isDisabled || isSubmitting) ? handleMouseLeave : undefined}
+							<LinkText
+								rightIcon={FiChevronRight}
+								isDisabled={isDisabled || isSubmitting}
 								onClick={!(isDisabled || isSubmitting) ? () => onEditClick() : undefined}
 							>
-								<Text
-									textStyle="body1"
-									color={isHovered ? 'brand-primary.300' : 'brand-primary.default'}
-									transition="all 0.3s"
-								>
-									Editar
-								</Text>
-								<Icon
-									as={FiChevronRight}
-									color={isHovered ? 'brand-primary.300' : 'brand-primary.default'}
-									ms={isHovered ? '0.25rem' : '0'}
-									transition="all 0.3s"
-								/>
-							</HStack>
+								Editar
+							</LinkText>
 						) : (
 							<Icon as={FiLock} color="gray.500" />
 						)}
@@ -188,34 +158,45 @@ export const EditableInput: React.FC<IProps> = (props) => {
 							</HStack>
 						</VStack>
 						{!field.blocked ? (
-							<HStack
-								ref={ref}
-								cursor={isDisabled || isSubmitting ? 'default' : 'pointer'}
-								w="fit-content"
-								opacity={isDisabled || isSubmitting ? 0.5 : 1}
-								alignItems="center"
-								spacing="0.15rem"
-								onMouseEnter={!(isDisabled || isSubmitting) ? handleMouseEnter : undefined}
-								onMouseLeave={!(isDisabled || isSubmitting) ? handleMouseLeave : undefined}
+							<LinkText
+								rightIcon={FiChevronRight}
 								onClick={!(isDisabled || isSubmitting) ? () => onEditClick() : undefined}
 							>
-								<Text
-									textStyle="body1"
-									color={isHovered ? 'brand-primary.300' : 'brand-primary.default'}
-									transition="all 0.3s"
-								>
-									Editar
-								</Text>
-								<Icon
-									as={FiChevronRight}
-									color={isHovered ? 'brand-primary.300' : 'brand-primary.default'}
-									ms={isHovered ? '0.25rem' : '0'}
-									transition="all 0.3s"
-								/>
-							</HStack>
+								Editar
+							</LinkText>
 						) : (
 							<Icon as={FiLock} color="gray.500" />
 						)}
+					</VStack>
+				);
+			case 'headers':
+				return (
+					<VStack align="stretch" spacing="0.5rem">
+						{isSubmitting ? (
+							<Spinner
+								thickness="2px"
+								speed="0.35s"
+								emptyColor="brand-gray.200"
+								color="brand-primary.default"
+								size="sm"
+							/>
+						) : (
+							<React.Fragment>
+								{field.value && (field.value as string[]).length > 0 ? (
+									<HeaderThumbnails headerPaths={field.value as string[]} />
+								) : (
+									<Text textStyle="body1" color="gray.500">
+										No se han subido imágenes aún
+									</Text>
+								)}
+							</React.Fragment>
+						)}
+						<LinkText
+							rightIcon={FiChevronRight}
+							onClick={!(isDisabled || isSubmitting) ? () => onEditClick() : undefined}
+						>
+							Subir nuevas cabeceras
+						</LinkText>
 					</VStack>
 				);
 		}
@@ -361,20 +342,21 @@ export const EditableInput: React.FC<IProps> = (props) => {
 						/>
 					</VStack>
 				);
+			case 'headers':
+				return (
+					<VStack alignItems="stretch" spacing="0.5rem" w="100%">
+						<DragAndDrop id={field.id} field={field} hideLabel filesLimit={3} />
+						<SaveCancelButtons
+							isDisabled={field.value === '' || !!error}
+							handleSubmit={onFinishEditing}
+							handleCancel={onCancelEditing}
+							isNotFromForm
+						/>
+					</VStack>
+				);
 		}
 	};
 
-	const handleMouseEnter = () => {
-		if (ref.current) {
-			setIsHovered(true);
-		}
-	};
-
-	const handleMouseLeave = () => {
-		if (ref.current) {
-			setIsHovered(false);
-		}
-	};
 	return (
 		<FormControl isInvalid={!!field.error ?? false}>
 			<Grid w="100%" templateColumns={`repeat(${labelingCol + inputCol}, 1fr)`} columnGap="0.5rem">

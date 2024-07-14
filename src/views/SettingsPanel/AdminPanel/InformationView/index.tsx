@@ -21,31 +21,39 @@ export const InformationView: React.FC = () => {
 
 	const handleEditableInputSubmit = async (args: UpdateRestaurantInput) => {
 		const input = { ...values, ...args } as UpdateRestaurantInput;
+
+		const filteredInput = Object.fromEntries(
+			Object.entries(input).filter(([_, value]) => value !== undefined && value !== null),
+		) as UpdateRestaurantInput;
+
+		const finalInput = {
+			...filteredInput,
+			restaurant_id: restaurantData?.id ?? '',
+		};
 		setIsSubmitting(true);
-		await updateRestaurant({ ...input, restaurant_id: restaurantData?.id ?? '' })
-			.then(() => {
-				toast({
-					position: 'top',
-					description: `Información actualizada correctamente.`,
-					status: 'success',
-					duration: 4000,
-					isClosable: true,
-				});
-				dispatch(getMyRestaurantThunk());
-			})
-			.catch((err) => {
-				console.error(err);
-				toast({
-					position: 'top',
-					description: `Ha ocurrido un error al actualizar la información.`,
-					status: 'error',
-					duration: 4000,
-					isClosable: true,
-				});
-			})
-			.finally(() => {
-				setIsSubmitting(false);
+
+		try {
+			await updateRestaurant(finalInput);
+			toast({
+				position: 'top',
+				description: 'Información actualizada correctamente.',
+				status: 'success',
+				duration: 4000,
+				isClosable: true,
 			});
+			dispatch(getMyRestaurantThunk());
+		} catch (err) {
+			console.error(err);
+			toast({
+				position: 'top',
+				description: 'Ha ocurrido un error al actualizar la información.',
+				status: 'error',
+				duration: 4000,
+				isClosable: true,
+			});
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	const { values, errors, touched, handleBlur, handleChange } = useFormik({
@@ -56,7 +64,7 @@ export const InformationView: React.FC = () => {
 			postal_code: restaurantData?.postal_code,
 			address: restaurantData?.address,
 			description: restaurantData?.description,
-			extra_description: restaurantData?.extra_information && restaurantData?.extra_information.extra_description,
+			extra_description: restaurantData?.extra_information && restaurantData?.extra_information?.extra_description,
 			twitter: restaurantData?.social_media && restaurantData?.social_media.twitter,
 			instagram: restaurantData?.social_media && restaurantData?.social_media.instagram,
 			tiktok: restaurantData?.social_media && restaurantData?.social_media.tiktok,
@@ -213,6 +221,10 @@ export const InformationView: React.FC = () => {
 			],
 		},
 	];
+
+	React.useEffect(() => {
+		dispatch(getMyRestaurantThunk());
+	}, []);
 
 	return (
 		<Box w="100%" h="100%">

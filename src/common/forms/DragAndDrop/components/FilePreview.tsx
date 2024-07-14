@@ -28,7 +28,7 @@ export const FilePreview: React.FC<IProps> = (props) => {
 	}, [file]);
 
 	return (
-		<ContentContainer opacity={isDisabled ? '0.5' : undefined}>
+		<ContentContainer opacity={isDisabled ? '0.5' : undefined} maxW="25rem">
 			<HStack spacing="1rem" w="100%" justifyContent="space-between" alignItems="center">
 				<HStack align="start" spacing="1rem" alignItems="center">
 					{previewUrl ? (

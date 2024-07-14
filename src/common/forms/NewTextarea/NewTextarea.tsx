@@ -21,7 +21,7 @@ export const NewTextarea: React.FC<IProps> = (props): React.ReactNode => {
 				<Textarea {...inputProps} border="1px solid" borderColor="brand-gray.200" maxH="15rem" color="gray.500" />
 				{limit && (
 					<Text textStyle="body3" color="gray.500" position="absolute" bottom="0.5rem" right="0.875rem">
-						{`${(inputProps.value as string).length}/${limit}`}
+						{`${(inputProps.value === null ? '' : (inputProps.value as string)).length}/${limit}`}
 					</Text>
 				)}
 			</Box>

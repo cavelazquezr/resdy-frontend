@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Button, HStack, Input, InputGroup, useToast } from '@chakra-ui/react';
+import { useLocation } from 'react-router-dom';
 
 import { updateUser } from '../../../api/authentication';
 import { uploadFiles } from '../../../api/microservices';
@@ -19,15 +20,21 @@ export const UploadAvatarInput: React.FC<IProps> = (props) => {
 	const [isUploading, setIsUploading] = React.useState<boolean>(false);
 
 	const dispatch = useAppDispatch();
+	const location = useLocation();
 	const toast = useToast();
 
+	const isAdminView = location.pathname.includes('admin');
+
 	const userData = useAppSelector((state) => state.user.userData?.data);
+	const restaurantData = useAppSelector((state) => state.restaurant.restaurantData?.data);
 
 	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const fileList: FileList | null = e.target.files;
 		if (fileList) {
 			const attachedFiles: IAttachedFile[] = Array.from(fileList).map((file) => ({
-				id: `users/${userData?.id}/${userData?.id}-avatar`,
+				id: isAdminView
+					? `restaurants/${restaurantData?.name}/${restaurantData?.name}-logo`
+					: `users/${userData?.id}/${userData?.id}-avatar`,
 				name: `${userData?.id}-avatar`,
 				file: file,
 				type: file.type,
