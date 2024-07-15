@@ -18,6 +18,8 @@ import {
 	Icon,
 	Select,
 	Input,
+	useDisclosure,
+	IconButton,
 } from '@chakra-ui/react';
 import {
 	FiBookOpen,
@@ -26,8 +28,10 @@ import {
 	FiImage,
 	FiInfo,
 	FiLogOut,
+	FiMenu,
 	FiMessageSquare,
 	FiUser,
+	FiX,
 } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
 
@@ -44,16 +48,50 @@ export const Topbar: React.FC = () => {
 	const location = useLocation();
 	const isRestautantView = location.pathname.includes('/restaurant');
 	const isDiscoverView = location.pathname.includes('/discover');
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
-		<Flex w="100%" justifyContent="center" py="0.5rem" bg={isRestautantView ? 'brand-primary.default' : 'white'}>
-			<HStack py="0.75rem" justifyContent="space-between" w={breakpointLayoutWidth}>
+		<Flex
+			w="100%"
+			position="relative"
+			justifyContent="center"
+			py="0.5rem"
+			bg={isRestautantView ? 'brand-primary.default' : 'white'}
+		>
+			<IconButton
+				position="absolute"
+				variant="default-light"
+				left="2rem"
+				size="lg"
+				aria-label="open-menu"
+				display={{ xs: 'none' }}
+				onClick={isOpen ? onClose : onOpen}
+			>
+				<Icon as={isOpen ? FiX : FiMenu} />
+			</IconButton>
+			<HStack
+				py="0.75rem"
+				justifyContent={{
+					base: 'center',
+					xs: 'space-between',
+				}}
+				w={breakpointLayoutWidth}
+			>
 				{!isDiscoverView && (
 					<SuperLink to="/">
 						<Img src={isRestautantView ? resdyForRestaurant : resdyLogoPrimary} />
 					</SuperLink>
 				)}
-				<Flex position="fixed" justifyContent="center" zIndex={3} top="0.5rem">
+				<Flex
+					position="fixed"
+					justifyContent="center"
+					zIndex={3}
+					top="0.5rem"
+					display={{
+						base: 'none',
+						xs: 'flex',
+					}}
+				>
 					<Flex width={breakpointLayoutWidth} justify="end">
 						<HStack
 							className="topbar-background"

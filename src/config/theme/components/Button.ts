@@ -39,7 +39,10 @@ const componentOverride: ComponentStyleConfig = {
 			},
 		},
 		defaultProps: {
-			size: 'sm',
+			size: {
+				base: 'lg',
+				md: 'md',
+			},
 			textStyle: 'body1',
 			colorScheme: 'gray',
 			variant: 'solid',

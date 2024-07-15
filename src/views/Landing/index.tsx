@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Flex, Text, VStack, Button, HStack, Box, Grid, GridItem, Img } from '@chakra-ui/react';
+import { Flex, Text, VStack, Button, HStack, Box, Grid, GridItem, Img, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { IconType } from 'react-icons';
 import { FiAward, FiThumbsUp, FiSmile } from 'react-icons/fi';
@@ -76,7 +76,16 @@ export const LandingView: React.FC = () => {
 		<React.Fragment>
 			<VStack>
 				<Flex h="28rem" alignItems="center">
-					<VStack w="100%" align="center" spacing="1rem" width={breakpointLayoutWidth}>
+					<VStack
+						w="100%"
+						align="center"
+						spacing="1rem"
+						width={breakpointLayoutWidth}
+						p={{
+							base: '0rem 3rem',
+							xs: '0rem',
+						}}
+					>
 						<Text textStyle="body1" w="fit-content" color="brand-primary.default" borderRadius="0.5rem" p="0.15rem">
 							Descubre, reserva y comparte
 						</Text>
@@ -89,12 +98,26 @@ export const LandingView: React.FC = () => {
 						</Text>
 						<HStack>
 							<SuperLink to="/login">
-								<Button size="md" variant="primary" w="fit-content">
+								<Button
+									size={{
+										base: 'lg',
+										md: 'md',
+									}}
+									variant="primary"
+									w="fit-content"
+								>
 									Comenzar
 								</Button>
 							</SuperLink>
 							<SuperLink to={'/discover'} w="fit-content">
-								<Button size="md" variant="default-light" w="fit-content">
+								<Button
+									size={{
+										base: 'lg',
+										md: 'md',
+									}}
+									variant="default-light"
+									w="fit-content"
+								>
 									Descubrir
 								</Button>
 							</SuperLink>
@@ -180,7 +203,21 @@ export const LandingView: React.FC = () => {
 				</Flex>
 				<Flex w="100%" position="relative" justifyContent="center" mt="2rem">
 					<Box className="gradient-divider" />
-					<HStack width={breakpointLayoutWidth} justifyContent="space-between" mt="2rem" spacing="2rem" zIndex={2}>
+					<Stack
+						direction={{
+							base: 'column',
+							xs: 'row',
+						}}
+						p={{
+							base: '0rem 2rem',
+							xs: '0rem',
+						}}
+						width={breakpointLayoutWidth}
+						justifyContent="space-between"
+						mt="2rem"
+						spacing="2rem"
+						zIndex={2}
+					>
 						{[mostVisitedRestaurants, mostRatedRestaurants, newRestaurants].map(
 							({ icon, data, category, onViewAll }, index) => (
 								<VerticalRestaurantStackByCategory
@@ -193,7 +230,7 @@ export const LandingView: React.FC = () => {
 								/>
 							),
 						)}
-					</HStack>
+					</Stack>
 				</Flex>
 				<Flex w="100%" position="relative" justifyContent="center" mt="2rem">
 					<Box className="gradient-divider" />

@@ -30,16 +30,30 @@ export const FeatureStack: React.FC = () => {
 	];
 
 	return (
-		<Stack direction={['column', 'row']} spacing="1.5rem">
+		<Stack
+			direction={{
+				base: 'column',
+				xs: 'row',
+			}}
+			spacing="1.5rem"
+			w="100%"
+		>
 			{features.map(({ icon, title, description }, index) => (
-				<VStack key={index} spacing="1rem">
-					<HStack>
+				<VStack key={index} spacing="2rem" align="stretch">
+					<HStack justifyContent="center">
 						<IconBadge icon={icon as IconType} />
 						<Text textStyle="heading6" color="gray.900">
 							{title as string}
 						</Text>
 					</HStack>
-					<Text textStyle="body1" color="gray.500">
+					<Text
+						textStyle="body1"
+						color="gray.500"
+						p={{
+							base: '0rem 3rem',
+							xs: '0rem',
+						}}
+					>
 						{description as string}
 					</Text>
 				</VStack>
