@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React from 'react';
 
-import { HStack, Stack, Text, VStack } from '@chakra-ui/react';
+import { Stack, Text, VStack } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
 import { FiCalendar, FiLayout, FiMap } from 'react-icons/fi';
 
