@@ -14,7 +14,7 @@ import { Footer } from '../../components/Footer/Footer';
 import { breakpointLayoutWidth } from '../../components/Layout/utils/styles';
 import './styles.css';
 import { actions as mapNavigationActions } from '../../store/mapNavigation/reducer';
-import { useAppDispatch } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { GetRestaurantsQueryParams, RestaurantCardRecord } from '../../types/restaurants';
 
 const cityBackground: Record<string, string> = {
@@ -30,6 +30,7 @@ type RestaurantStackItem = {
 };
 
 export const LandingView: React.FC = () => {
+	const user = useAppSelector((state) => state.user.userData?.data);
 	const [filters, _setFilters] = React.useState<GetRestaurantsQueryParams>({
 		city: 'Madrid',
 	});
@@ -97,25 +98,27 @@ export const LandingView: React.FC = () => {
 							dolore magna aliqua. Ut enim ad minim veniam.
 						</Text>
 						<HStack>
-							<SuperLink to="/login">
-								<Button
-									size={{
-										base: 'lg',
-										md: 'md',
-									}}
-									variant="primary"
-									w="fit-content"
-								>
-									Comenzar
-								</Button>
-							</SuperLink>
+							{!user && (
+								<SuperLink to="/login">
+									<Button
+										size={{
+											base: 'lg',
+											md: 'md',
+										}}
+										variant="primary"
+										w="fit-content"
+									>
+										Comenzar
+									</Button>
+								</SuperLink>
+							)}
 							<SuperLink to={'/discover'} w="fit-content">
 								<Button
 									size={{
 										base: 'lg',
 										md: 'md',
 									}}
-									variant="default-light"
+									variant={user ? 'primary' : 'default-light'}
 									w="fit-content"
 								>
 									Descubrir

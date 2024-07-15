@@ -1,21 +1,33 @@
 .feature-box-border {
-	background: radial-gradient(circle at bottom, #0F717366 0%, #E0E0E0 100%);
+	background: radial-gradient(circle at bottom, #0f717366 0%, #e0e0e0 100%);
 	padding: 1px;
+	width: fit-content;
 	border-radius: 12px;
 }
 
 .feature-box {
-	background: radial-gradient(circle at bottom, #8DBFC0 0%, #F4F7FA 70%);
+	background: radial-gradient(circle at bottom, #8dbfc0 0%, #f4f7fa 70%);
+	width: fit-content;
 	padding: 0.75rem;
 	border-radius: 11px;
-    box-shadow: 0px 3px 4px #8F8F8F33;
-    display: flex;
+	box-shadow: 0px 3px 4px #8f8f8f33;
+	display: flex;
 }
 
 .feature-icon {
-    height: 1.5rem;
-    width: 1.5rem;
-    color: #0F7173;
-    fill: #0F717366;
+	height: 1.5rem;
+	width: 1.5rem;
+	color: #0f7173;
+	fill: #0f717366;
 }
 
+@media (max-width: 768px) {
+	.feature-box {
+		padding: 1rem;
+	}
+
+	.feature-icon {
+		height: 2rem;
+		width: 2rem;
+	}
+}

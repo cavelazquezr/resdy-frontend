@@ -17,7 +17,7 @@ const BREAKPOINTS = {
 
 const fontSizeBreakpoints = {
 	'@media screen and (max-width: 1480px)': {
-		fontSize: '10px',
+		fontSize: '12px',
 	},
 	'@media screen and (min-width: 1480px) and (max-width: 1560px)': {
 		fontSize: '12px',

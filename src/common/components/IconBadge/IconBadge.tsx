@@ -13,7 +13,7 @@ export const IconBadge: React.FC<IProps> = (props) => {
 	return (
 		<div className="feature-box-border">
 			<div className="feature-box">
-				<Icon as={icon} className="feature-icon" />
+				<Icon as={icon} className="feature-icon" boxSize={['1.5rem', '1.5rem', '1.5rem', '1.5rem']} />
 			</div>
 		</div>
 	);
