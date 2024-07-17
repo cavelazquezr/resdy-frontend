@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './styles.css';
-import { Text, HStack, Image, VStack, Button, Box } from '@chakra-ui/react';
+import { Text, HStack, Image, VStack, Button, Box, Stack, Skeleton, SkeletonText } from '@chakra-ui/react';
 
 import { RestaurantSummary } from '../../../common/components/RestaurantSummary/RestaurantSummary';
 import { SuperLink } from '../../../common/components/SuperLink/SuperLink';
@@ -16,11 +16,46 @@ export const HorizontalRestaurantStack: React.FC<IProps> = (props) => {
 	const { data, isLoading } = props;
 
 	if (isLoading) {
-		return <>Loading</>;
+		return (
+			<HStack
+				overflow="scroll"
+				px={{
+					base: '1rem',
+					xs: '0rem',
+				}}
+			>
+				{Array.from({ length: 4 }).map((_, index) => (
+					<VStack
+						key={index}
+						bg="white"
+						align="stretch"
+						spacing="0rem"
+						border="1px solid"
+						borderRadius="0.75rem"
+						borderColor="brand-gray.200"
+						overflow="hidden"
+						w="100%"
+						minW="15rem"
+					>
+						<Skeleton w="100%" h="10rem" objectFit="cover" />
+						<VStack padding="1rem" align="stretch" spacing="1rem">
+							<Skeleton height="1rem" />
+							<SkeletonText noOfLines={3} spacing="0.5rem" />
+						</VStack>
+					</VStack>
+				))}
+			</HStack>
+		);
 	}
 
 	return (
-		<HStack>
+		<HStack
+			overflow="scroll"
+			px={{
+				base: '1rem',
+				md: '0rem',
+			}}
+		>
 			{data.map(({ brand_name, name, header_url, ...summary }, index) => (
 				<VStack
 					key={index}
@@ -32,6 +67,7 @@ export const HorizontalRestaurantStack: React.FC<IProps> = (props) => {
 					borderColor="brand-gray.200"
 					overflow="hidden"
 					w="100%"
+					minW="15rem"
 				>
 					{header_url ? (
 						<Image src={header_url ?? ''} alt={name} w="100%" h="10rem" objectFit="cover" />
@@ -50,16 +86,21 @@ export const HorizontalRestaurantStack: React.FC<IProps> = (props) => {
 							address={summary.address}
 							city={summary.city}
 						/>
-						<HStack>
+						<Stack
+							direction={{
+								base: 'column',
+								xs: 'row',
+							}}
+						>
 							<SuperLink to={`restaurant/${name}/home`} w="100%">
-								<Button w="100%" variant="default-light">
+								<Button aria-label="go-to-restaurant" w="100%" variant="default-light">
 									Ver
 								</Button>
 							</SuperLink>
-							<Button w="100%" variant="primary">
+							<Button aria-label="book-in-restaurant" w="100%" variant="primary">
 								Reservar
 							</Button>
-						</HStack>
+						</Stack>
 					</VStack>
 				</VStack>
 			))}

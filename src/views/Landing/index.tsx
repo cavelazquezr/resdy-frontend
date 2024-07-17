@@ -134,8 +134,24 @@ export const LandingView: React.FC = () => {
 				<Flex w="100%" position="relative" justifyContent="center" mt="2rem">
 					<Box className="gradient-divider" />
 					<Grid templateColumns="repeat(4, 1fr)" columnGap="2rem" mt="2rem" zIndex={2} width={breakpointLayoutWidth}>
-						<GridItem>
-							<VStack align="stretch" spacing="0.5rem">
+						<GridItem
+							colSpan={{
+								base: 4,
+								xs: 1,
+							}}
+						>
+							<VStack
+								align="stretch"
+								spacing="0.5rem"
+								padding={{
+									base: '0rem 2rem',
+									xs: '0rem',
+								}}
+								mb={{
+									base: '2rem',
+									xs: '0rem',
+								}}
+							>
 								<Text textStyle="heading6" color="gray.900">
 									Descubre restaurantes que te encantarán en Madrid
 								</Text>
@@ -176,7 +192,12 @@ export const LandingView: React.FC = () => {
 								</VStack>
 							</VStack>
 						</GridItem>
-						<GridItem colSpan={3}>
+						<GridItem
+							colSpan={{
+								base: 4,
+								xs: 3,
+							}}
+						>
 							<Box position="relative" h="30rem" w="100%">
 								<Img
 									src={cityBackground.madrid}
@@ -186,7 +207,17 @@ export const LandingView: React.FC = () => {
 									objectFit="cover"
 									objectPosition="center"
 								/>
-								<Flex position="absolute" bottom={0} right={0} bg="white" padding="1rem" w="40%">
+								<Flex
+									position="absolute"
+									bottom={0}
+									right={0}
+									bg="white"
+									padding="1rem"
+									w={{
+										base: '60%',
+										xs: '40%',
+									}}
+								>
 									<VStack align="stretch" spacing="0.5rem">
 										<Text textStyle="heading6" color="brand-primary.default">
 											En Madrid
@@ -211,10 +242,6 @@ export const LandingView: React.FC = () => {
 							base: 'column',
 							xs: 'row',
 						}}
-						p={{
-							base: '0rem 2rem',
-							xs: '0rem',
-						}}
 						width={breakpointLayoutWidth}
 						justifyContent="space-between"
 						mt="2rem"
@@ -228,7 +255,7 @@ export const LandingView: React.FC = () => {
 									icon={icon}
 									data={data}
 									key={index}
-									isLoading={isLoading}
+									isLoading={isLoading || data.length === 0}
 									onClickViewAll={onViewAll}
 								/>
 							),
@@ -238,7 +265,14 @@ export const LandingView: React.FC = () => {
 				<Flex w="100%" position="relative" justifyContent="center" mt="2rem">
 					<Box className="gradient-divider" />
 					<VStack width={breakpointLayoutWidth} align="stretch" spacing="2rem" mt="2rem" zIndex={2}>
-						<HStack justifyContent="space-between" w="100%">
+						<HStack
+							justifyContent="space-between"
+							w="100%"
+							px={{
+								base: '2rem',
+								xs: '0rem',
+							}}
+						>
 							<Text textStyle="heading6" color="gray.900">
 								Reserva esta noche...
 							</Text>
@@ -246,7 +280,10 @@ export const LandingView: React.FC = () => {
 								Ver más
 							</SuperLink>
 						</HStack>
-						<HorizontalRestaurantStack data={landingRestaurants.book_tonight ?? []} />
+						<HorizontalRestaurantStack
+							data={landingRestaurants.book_tonight ?? []}
+							isLoading={isLoading || !landingRestaurants.book_tonight}
+						/>
 					</VStack>
 				</Flex>
 				<Footer />
