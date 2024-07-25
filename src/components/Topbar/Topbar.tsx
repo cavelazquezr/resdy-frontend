@@ -88,10 +88,20 @@ export const Topbar: React.FC = () => {
 	return (
 		<Flex
 			w="100%"
-			position="relative"
+			position={{ base: 'fixed', xs: 'relative' }}
 			justifyContent="center"
+			zIndex={10}
 			py="0.5rem"
-			bg={isRestautantView ? 'brand-primary.default' : 'white'}
+			bg={isRestautantView ? 'brand-primary.default' : '#FFFFFFBF'}
+			backdropFilter={{
+				base: 'blur(5px)',
+				xs: 'none',
+			}}
+			borderBottom={{
+				base: '1px solid',
+				xs: 'none',
+			}}
+			borderBottomColor="brand-gray.200"
 			alignItems="center"
 		>
 			<IconButton

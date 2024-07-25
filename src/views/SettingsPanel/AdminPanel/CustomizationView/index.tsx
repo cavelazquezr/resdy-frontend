@@ -14,7 +14,6 @@ export const CustomizationView: React.FC = () => {
 	const userData = useAppSelector((state) => state.user.userData?.data);
 	const restaurantData = useAppSelector((state) => state.restaurant.restaurantData?.data);
 	const [files, setFiles] = React.useState<File[]>([]);
-	console.log('files', files);
 
 	const dispatch = useAppDispatch();
 	const toast = useToast();

@@ -22,6 +22,8 @@ interface IProps {
 export const VerticalRestaurantStackByCategory: React.FC<IProps> = (props) => {
 	const { category, icon, data, isLoading, onClickViewAll } = props;
 
+	console.log('data', data);
+
 	return (
 		<Box position="relative" w="100%">
 			<Flex position="absolute" w="100%" top="-0.5rem" justifyContent="center">
@@ -46,7 +48,7 @@ export const VerticalRestaurantStackByCategory: React.FC<IProps> = (props) => {
 								<RestaurantCardSkeleton noOfRows={4} size="md" />
 							) : (
 								<React.Fragment>
-									{data.map(({ brand_name, name, ...summary }, index) => (
+									{data.map(({ brand_name, headers_url, name, ...summary }, index) => (
 										<SuperLink
 											key={index}
 											to={`restaurant/${name}/home`}
@@ -55,9 +57,9 @@ export const VerticalRestaurantStackByCategory: React.FC<IProps> = (props) => {
 										>
 											<HStack justifyContent="space-between">
 												<HStack spacing="0.75rem">
-													{summary.header_url ? (
+													{headers_url.length > 0 ? (
 														<Image
-															src={summary.header_url ?? ''}
+															src={headers_url[0] ?? ''}
 															alt={brand_name ?? ''}
 															w="5rem"
 															h="5rem"

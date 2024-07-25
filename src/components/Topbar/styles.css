@@ -3,3 +3,9 @@
 	border: 1px solid #e1e1e1;
 	backdrop-filter: blur(5px);
 }
+
+.responsive-topbar-background {
+	background-color: rgb(255, 255, 255, 0.5);
+	border-bottom: 1px solid #e1e1e1;
+	backdrop-filter: blur(5px);
+}

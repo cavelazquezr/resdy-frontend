@@ -76,7 +76,14 @@ export const LandingView: React.FC = () => {
 	return (
 		<React.Fragment>
 			<VStack>
-				<Flex h="28rem" alignItems="center">
+				<Flex
+					h="28rem"
+					alignItems="center"
+					mt={{
+						base: '5rem',
+						xs: '0rem',
+					}}
+				>
 					<VStack
 						w="100%"
 						align="center"

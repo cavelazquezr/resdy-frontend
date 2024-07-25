@@ -18,7 +18,8 @@ type CustomizationOutput = {
 	color_palette: Record<string, string>;
 	font_families: Record<string, string>;
 	extra_customization: Record<string, string>;
-	header_url: string | null;
+	headers_url: string[];
+	headers_path: string[] | null;
 	name: string | null;
 	updated_at: Date;
 	restaurant_id: string;
@@ -57,7 +58,7 @@ export interface RestaurantRecord
 			| 'social_media'
 		>,
 		Pick<RestaurantOutput, 'name' | 'id'>,
-		Pick<CustomizationOutput, 'header_url'> {
+		Pick<CustomizationOutput, 'headers_url'> {
 	brand_name: string | null;
 	price_average: number;
 	rating: number;
@@ -71,7 +72,7 @@ export type RestaurantCardRecord = Pick<
 	| 'brand_name'
 	| 'address'
 	| 'price_average'
-	| 'header_url'
+	| 'headers_url'
 	| 'rating'
 	| 'rating_count'
 	| 'city'

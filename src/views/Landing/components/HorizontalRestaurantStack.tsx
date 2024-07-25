@@ -56,7 +56,7 @@ export const HorizontalRestaurantStack: React.FC<IProps> = (props) => {
 				md: '0rem',
 			}}
 		>
-			{data.map(({ brand_name, name, header_url, ...summary }, index) => (
+			{data.map(({ brand_name, name, headers_url, ...summary }, index) => (
 				<VStack
 					key={index}
 					bg="white"
@@ -69,8 +69,8 @@ export const HorizontalRestaurantStack: React.FC<IProps> = (props) => {
 					w="100%"
 					minW="15rem"
 				>
-					{header_url ? (
-						<Image src={header_url ?? ''} alt={name} w="100%" h="10rem" objectFit="cover" />
+					{headers_url.length > 0 ? (
+						<Image src={headers_url[0] ?? ''} alt={name} w="100%" h="10rem" objectFit="cover" />
 					) : (
 						<Box bg="gray.200" w="100%" h="10rem" />
 					)}
