@@ -87,7 +87,13 @@ export const RestaurantLayout: React.FC = () => {
 						</Text>
 					</Flex>
 					<Box bg="black" opacity="50%" w="100%" h="20rem" position="absolute" />
-					<Image src={restautantRecord.header_url ?? ''} w="100%" h="20rem" objectFit="cover" objectPosition="center" />
+					<Image
+						src={restautantRecord.headers_url[0] ?? ''}
+						w="100%"
+						h="20rem"
+						objectFit="cover"
+						objectPosition="center"
+					/>
 				</Box>
 				<Box bg="brand-primary.default" w="100%" h="3rem">
 					<HStack alignItems="center" h="100%" justifyContent="center" spacing="1rem">

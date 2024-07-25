@@ -30,7 +30,7 @@ export const RestaurantCardSlider: React.FC<IRestaurantCardSliderProps> = (props
 };
 
 const RestaurantCard: React.FC<{ restaurant: RestaurantRecord }> = (props) => {
-	const { name, brand_name, price_average, address, rating, rating_count, restaurant_type, header_url } =
+	const { name, brand_name, price_average, address, rating, rating_count, restaurant_type, headers_url } =
 		props.restaurant;
 
 	return (
@@ -49,7 +49,7 @@ const RestaurantCard: React.FC<{ restaurant: RestaurantRecord }> = (props) => {
 				transition="transform 0.4s, box-shadow 0.4s" // Transition for scaling only
 			>
 				<Box position="relative" h="25vh" overflow="hidden">
-					<Image src={header_url ?? ''} alt="header" objectFit="cover" w="100%" h="100%" />
+					<Image src={headers_url[0] ?? ''} alt="header" objectFit="cover" w="100%" h="100%" />
 				</Box>
 				<Stack spacing="0.5rem" p="1rem">
 					<HStack>
