@@ -97,7 +97,6 @@ export const CustomizationView: React.FC = () => {
 		},
 	];
 
-	console.log('isSubmitting', isSubmitting);
 	return (
 		<Box w="100%" h="100%">
 			<form id="customization-info" noValidate>

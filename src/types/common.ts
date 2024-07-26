@@ -10,7 +10,7 @@ export interface RestaurantCardOutput<T> {
 	brand_name: string;
 	address: string;
 	city: string;
-	header_url: string | null;
+	headers_url: string | null;
 	restaurant_type: string;
 	location: Point;
 	summary: RestaurantSummary;

@@ -23,7 +23,6 @@ export const ChangePasswordView: React.FC = () => {
 			password: values.password,
 		};
 
-		console.log('input: ', input);
 		setIsSubmitting(true);
 		try {
 			await updateUser(input).then(() => {

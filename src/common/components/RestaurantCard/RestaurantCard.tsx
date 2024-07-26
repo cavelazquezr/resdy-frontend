@@ -35,6 +35,8 @@ export const RestaurantCard: React.FC<IProps> = (props) => {
 		day: 'numeric',
 	});
 
+	console.log('record', record);
+
 	return (
 		<SuperLink
 			onClick={onClick ? () => onClick(record) : undefined}
@@ -60,7 +62,7 @@ export const RestaurantCard: React.FC<IProps> = (props) => {
 						borderRadius="0.5rem"
 						w={{ base: '100%', xs: '12rem' }}
 						h={{ base: '100%', xs: '12rem' }}
-						src={record.header_url ?? undefined}
+						src={record.headers_url ? record.headers_url[0] : undefined}
 						alt={record.name}
 					/>
 				</Box>

@@ -33,7 +33,6 @@ export const LoginForm: React.FC = () => {
 			.then(async (response) => {
 				localStorage.setItem('accessToken', response.data.token);
 				await dispatch(getCurrentUserThunk());
-				console.log('response', response);
 				await dispatch(getMyRestaurantThunk());
 			})
 			.catch((err) => {

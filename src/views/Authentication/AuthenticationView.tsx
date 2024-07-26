@@ -19,8 +19,6 @@ export const AuthenticationView: React.FC = () => {
 
 	const isAuthenticationView = isRegisterView || isLoginView;
 
-	console.log('isAuthenticationView', isAuthenticationView);
-
 	useEffect(() => {
 		if (videoRef.current) {
 			videoRef.current.playbackRate = 0.85; // Adjust this value to set the desired playback speed

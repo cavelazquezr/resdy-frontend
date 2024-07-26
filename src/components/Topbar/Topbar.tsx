@@ -86,98 +86,19 @@ export const Topbar: React.FC = () => {
 	}, [isOpen]);
 
 	return (
-		<Flex
-			w="100%"
-			position={{ base: 'fixed', xs: 'relative' }}
-			justifyContent="center"
-			zIndex={10}
-			py="0.5rem"
-			bg={isRestautantView ? 'brand-primary.default' : '#FFFFFFBF'}
-			backdropFilter={{
-				base: 'blur(5px)',
-				xs: 'none',
-			}}
-			borderBottom={{
-				base: '1px solid',
-				xs: 'none',
-			}}
-			borderBottomColor="brand-gray.200"
-			alignItems="center"
-		>
-			<IconButton
-				position="absolute"
-				variant="ghost"
-				left="2rem"
-				borderRadius="0.5rem"
-				height="3.5rem"
-				w="3.5rem"
-				size="lg"
-				aria-label="open-menu"
-				display={{ xs: 'none' }}
-				onClick={isOpen ? onClose : onOpen}
-			>
-				<Icon as={FiMenu} fontSize="2rem" />
-			</IconButton>
-			<HStack
-				py="0.75rem"
-				justifyContent={{
-					base: 'center',
-					xs: 'space-between',
-				}}
-				w={breakpointLayoutWidth}
-			>
-				{!isDiscoverView && (
-					<SuperLink to="/">
-						<Img src={isRestautantView ? resdyForRestaurant : resdyLogoPrimary} />
-					</SuperLink>
-				)}
-				<Flex
-					position="fixed"
-					justifyContent="center"
-					zIndex={3}
-					top="0.5rem"
-					display={{
-						base: 'none',
-						xs: 'flex',
-					}}
-				>
-					<Flex width={breakpointLayoutWidth} justify="end">
-						<HStack
-							className="topbar-background"
-							justifyContent="end"
-							padding="0.5rem"
-							spacing="1rem"
-							borderRadius="full"
-						>
-							<HStack borderRight="1px solid" borderRightColor="brand-gray.200" pe="1rem">
-								<Select placeholder="Madrid" border="none" w="8rem" />
-							</HStack>
-							<HStack borderRight="1px solid" borderRightColor="brand-gray.200" pe="1rem">
-								<Input placeholder="Buscar" border="none" />
-								<Button variant="default-light" size="sm" w="7rem">
-									Buscar
-								</Button>
-							</HStack>
-							{authenticatedUser ? (
-								<UserMenu user={authenticatedUser} />
-							) : (
-								<SuperLink to="/login">
-									<Button variant="primary" size="sm" w="7rem">
-										Ingresar
-									</Button>
-								</SuperLink>
-							)}
-						</HStack>
-					</Flex>
-				</Flex>
-			</HStack>
-			<Slide in={isOpen} direction="left" style={{ zIndex: 11, width: '60%' }}>
+		<>
+			<Slide in={isOpen} direction="left" style={{ zIndex: 12, width: '60%' }}>
 				<Box h="100%">
 					<Box id="menu" pb={4} bg="white" padding="2rem" w="100%" h="100%" zIndex={5}>
 						{authenticatedUser ? (
 							<Stack as={'nav'} spacing={4} w="100%">
 								<VStack align="stretch" spacing="1rem">
-									<UserAvatar size="lg" avatarPath={authenticatedUser.avatar_url ?? 'https://bit.ly/broken-link'} />
+									<UserAvatar
+										size="lg"
+										avatarUrl={
+											authenticatedUser.avatar_url ? authenticatedUser.avatar_url : 'https://bit.ly/broken-link'
+										}
+									/>
 									<VStack align="stretch" spacing={0}>
 										<Text textStyle="body1" fontWeight="medium" color="gray.900">{`${authenticatedUser.firstname} ${
 											authenticatedUser.lastname ?? ''
@@ -217,7 +138,7 @@ export const Topbar: React.FC = () => {
 				</Box>
 			</Slide>
 			{isOpen && (
-				<Fade in={isOpen} unmountOnExit style={{ zIndex: 10 }}>
+				<Fade in={isOpen} unmountOnExit style={{ zIndex: 11 }}>
 					<Box
 						position="fixed"
 						zIndex={99}
@@ -231,7 +152,96 @@ export const Topbar: React.FC = () => {
 					/>
 				</Fade>
 			)}
-		</Flex>
+			<Flex
+				w="100%"
+				position={{ base: 'fixed', xs: 'relative' }}
+				justifyContent="center"
+				zIndex={10}
+				py="0.5rem"
+				bg={{
+					base: isRestautantView ? 'brand-primary.default' : '#FFFFFFBF',
+					xs: 'none',
+				}}
+				backdropFilter={{
+					base: 'blur(5px)',
+					xs: 'none',
+				}}
+				borderBottom={{
+					base: '1px solid',
+					xs: 'none',
+				}}
+				borderBottomColor="brand-gray.200"
+				alignItems="center"
+			>
+				<IconButton
+					position="absolute"
+					variant="ghost"
+					left="2rem"
+					borderRadius="0.5rem"
+					height="3.5rem"
+					w="3.5rem"
+					size="lg"
+					aria-label="open-menu"
+					display={{ xs: 'none' }}
+					onClick={isOpen ? onClose : onOpen}
+				>
+					<Icon as={FiMenu} fontSize="2rem" />
+				</IconButton>
+				<HStack
+					py="0.75rem"
+					justifyContent={{
+						base: 'center',
+						xs: 'space-between',
+					}}
+					w={breakpointLayoutWidth}
+				>
+					{!isDiscoverView && (
+						<SuperLink to="/">
+							<Img src={isRestautantView ? resdyForRestaurant : resdyLogoPrimary} />
+						</SuperLink>
+					)}
+					<Flex
+						position="fixed"
+						justifyContent="center"
+						zIndex={3}
+						top="0.5rem"
+						display={{
+							base: 'none',
+							xs: 'flex',
+						}}
+					>
+						<Flex width={breakpointLayoutWidth} justify="end">
+							<HStack
+								className="topbar-background"
+								justifyContent="end"
+								padding="0.5rem"
+								spacing="1rem"
+								borderRadius="full"
+							>
+								<HStack borderRight="1px solid" borderRightColor="brand-gray.200" pe="1rem">
+									<Select placeholder="Madrid" border="none" w="8rem" />
+								</HStack>
+								<HStack borderRight="1px solid" borderRightColor="brand-gray.200" pe="1rem">
+									<Input placeholder="Buscar" border="none" />
+									<Button variant="default-light" size="sm" w="7rem">
+										Buscar
+									</Button>
+								</HStack>
+								{authenticatedUser ? (
+									<UserMenu user={authenticatedUser} />
+								) : (
+									<SuperLink to="/login">
+										<Button variant="primary" size="sm" w="7rem">
+											Ingresar
+										</Button>
+									</SuperLink>
+								)}
+							</HStack>
+						</Flex>
+					</Flex>
+				</HStack>
+			</Flex>
+		</>
 	);
 };
 
@@ -248,11 +258,11 @@ const UserMenu: React.FC<{ user: UserRecord }> = (props) => {
 		<Box position="relative" zIndex="2">
 			<Menu placement="bottom-end">
 				<MenuButton>
-					<UserAvatar size="sm" avatarPath={user.avatar_url ?? 'https://bit.ly/broken-link'} />
+					<UserAvatar size="sm" avatarUrl={user.avatar_url ?? 'https://bit.ly/broken-link'} />
 				</MenuButton>
 				<MenuList w="fit-content" p="1rem">
 					<VStack>
-						<UserAvatar size="md" avatarPath={user.avatar_url ?? 'https://bit.ly/broken-link'} />
+						<UserAvatar size="md" avatarUrl={user.avatar_url ?? 'https://bit.ly/broken-link'} />
 						<Text textStyle="body1" color="gray.700">{`${user.firstname} ${user.lastname ?? ''}`}</Text>
 					</VStack>
 					<Box mx="-1rem">

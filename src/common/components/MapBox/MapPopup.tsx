@@ -65,8 +65,8 @@ export const MapPopup: React.FC<IProps> = (props) => {
 					<PopoverArrow />
 					<PopoverBody overflow="hidden" p="0rem" borderRadius="0.5rem">
 						<VStack align="stretch" spacing="0rem" overflow="hidden" w="100%">
-							{detail.header_url ? (
-								<Image src={detail.header_url ?? ''} alt={detail.name} w="100%" h="10rem" objectFit="cover" />
+							{detail.headers_url && detail.headers_url[0] ? (
+								<Image src={detail.headers_url[0] ?? ''} alt={detail.name} w="100%" h="10rem" objectFit="cover" />
 							) : (
 								<Box bg="gray.200" w="100%" h="10rem" />
 							)}

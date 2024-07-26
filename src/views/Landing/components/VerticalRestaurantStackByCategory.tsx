@@ -22,8 +22,6 @@ interface IProps {
 export const VerticalRestaurantStackByCategory: React.FC<IProps> = (props) => {
 	const { category, icon, data, isLoading, onClickViewAll } = props;
 
-	console.log('data', data);
-
 	return (
 		<Box position="relative" w="100%">
 			<Flex position="absolute" w="100%" top="-0.5rem" justifyContent="center">

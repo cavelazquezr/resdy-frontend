@@ -55,6 +55,8 @@ export const InformationView: React.FC = () => {
 		validationSchema: schema,
 	});
 
+	console.log('userData', userData);
+
 	const fields: FormField[] = [
 		{
 			id: 'personal_info',
@@ -101,6 +103,7 @@ export const InformationView: React.FC = () => {
 					type: 'text',
 					colSpan: 2,
 					value: userData?.email,
+					defaultValue: userData?.email,
 					blocked: true,
 					isEditable: true,
 				},

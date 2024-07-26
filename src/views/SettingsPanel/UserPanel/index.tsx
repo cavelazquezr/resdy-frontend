@@ -106,7 +106,7 @@ const Sidebar: React.FC = () => {
 			h="100%"
 		>
 			<HStack minH="3rem">
-				<UserAvatar avatarPath={userData?.avatar_url} size="md" />
+				<UserAvatar avatarUrl={userData?.avatar_url ? userData?.avatar_url : undefined} size="md" />
 				<VStack align="stretch" spacing={0}>
 					<Text textStyle="body1" fontWeight="medium" color="gray.900">
 						{`¡Hola, ${userData?.firstname}!`}

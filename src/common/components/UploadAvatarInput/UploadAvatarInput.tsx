@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Button, HStack, Input, InputGroup, useToast } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
 
 import { updateUser } from '../../../api/authentication';
 import { uploadFiles } from '../../../api/microservices';
@@ -20,19 +19,18 @@ export const UploadAvatarInput: React.FC<IProps> = (props) => {
 	const [isUploading, setIsUploading] = React.useState<boolean>(false);
 
 	const dispatch = useAppDispatch();
-	const location = useLocation();
 	const toast = useToast();
-
-	const isAdminView = location.pathname.includes('admin');
 
 	const userData = useAppSelector((state) => state.user.userData?.data);
 	const restaurantData = useAppSelector((state) => state.restaurant.restaurantData?.data);
+
+	const isAdmin = userData?.is_owner;
 
 	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const fileList: FileList | null = e.target.files;
 		if (fileList) {
 			const attachedFiles: IAttachedFile[] = Array.from(fileList).map((file) => ({
-				id: isAdminView
+				id: isAdmin
 					? `restaurants/${restaurantData?.name}/${restaurantData?.name}-logo`
 					: `users/${userData?.id}/${userData?.id}-avatar`,
 				name: `${userData?.id}-avatar`,
@@ -65,7 +63,11 @@ export const UploadAvatarInput: React.FC<IProps> = (props) => {
 
 	return (
 		<HStack>
-			<UserAvatar avatarPath={userData?.avatar_url} size="md" opacity={isSubmitting ? 0.5 : 1} />
+			<UserAvatar
+				avatarUrl={userData?.avatar_url ? userData?.avatar_url : undefined}
+				size="md"
+				opacity={isSubmitting ? 0.5 : 1}
+			/>
 			<InputGroup>
 				<form>
 					<label htmlFor="file-upload">
