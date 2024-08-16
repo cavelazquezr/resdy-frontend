@@ -1,4 +1,4 @@
-import { WithHide } from '.';
+import { WithHide, WithIsUsed } from '.';
 
 /*
  * Notes:
@@ -17,5 +17,8 @@ export type CategoryOutput = {
 };
 
 export type CategoryProps = Partial<CategoryOutput>;
-export type CategoryCreateInput = Pick<CategoryOutput, 'label'>;
-export type CategoryUpdateInput = WithHide<Partial<Pick<CategoryProps, 'label'>>>;
+export type CategoryCreateInput = Pick<CategoryOutput, 'label'> & { restaurantName?: string };
+export type MyCategoriesRecord = Omit<WithIsUsed<CategoryOutput>, 'restaurant_id'> & { dishes: number };
+export type CategoryUpdateInput = Pick<Partial<WithHide<CategoryOutput>>, 'hide' | 'label'> & {
+	categoryId: string;
+};

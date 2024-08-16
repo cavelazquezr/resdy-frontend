@@ -7,6 +7,7 @@ import { DragAndDrop } from './DragAndDrop/DragAndDrop';
 import { EditableInput } from './EditableInput/EditableInput';
 import { FormStack } from './FormStack/FormStack';
 import { InlineForm } from './InlineForm/InlineForm';
+import { MultiSelect } from './MultiSelect/MultiSelect';
 import { NewInput } from './NewInput/NewInput';
 import { NewSelect } from './NewSelect/NewSelect';
 import { NewTextarea } from './NewTextarea/NewTextarea';
@@ -52,6 +53,7 @@ export const NewForm: React.FC<IProps> = (props): React.ReactNode => {
 				);
 			} else {
 				switch (field.type) {
+					case 'number':
 					case 'text':
 					case 'password':
 						return (
@@ -148,6 +150,24 @@ export const NewForm: React.FC<IProps> = (props): React.ReactNode => {
 								error={field.error}
 								isInvalid={!!field.error}
 								isDisabled={field.isDisabled || isSubmitting || isDisabled}
+								onChange={onChange}
+							/>
+						);
+					case 'multiSelect':
+						return (
+							<MultiSelect
+								key={index}
+								label={field.label}
+								id={field.id}
+								choices={field.choices ?? []}
+								placeholder={field.placeholder}
+								size="md"
+								value={field.value as string[]}
+								error={field.error}
+								isInvalid={!!field.error}
+								isDisabled={field.isDisabled || isSubmitting || isDisabled}
+								isRequired={field.isRequired}
+								setSelectedItems={field.dispatcher}
 								onChange={onChange}
 							/>
 						);
