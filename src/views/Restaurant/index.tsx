@@ -41,7 +41,7 @@ type TabContent = {
 };
 
 export const RestaurantLayout: React.FC = () => {
-	const { restaurantName, restaurantSection } = useCustomParams(['restaurantName', 'restaurantSection']);
+	const { restaurantName } = useCustomParams(['restaurantName']);
 
 	const queryBuilder = [
 		{
