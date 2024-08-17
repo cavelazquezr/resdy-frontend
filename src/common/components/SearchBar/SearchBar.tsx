@@ -10,9 +10,11 @@ import { DatePicker } from '../DatePicker/DatePicker';
 interface IProps {
 	hasCalendar?: boolean;
 	selectValues?: string[];
+	searchPlaceholder?: string;
 	filters?: QueryFilter | undefined;
 	handleSetFilter: (input: Record<string, string | undefined>) => void;
 	hideDatePicker?: boolean;
+	hideCitySelect?: boolean;
 }
 
 const datePickerButtonProps: ButtonProps = {
@@ -25,7 +27,7 @@ const datePickerButtonProps: ButtonProps = {
 };
 
 export const SearchBar: React.FC<IProps> = (props) => {
-	const { filters, selectValues, handleSetFilter, hideDatePicker } = props;
+	const { filters, selectValues, searchPlaceholder, handleSetFilter, hideDatePicker, hideCitySelect } = props;
 	const [search, setSearch] = React.useState<string | undefined>();
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -50,35 +52,43 @@ export const SearchBar: React.FC<IProps> = (props) => {
 					<DatePicker filters={filters} buttonProps={datePickerButtonProps} handleSetFilter={handleSetFilter} />
 				</HStack>
 			)}
-			<HStack w="13rem" spacing="0rem" ps="1rem">
-				<Icon as={HiOutlineLocationMarker} color="gray.500" />
-				<Select
-					id="city"
-					border="none"
-					value={filters?.city || ''}
-					onChange={(e) => {
-						const { id, value } = e.target;
-						handleSetFilter({ ...filters, [id]: value });
-					}}
-					size="md"
-					placeholder="Ciudad"
-				>
-					{selectValues &&
-						selectValues.map((value, i) => (
-							<option key={i} value={value}>
-								{value}
-							</option>
-						))}
-				</Select>
-			</HStack>
-			<HStack w="100%" borderLeft="1px solid" spacing="0rem" borderLeftColor="brand-gray.200" ps="1rem">
+			{!hideCitySelect && (
+				<HStack w="13rem" spacing="0rem" ps="1rem">
+					<Icon as={HiOutlineLocationMarker} color="gray.500" />
+					<Select
+						id="city"
+						border="none"
+						value={filters?.city || ''}
+						onChange={(e) => {
+							const { id, value } = e.target;
+							handleSetFilter({ ...filters, [id]: value });
+						}}
+						size="md"
+						placeholder="Ciudad"
+					>
+						{selectValues &&
+							selectValues.map((value, i) => (
+								<option key={i} value={value}>
+									{value}
+								</option>
+							))}
+					</Select>
+				</HStack>
+			)}
+			<HStack
+				w="100%"
+				borderLeft={!hideCitySelect ? 'brand-gray.200' : undefined}
+				spacing="0rem"
+				borderLeftColor="brand-gray.200"
+				ps="1rem"
+			>
 				<Icon as={FiSearch} color="gray.500" />
 				<Input
 					id="search"
 					border="none"
 					size="md"
 					value={search}
-					placeholder="Nombre del restaurante..."
+					placeholder={searchPlaceholder ? searchPlaceholder : 'Nombre del restaurante...'}
 					onChange={(e) => setSearch(e.target.value)}
 					onKeyDown={(e) => handleKeyDown(e)}
 					onBlur={() => {

@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CustomizationView } from './CustomizationView';
 import { InformationView } from './InformationView';
+import { MenuView } from './MenuView';
 import { IconBadge } from '../../../common/components/IconBadge/IconBadge';
 import { SuperLink } from '../../../common/components/SuperLink/SuperLink';
 import { UserAvatar } from '../../../common/components/UserAvatar/UserAvatar';
@@ -69,7 +70,7 @@ const sections = [
 		label: 'Menú',
 		icon: FiClipboard,
 		description: 'Administra el menú de tu restaurante.',
-		component: () => <>Menu</>,
+		component: MenuView,
 		path: '/admin/menu',
 	},
 ];

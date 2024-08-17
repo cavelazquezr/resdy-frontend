@@ -6,7 +6,7 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { InputErrorMessage } from '../../components/InputErrorMessage/InputErrorMessage';
 
 interface IProps extends InputProps {
-	type: 'text' | 'password';
+	type: 'text' | 'password' | 'number';
 	label?: string;
 	tooltip?: string;
 	error?: string;
@@ -20,7 +20,7 @@ export const NewInput: React.FC<IProps> = (props): React.ReactNode => {
 		<FormControl isInvalid={!!error} isRequired={inputProps.isRequired}>
 			{label && <FormLabel htmlFor={inputProps.id}>{label}</FormLabel>}
 			<InputGroup>
-				<Input type={showPassword ? 'text' : 'password'} {...inputProps} />
+				<Input type={showPassword ? type : 'password'} {...inputProps} />
 				{type === 'password' && (
 					<InputRightElement display="flex" alignItems="center" h="100%">
 						<IconButton

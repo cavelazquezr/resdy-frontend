@@ -19,7 +19,8 @@ type FieldTypes =
 	| 'dragAndDrop'
 	| 'autoComplete'
 	| 'inlineGroup'
-	| 'formStack';
+	| 'formStack'
+	| 'multiSelect';
 
 export type FieldValue = string | number | boolean | Date | null | Record<string, unknown> | Array<string> | undefined;
 

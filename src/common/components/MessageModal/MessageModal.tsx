@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { VStack, Text, Button, Icon } from '@chakra-ui/react';
-import { FiCheckCircle } from 'react-icons/fi';
+import { FiAlertCircle, FiAlertTriangle, FiCheckCircle } from 'react-icons/fi';
 
 import { ModalTemplate as Modal } from '../ModalTemplate/ModalTemplate';
 
@@ -11,21 +11,35 @@ type SimpleActionButton = {
 };
 interface IProps {
 	title: string;
+	type?: 'success' | 'error' | 'warning';
 	bodyText: string;
 	isOpen: boolean;
 	firstActionButton?: SimpleActionButton;
 	secondActionButton?: SimpleActionButton;
 	onClose: () => void;
-	handleToggle: () => void;
+	handleToggle?: () => void;
 }
 
 export const MessageModal: React.FC<IProps> = (props) => {
-	const { title, bodyText, handleToggle, firstActionButton, secondActionButton, ...modalProps } = props;
+	const {
+		title,
+		type = 'success',
+		bodyText,
+		handleToggle,
+		firstActionButton,
+		secondActionButton,
+		...modalProps
+	} = props;
 
 	return (
 		<Modal {...modalProps} hideCloseButton size="sm">
 			<VStack spacing="1rem">
-				<Icon color="brand-secondary.default" w="8rem" h="8rem" as={FiCheckCircle} />
+				<Icon
+					color={type === 'success' ? 'green.500' : type === 'warning' ? 'yellow.500' : 'red.500'}
+					w="8rem"
+					h="8rem"
+					as={type === 'success' ? FiCheckCircle : type === 'warning' ? FiAlertCircle : FiAlertTriangle}
+				/>
 				<Text textStyle="heading5" textAlign="center">
 					{title}
 				</Text>
