@@ -20,7 +20,7 @@ export const NewInput: React.FC<IProps> = (props): React.ReactNode => {
 		<FormControl isInvalid={!!error} isRequired={inputProps.isRequired}>
 			{label && <FormLabel htmlFor={inputProps.id}>{label}</FormLabel>}
 			<InputGroup>
-				<Input type={showPassword ? type : 'password'} {...inputProps} />
+				<Input type={showPassword ? 'text' : 'password'} {...inputProps} />
 				{type === 'password' && (
 					<InputRightElement display="flex" alignItems="center" h="100%">
 						<IconButton

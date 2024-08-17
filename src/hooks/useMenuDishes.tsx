@@ -28,8 +28,11 @@ export function useMenuDishes(filters?: any) {
 	// Create dish
 	const { mutate: createDishMutation } = useMutation({
 		mutationFn: (args: DishCreateInput) => createDish({ ...args, restaurantName: restaurantData?.name }),
-		onSuccess: () => {
+		onSuccess: async () => {
 			invalidateDishesQuery();
+			await queryClient.invalidateQueries({
+				queryKey: ['myCategoriesQuery', filters],
+			});
 			toast({
 				position: 'top',
 				title: 'Plato creado con éxito',

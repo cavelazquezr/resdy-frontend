@@ -19,14 +19,18 @@ import {
 	TabPanel,
 	useDisclosure,
 	Image,
+	IconButton,
+	Icon,
 } from '@chakra-ui/react';
 import { useQueries } from '@tanstack/react-query';
-import { FiShare } from 'react-icons/fi';
+import { FaFacebook, FaInstagram, FaTiktok, FaTwitter } from 'react-icons/fa';
+import { FiMapPin, FiShare } from 'react-icons/fi';
 
 import { AllRatingsModal } from './components/AllRatingsModal';
 import { getMenu } from '../../api/menu';
 import { getRatingStats, getRatings } from '../../api/rating';
 import { getRestaurants } from '../../api/restautants';
+import { ContentContainer } from '../../common/components/ContentContainer/ContentContainer';
 import { RatingCard } from '../../common/components/RatingCard/RatingCard';
 import { RestaurantSummary } from '../../common/components/RestaurantSummary/RestaurantSummary';
 import { Footer } from '../../components/Footer/Footer';
@@ -83,7 +87,7 @@ export const RestaurantLayout: React.FC = () => {
 	const requestFinished =
 		!restaurantQuery.isLoading && !ratingStatsQuery.isLoading && !ratingsQuery.isLoading && !menuQuery.isLoading;
 
-	console.log('restautantRecord', restautantRecord);
+	console.log('menuRecords', menuRecords);
 
 	const tabContent: TabContent[] = [
 		{
@@ -245,10 +249,41 @@ export const RestaurantLayout: React.FC = () => {
 					</VStack>
 				</GridItem>
 				<GridItem colSpan={5}>
-					<VStack align="stretch">
+					<VStack align="stretch" spacing="2rem">
 						<Box h="30rem" borderRadius="0.5rem" overflow="hidden">
 							<Image w="100%" h="100%" objectFit="cover" src={restautantRecord.headers_url[0]} alt="header" />
 						</Box>
+						<ContentContainer p={0}>
+							<VStack align="stretch" w="100%">
+								<Box bg="gray.200" h="10rem" w="100%"></Box>
+								<VStack align="stretch" spacing="1rem" padding="1.5rem">
+									<VStack align="stretch" spacing="0rem">
+										<Text textStyle="heading5">{restautantRecord.brand_name}</Text>
+										<HStack>
+											{restautantRecord.social_media.tiktok && (
+												<IconButton variant="ghost" aria-label="TikTok" icon={<FaTiktok />} />
+											)}
+											{restautantRecord.social_media.facebook && (
+												<IconButton variant="ghost" aria-label="TikTok" icon={<FaFacebook />} />
+											)}
+											{restautantRecord.social_media.instagram && (
+												<IconButton variant="ghost" aria-label="TikTok" icon={<FaInstagram />} />
+											)}
+											{restautantRecord.social_media.twitter && (
+												<IconButton variant="ghost" aria-label="TikTok" icon={<FaTwitter />} />
+											)}
+										</HStack>
+									</VStack>
+									<Divider />
+									<HStack spacing={0} alignItems="center">
+										<Icon me="0.25rem" as={FiMapPin} color="gray.500" />
+										<Text textStyle="body2" color="gray.500">
+											{`${restautantRecord.address}, ${restautantRecord.city}`}
+										</Text>
+									</HStack>
+								</VStack>
+							</VStack>
+						</ContentContainer>
 					</VStack>
 				</GridItem>
 			</Grid>

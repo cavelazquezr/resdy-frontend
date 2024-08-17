@@ -41,6 +41,7 @@ export const CategoriesTable: React.FC<IProps> = ({ categories }) => {
 	const columnsLayout: Array<ColumnLayout> = [
 		{ key: 'label', label: 'Categoría', colSpan: 7, align: 'start', isSortable: true },
 		{ key: 'dishes', label: 'Platos', colSpan: 1, align: 'center', isSortable: true },
+		{ key: 'order', label: 'Orden', colSpan: 1, align: 'center', isSortable: true },
 		{ key: 'is_active', label: 'Activo', colSpan: 1, align: 'center', isSortable: true },
 		{ colSpan: 1, align: 'end', isSortable: false },
 	];
@@ -65,6 +66,7 @@ export const CategoriesTable: React.FC<IProps> = ({ categories }) => {
 						cells={[
 							{ type: 'text', content: category.label },
 							{ type: 'text', content: category.dishes.toString() },
+							{ type: 'text', content: 'foo' },
 							{
 								type: 'component',
 								content: (
