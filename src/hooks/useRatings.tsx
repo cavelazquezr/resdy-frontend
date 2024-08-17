@@ -6,7 +6,7 @@ import { useAppSelector } from '../store/store';
 import { RatingUpdateRecord } from '../types/rating';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useRatings(filters?: any) {
+export function useRatings() {
 	const restaurantData = useAppSelector((state) => state.restaurant.restaurantData?.data);
 	const queryClient = useQueryClient();
 
