@@ -39,7 +39,6 @@ import { useLocation } from 'react-router-dom';
 import './styles.css';
 
 import resdyLogoPrimary from '../../assets/Resdy.svg';
-import resdyForRestaurant from '../../assets/ResdyForRestaurant.svg';
 import { SuperLink } from '../../common/components/SuperLink/SuperLink';
 import { UserAvatar } from '../../common/components/UserAvatar/UserAvatar';
 import { useAppSelector } from '../../store/store';
@@ -64,7 +63,6 @@ const nonAuthenticatedMenuItems = [{ label: 'Ingresar', icon: FiUser, path: '/lo
 export const Topbar: React.FC = () => {
 	const authenticatedUser = useAppSelector((state) => state.user.userData?.data);
 	const location = useLocation();
-	const isRestautantView = location.pathname.includes('/restaurant');
 	const isDiscoverView = location.pathname.includes('/discover');
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -159,7 +157,7 @@ export const Topbar: React.FC = () => {
 				zIndex={10}
 				py="0.5rem"
 				bg={{
-					base: isRestautantView ? 'brand-primary.default' : '#FFFFFFBF',
+					base: '#FFFFFFBF',
 					xs: 'none',
 				}}
 				backdropFilter={{
@@ -197,7 +195,7 @@ export const Topbar: React.FC = () => {
 				>
 					{!isDiscoverView && (
 						<SuperLink to="/">
-							<Img src={isRestautantView ? resdyForRestaurant : resdyLogoPrimary} />
+							<Img src={resdyLogoPrimary} />
 						</SuperLink>
 					)}
 					<Flex

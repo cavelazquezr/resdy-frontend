@@ -23,7 +23,7 @@ export type RatingRecord = Omit<RatingsOutput, 'user_id' | 'updated_at' | 'resta
 	replied_at: RatingsOutput['updated_at'];
 };
 export type MyRatingInfoRecord = Omit<RatingRecord, 'user_info' | 'restaurant_id' | 'id' | 'status'>;
-export type RatingUpdateRecord = Pick<RatingRecord, 'id' | 'title' | 'comment' | 'rating'>;
+export type RatingUpdateRecord = Pick<Partial<RatingRecord>, 'id' | 'title' | 'comment' | 'rating' | 'answer'>;
 export type RatingDetailOutput = Pick<
 	RatingRecord,
 	'title' | 'comment' | 'rating' | 'answer' | 'created_at' | 'replied_at'
@@ -31,7 +31,9 @@ export type RatingDetailOutput = Pick<
 export interface RatingStatsOutput {
 	rating: string;
 	rating_count: number;
-	stats?: Record<number, number>;
+	stats: Record<number, number>;
+	answered_ratings: number;
+	unanswered_ratings: number;
 }
 
 export interface UserRatingOutput {

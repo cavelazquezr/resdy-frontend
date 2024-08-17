@@ -17,7 +17,9 @@ type Dish = {
 
 export type DishOutput = Dish & { category: CategoryOutput };
 export type DishProps = Partial<DishOutput>;
-export type DishCreateInput = Pick<DishOutput, 'name' | 'photo_url' | 'allergen' | 'price' | 'description'>;
+export type DishCreateInput = Pick<DishOutput, 'name' | 'allergen' | 'price' | 'description' | 'category_id'> & {
+	restaurantName?: string;
+};
 export type DishUpdateInput = WithHide<
 	Partial<Pick<DishProps, 'name' | 'photo_url' | 'allergen' | 'price' | 'description'>> & { dishId: string }
 >;

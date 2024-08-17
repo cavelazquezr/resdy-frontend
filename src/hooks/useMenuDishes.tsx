@@ -1,11 +1,13 @@
 import { useToast } from '@chakra-ui/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { deleteDish, getMyDishes, updateDish } from '../api/dishes';
-import { DishUpdateInput } from '../types/dishes';
+import { createDish, deleteDish, getMyDishes, updateDish } from '../api/dishes';
+import { useAppSelector } from '../store/store';
+import { DishCreateInput, DishUpdateInput } from '../types/dishes';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useMenuDishes(filters?: any) {
+	const restaurantData = useAppSelector((state) => state.restaurant.restaurantData?.data);
 	const queryClient = useQueryClient();
 
 	const toast = useToast();
@@ -23,20 +25,20 @@ export function useMenuDishes(filters?: any) {
 		});
 	};
 
-	// Create category
-	// const { mutate: createCategoryMutation } = useMutation({
-	// 	mutationFn: (args: CategoryCreateInput) => createCategory({ ...args, restaurantName: restaurantData?.name }),
-	// 	onSuccess: () => {
-	// 		invalidateCategoriesQuery();
-	// 		toast({
-	// 			position: 'top',
-	// 			title: 'Categoría creada con éxito',
-	// 			status: 'success',
-	// 			duration: 4000,
-	// 			isClosable: true,
-	// 		});
-	// 	},
-	// });
+	// Create dish
+	const { mutate: createDishMutation } = useMutation({
+		mutationFn: (args: DishCreateInput) => createDish({ ...args, restaurantName: restaurantData?.name }),
+		onSuccess: () => {
+			invalidateDishesQuery();
+			toast({
+				position: 'top',
+				title: 'Plato creado con éxito',
+				status: 'success',
+				duration: 4000,
+				isClosable: true,
+			});
+		},
+	});
 
 	// // Update dish
 	const { mutate: updateDishMutation } = useMutation({
@@ -70,7 +72,7 @@ export function useMenuDishes(filters?: any) {
 
 	return {
 		dishes: dishesData?.data,
-		// createCategoryMutation,
+		createDishMutation,
 		updateDishMutation,
 		deleteDishMutation,
 		invalidateDishesQuery,

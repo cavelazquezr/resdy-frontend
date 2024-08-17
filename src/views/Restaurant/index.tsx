@@ -1,20 +1,44 @@
 import React from 'react';
 
-import { Box, Flex, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import {
+	Grid,
+	GridItem,
+	Heading,
+	VStack,
+	Text,
+	HStack,
+	Button,
+	Divider,
+	Box,
+	Tabs,
+	Flex,
+	TabList,
+	Tab,
+	TabIndicator,
+	TabPanels,
+	TabPanel,
+	useDisclosure,
+	Image,
+} from '@chakra-ui/react';
 import { useQueries } from '@tanstack/react-query';
+import { FiShare } from 'react-icons/fi';
 
-import { HomeView } from './HomeView';
-import { MenuView } from './MenuView';
-import { RatingView } from './RatingsView';
-import { ReservationView } from './ReservationView';
+import { AllRatingsModal } from './components/AllRatingsModal';
 import { getMenu } from '../../api/menu';
 import { getRatingStats, getRatings } from '../../api/rating';
 import { getRestaurants } from '../../api/restautants';
-import { SuperLink } from '../../common/components/SuperLink/SuperLink';
+import { RatingCard } from '../../common/components/RatingCard/RatingCard';
+import { RestaurantSummary } from '../../common/components/RestaurantSummary/RestaurantSummary';
+import { Footer } from '../../components/Footer/Footer';
 import { useCustomParams } from '../../hooks/useCustomParams';
 import { MenuRecord } from '../../types/menu';
 import { RatingRecord, RatingStatsOutput } from '../../types/rating';
 import { RestaurantRecord } from '../../types/restaurants';
+
+type TabContent = {
+	label: string;
+	component: () => JSX.Element;
+};
 
 export const RestaurantLayout: React.FC = () => {
 	const { restaurantName, restaurantSection } = useCustomParams(['restaurantName', 'restaurantSection']);
@@ -38,6 +62,13 @@ export const RestaurantLayout: React.FC = () => {
 		},
 	];
 
+	// All ratings modal
+	const {
+		isOpen: isAllRatingsModalOpen,
+		onOpen: onAllRatingsModalOpen,
+		onClose: onAllRatingsModalClose,
+	} = useDisclosure();
+
 	// Queries
 	const [restaurantQuery, ratingStatsQuery, ratingsQuery, menuQuery] = useQueries({
 		queries: queryBuilder.map((query) => ({ queryKey: [query.key], queryFn: query.apiFn })),
@@ -52,67 +83,176 @@ export const RestaurantLayout: React.FC = () => {
 	const requestFinished =
 		!restaurantQuery.isLoading && !ratingStatsQuery.isLoading && !ratingsQuery.isLoading && !menuQuery.isLoading;
 
-	const sections = [
+	console.log('restautantRecord', restautantRecord);
+
+	const tabContent: TabContent[] = [
 		{
-			name: 'home',
-			label: 'Inicio',
-			component: HomeView,
+			label: 'Menu',
+			component: () => (
+				<VStack align="stretch" spacing="1rem">
+					<Text textStyle="heading5">Menu</Text>
+					{menuRecords.map(({ category, dishes }, index) => (
+						<VStack key={index} align="stretch" spacing="1rem">
+							<Text textStyle="heading6">{category}</Text>
+							{dishes.map((dish, index) => (
+								<VStack key={index} align="stretch">
+									<HStack w="100%" alignItems="end" justifyContent="space-between" position="relative">
+										<Text bg="white" textStyle="body1" fontWeight="medium">
+											{dish.name}
+										</Text>
+										<Text bg="white" textStyle="body1" fontWeight="semibold">
+											{`${dish.price}€`}
+										</Text>
+										<Box
+											borderBottom="1px solid"
+											borderBottomColor="brand-gray.200"
+											w="100%"
+											position="absolute"
+											zIndex={-1}
+										/>
+									</HStack>
+									{dish.description && (
+										<Text textStyle="body2" color="gray.500">
+											{dish.description}
+										</Text>
+									)}
+								</VStack>
+							))}
+						</VStack>
+					))}
+				</VStack>
+			),
 		},
 		{
-			name: 'menu',
-			label: 'Carta',
-			component: MenuView,
-		},
-		{
-			name: 'ratings',
-			label: 'Opiniones',
-			component: RatingView,
-		},
-		{
-			name: 'reservations',
-			label: 'Reservar',
-			component: ReservationView,
+			label: 'Reseñas',
+			component: () => (
+				<>
+					<VStack align="stretch" spacing="1rem">
+						<Text textStyle="heading5">Reseñas</Text>
+						{ratingsRecords.slice(0, 4).map((rating, index) => (
+							<RatingCard key={index} rating={rating} />
+						))}
+						{ratingsRecords.slice(0, 4).length === 4 && (
+							<Flex w="100%" justifyContent="center">
+								<Button variant="default-light" onClick={onAllRatingsModalOpen}>
+									Ver todas las reseñas
+								</Button>
+							</Flex>
+						)}
+					</VStack>
+					<AllRatingsModal
+						isOpen={isAllRatingsModalOpen}
+						onClose={onAllRatingsModalClose}
+						stats={ratingStatsRecord}
+						ratings={ratingsRecords}
+					/>
+				</>
+			),
 		},
 	];
 
-	const currentSection = sections.find((section) => section.name === restaurantSection);
+	if (!requestFinished) return <>Loading</>;
 
-	if (requestFinished && restautantRecord && ratingStatsRecord && ratingsRecords && menuRecords) {
-		return (
-			<VStack align="stretch" spacing={0}>
-				<Box position="relative" w="100%">
-					<Flex position="absolute" zIndex={2} w="100%" h="100%" alignItems="center">
-						<Text w="100%" textAlign="center" textStyle="heading2" color="white">
-							{restautantRecord.brand_name}
-						</Text>
-					</Flex>
-					<Box bg="black" opacity="50%" w="100%" h="20rem" position="absolute" />
-					<Image
-						src={restautantRecord.headers_url[0] ?? ''}
-						w="100%"
-						h="20rem"
-						objectFit="cover"
-						objectPosition="center"
-					/>
-				</Box>
-				<Box bg="brand-primary.default" w="100%" h="3rem">
-					<HStack alignItems="center" h="100%" justifyContent="center" spacing="1rem">
-						{sections.map((section, index) => (
-							<SuperLink key={index} to={`/restaurant/${restaurantName}/${section.name}`}>
-								<Text
-									textStyle="body1"
-									fontWeight="semibold"
-									color="brand-primary.200"
-									_hover={{ color: 'white', cursor: 'pointer' }}
+	if (restautantRecord.extra_information.extra_description)
+		tabContent.unshift({
+			label: 'Descripción',
+			component: () => (
+				<VStack align="stretch" spacing="0.5rem">
+					<Text textStyle="heading5">{`Más sobre ${restautantRecord.brand_name}`}</Text>
+					<Text textStyle="body1" color="gray.500">
+						{restautantRecord.extra_information.extra_description}
+					</Text>
+				</VStack>
+			),
+		});
+
+	// const currentSection = sections.find((section) => section.name === restaurantSection);
+
+	return (
+		<React.Fragment>
+			<Grid templateColumns="repeat(12, 1fr)" gap="2rem" minH="70vh">
+				<GridItem colSpan={7}>
+					<VStack align="stretch" spacing="1rem">
+						<VStack align="stretch" spacing="0.5rem">
+							<Heading as="h1" textStyle="heading1">
+								{restautantRecord.brand_name}
+							</Heading>
+							<RestaurantSummary
+								rating={Number(ratingStatsRecord.rating)}
+								ratingCount={ratingStatsRecord.rating_count}
+								priceAverage={restautantRecord.price_average}
+								restaurantType={restautantRecord.restaurant_type}
+								address={restautantRecord.address}
+								city={restautantRecord.city}
+								showCity
+							/>
+							<Text textStyle="body1" color="gray.500">
+								{restautantRecord.description}
+							</Text>
+						</VStack>
+						<HStack>
+							<Button variant="default-light" leftIcon={<FiShare />}>
+								Compartir
+							</Button>
+						</HStack>
+						<Divider borderColor="brand-gray.200" />
+						<VStack align="stretch" spacing="1rem">
+							<Text textStyle="heading5">Reservar</Text>
+							<Text textStyle="body1" color="gray.500">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+								dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+								ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+							</Text>
+							<Box>Foo</Box>
+						</VStack>
+						<Divider borderColor="brand-gray.200" />
+						<Tabs variant="unstyled" colorScheme="green" position="relative">
+							<HStack spacing="25%">
+								<Flex
+									position="relative"
+									bg="gray.100"
+									w="fit-content"
+									py="0.25rem"
+									px="0.5rem"
+									alignItems="center"
+									borderRadius="0.5rem"
 								>
-									{section.label}
-								</Text>
-							</SuperLink>
-						))}
-					</HStack>
-				</Box>
-				<Box>{currentSection?.component && <currentSection.component />}</Box>
-			</VStack>
-		);
-	}
+									<TabList zIndex={2}>
+										{tabContent.map((tab, index) => (
+											<Tab minW="10rem" key={index}>
+												{tab.label}
+											</Tab>
+										))}
+									</TabList>
+									<TabIndicator
+										position="absolute"
+										zIndex={1}
+										height="2rem"
+										bg="white"
+										borderRadius="0.25rem"
+										boxShadow="0 4px 10px #8F8F8F33"
+									/>
+								</Flex>
+							</HStack>
+							<TabPanels>
+								{tabContent.map((tab, index) => (
+									<TabPanel p={0} mt="1rem" key={index}>
+										{tab.component()}
+									</TabPanel>
+								))}
+							</TabPanels>
+						</Tabs>
+					</VStack>
+				</GridItem>
+				<GridItem colSpan={5}>
+					<VStack align="stretch">
+						<Box h="30rem" borderRadius="0.5rem" overflow="hidden">
+							<Image w="100%" h="100%" objectFit="cover" src={restautantRecord.headers_url[0]} alt="header" />
+						</Box>
+					</VStack>
+				</GridItem>
+			</Grid>
+			<Footer />
+		</React.Fragment>
+	);
 };

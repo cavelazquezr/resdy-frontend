@@ -20,10 +20,7 @@ export const Layout: React.FC<IProps> = (props) => {
 	const isSettingsPanel: boolean = location.pathname.includes('/admin');
 
 	const disableBreakpointLayoutWidth: boolean =
-		isSettingsPanel ||
-		location.pathname.startsWith('/restaurant') ||
-		isAuthenticationForm ||
-		location.pathname.endsWith('/');
+		isSettingsPanel || isAuthenticationForm || location.pathname.endsWith('/');
 
 	return (
 		<Flex h="100%" w="100%" direction="column">

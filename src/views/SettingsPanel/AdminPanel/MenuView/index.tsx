@@ -20,11 +20,13 @@ import { FiPlus } from 'react-icons/fi';
 
 import { CategoriesTable } from './components/CategoriesTable';
 import { CategoryCreateModal } from './components/CategoryCreateModal';
+import { DishCreateModal } from './components/DishCreateModal';
 import { DishesTable } from './components/DishesTable';
 import { SearchBar } from '../../../../common/components/SearchBar/SearchBar';
 import { useMenuCategories } from '../../../../hooks/useMenuCategories';
 import { useMenuDishes } from '../../../../hooks/useMenuDishes';
 import { CategoryCreateInput } from '../../../../types/categories';
+import { DishCreateInput } from '../../../../types/dishes';
 
 type TabContent = {
 	label: string;
@@ -36,18 +38,31 @@ export const MenuView: React.FC = () => {
 	const [tabIndex, setTabIndex] = React.useState<number>(0);
 	const [filters, setFilters] = React.useState<any | undefined>();
 
+	// Create category modal
 	const {
 		isOpen: createCategoryModalIsOpen,
 		onClose: createCategoryModalOnClose,
 		onOpen: createCategoryModalOnOpen,
 	} = useDisclosure();
 
+	// Create dish modal
+	const {
+		isOpen: createDishModalIsOpen,
+		onClose: createDishModalOnClose,
+		onOpen: createDishModalOnOpen,
+	} = useDisclosure();
+
 	const { categories, createCategoryMutation } = useMenuCategories(filters);
-	const { dishes } = useMenuDishes(filters);
+	const { dishes, createDishMutation } = useMenuDishes(filters);
 
 	const handleCreateCategory = async (args: CategoryCreateInput) => {
 		await createCategoryMutation(args);
 		createCategoryModalOnClose();
+	};
+
+	const handleCreateDish = async (args: DishCreateInput) => {
+		await createDishMutation(args);
+		createDishModalOnOpen();
 	};
 
 	const handleSetSearchFilter = (input: any) => {
@@ -116,7 +131,18 @@ export const MenuView: React.FC = () => {
 								hideCitySelect
 								hideDatePicker
 							/>
-							<Button variant="primary" rightIcon={<FiPlus />} w="10rem" onClick={createCategoryModalOnOpen}>
+							<Button
+								variant="primary"
+								rightIcon={<FiPlus />}
+								w="10rem"
+								onClick={() => {
+									if (tabIndex === 0) {
+										createCategoryModalOnOpen();
+									} else {
+										createDishModalOnOpen();
+									}
+								}}
+							>
 								Crear
 							</Button>
 						</HStack>
@@ -135,6 +161,11 @@ export const MenuView: React.FC = () => {
 				isOpen={createCategoryModalIsOpen}
 				onClose={createCategoryModalOnClose}
 				handleCreateCategory={handleCreateCategory}
+			/>
+			<DishCreateModal
+				isOpen={createDishModalIsOpen}
+				onClose={createDishModalOnClose}
+				handleCreateDish={handleCreateDish}
 			/>
 		</React.Fragment>
 	);
