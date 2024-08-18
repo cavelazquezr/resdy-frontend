@@ -11,19 +11,28 @@ type StatusList = {
 
 interface IProps {
 	statusValues: string[];
-	handleSetFilter: (status: string[] | undefined) => void;
+	handleSetFilter: (status: string[] | null) => void;
+	resetFilters?: boolean;
+	setResetFilters?: (value: boolean) => void;
 }
 
 export const StatusMenuFilter: React.FC<IProps> = (props) => {
-	const { statusValues, handleSetFilter } = props;
+	const { statusValues, handleSetFilter, resetFilters, setResetFilters } = props;
 	const [checkedItems, setCheckedItems] = React.useState<string[]>([]);
 	const handleMenuItemSelect = (option: string) => {
+		if (setResetFilters) {
+			setResetFilters(true);
+		}
 		if (checkedItems.includes(option)) {
 			setCheckedItems(checkedItems.filter((item) => item !== option));
+		} else if (resetFilters === false && checkedItems.length > 0) {
+			console.log('entre');
+			setCheckedItems([]);
 		} else {
 			setCheckedItems([...checkedItems, option]);
 		}
 	};
+
 	const statusList: StatusList[] = [
 		{
 			value: 'finished',
@@ -55,8 +64,11 @@ export const StatusMenuFilter: React.FC<IProps> = (props) => {
 	const allChecked: boolean = checkedItems.length === statusValues.length;
 
 	React.useEffect(() => {
-		handleSetFilter(allChecked ? undefined : checkedItems);
-	}, [checkedItems]);
+		handleSetFilter(allChecked ? null : checkedItems);
+		if (resetFilters === false && checkedItems.length > 0) {
+			setCheckedItems([]);
+		}
+	}, [checkedItems, resetFilters]);
 
 	return (
 		<Menu placement="bottom-end">
@@ -72,10 +84,10 @@ export const StatusMenuFilter: React.FC<IProps> = (props) => {
 			</MenuButton>
 			<MenuList>
 				<VStack align="stretch" spacing="0.25rem" px="0.75rem">
-					{statusAvailable.map((status, i) => (
+					{statusAvailable.map((status) => (
 						<Checkbox
 							isChecked={checkedItems.includes(status.value)}
-							key={i}
+							key={status.value}
 							colorScheme={status.color}
 							p="0.25rem 0.5rem"
 							_hover={{ bg: `${status.color}.200` }}

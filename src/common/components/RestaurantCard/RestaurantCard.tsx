@@ -35,8 +35,6 @@ export const RestaurantCard: React.FC<IProps> = (props) => {
 		day: 'numeric',
 	});
 
-	console.log('record', record);
-
 	return (
 		<SuperLink
 			onClick={onClick ? () => onClick(record) : undefined}

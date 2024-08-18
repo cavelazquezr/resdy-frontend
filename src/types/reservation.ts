@@ -25,7 +25,7 @@ export type ReservationCreateInput = ReservationDetailOutput;
 export type ReservationUpdateInput = Pick<ReservationOutput, 'status'>;
 
 export interface MyReservationsQueryParams {
-	status?: string;
+	status?: string | null;
 	city?: string;
 	search?: string;
 	start_date?: string;

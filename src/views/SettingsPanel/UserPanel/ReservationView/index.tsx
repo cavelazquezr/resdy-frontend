@@ -16,12 +16,13 @@ import { MyReservationsQueryParams, ReservationDetailOutput } from '../../../../
 type MyReservationsRecord = RestaurantCardOutput<ReservationDetailOutput>;
 
 export const ReservationsView: React.FC = () => {
-	const [filters, setFilters] = React.useState<MyReservationsQueryParams | undefined>();
+	const [filters, setFilters] = React.useState<MyReservationsQueryParams | null>();
 	const [myReservations, setMyReservations] = React.useState<Array<MyReservationsRecord>>([]);
 	const [hoveredCard, setHoveredCard] = React.useState<string | undefined>();
+	const [resetFilter, setResetFilter] = React.useState<boolean>(false);
 	const { data, isLoading } = useQuery({
 		queryKey: ['myReservationsQuery', filters],
-		queryFn: () => getMyReservations(filters ? filters : {}),
+		queryFn: () => getMyReservations(filters || {}),
 	});
 
 	const handleHover = (id: string | undefined) => {
@@ -51,11 +52,11 @@ export const ReservationsView: React.FC = () => {
 			search: search === '' ? undefined : search,
 		});
 	};
-	const handleSetStatusFilter = (status: string[] | undefined) => {
+	const handleSetStatusFilter = (status: string[] | null) => {
 		if (status) {
-			setFilters({ ...filters, status: status.length ? status.join() : undefined });
+			setFilters({ ...filters, status: status.length ? status.join() : null });
 		} else {
-			setFilters({ ...filters, status: undefined });
+			setFilters({ ...filters, status: null });
 		}
 	};
 
@@ -73,19 +74,23 @@ export const ReservationsView: React.FC = () => {
 					filters={filters as QueryFilter}
 					handleSetFilter={handleSetSearchFilter}
 					selectValues={['Madrid', 'Barcelona']}
+					resetFilters={resetFilter}
+					setResetFilters={setResetFilter}
 				/>
 				<StatusMenuFilter
 					handleSetFilter={handleSetStatusFilter}
 					statusValues={['to_be_confirmed', 'finished', 'cancelled', 'next']}
+					resetFilters={resetFilter}
+					setResetFilters={setResetFilter}
 				/>
 			</HStack>
 			<HStack h="100%" spacing="1rem">
 				{myReservations.length > 0 ? (
 					<Box w="100%" h="100%" pe="1rem" overflowY="scroll">
 						<VStack spacing="1rem" align="stretch" h="100%" px="0.75rem" py="0.5rem">
-							{myReservations.map((reservation, index) => (
+							{myReservations.map((reservation) => (
 								<RestaurantCard
-									key={index}
+									key={reservation.id}
 									record={reservation}
 									navigateToRestaurantView
 									onHover={handleHover}
