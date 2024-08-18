@@ -11,7 +11,7 @@ type StatusList = {
 
 interface IProps {
 	statusValues: string[];
-	handleSetFilter: (status: string[] | null) => void;
+	handleSetFilter: (status: string[] | undefined) => void;
 	resetFilters?: boolean;
 	setResetFilters?: (value: boolean) => void;
 }
@@ -25,9 +25,6 @@ export const StatusMenuFilter: React.FC<IProps> = (props) => {
 		}
 		if (checkedItems.includes(option)) {
 			setCheckedItems(checkedItems.filter((item) => item !== option));
-		} else if (resetFilters === false && checkedItems.length > 0) {
-			console.log('entre');
-			setCheckedItems([]);
 		} else {
 			setCheckedItems([...checkedItems, option]);
 		}
@@ -64,7 +61,7 @@ export const StatusMenuFilter: React.FC<IProps> = (props) => {
 	const allChecked: boolean = checkedItems.length === statusValues.length;
 
 	React.useEffect(() => {
-		handleSetFilter(allChecked ? null : checkedItems);
+		handleSetFilter(allChecked ? undefined : checkedItems);
 		if (resetFilters === false && checkedItems.length > 0) {
 			setCheckedItems([]);
 		}

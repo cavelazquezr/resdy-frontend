@@ -21,6 +21,7 @@ type MyRatingRecord = RestaurantCardOutput<RatingDetailOutput>;
 export const RatingsView: React.FC = () => {
 	const [filters, setFilters] = React.useState<MyReservationsQueryParams | undefined>();
 	const [myRatings, setMyRatings] = React.useState<Array<MyRatingRecord>>([]);
+	const [resetFilter, setResetFilter] = React.useState<boolean>(false);
 	const [editingRating, setEditingRating] = React.useState<MyRatingRecord | undefined>(undefined);
 	const { data, isLoading: isMyRatingsLoading } = useQuery({
 		queryKey: ['myRatingsQuery', filters],
@@ -83,8 +84,15 @@ export const RatingsView: React.FC = () => {
 					handleSetFilter={handleSetSearchFilter}
 					selectValues={['Madrid', 'Barcelona']}
 					hideDatePicker
+					setResetFilters={setResetFilter}
+					resetFilters={resetFilter}
 				/>
-				<StatusMenuFilter handleSetFilter={handleSetStatusFilter} statusValues={['to_rate', 'finished']} />
+				<StatusMenuFilter
+					handleSetFilter={handleSetStatusFilter}
+					statusValues={['to_rate', 'finished']}
+					setResetFilters={setResetFilter}
+					resetFilters={resetFilter}
+				/>
 			</HStack>
 			<HStack h="100%" spacing="1rem">
 				{requestFinished ? (
@@ -94,7 +102,7 @@ export const RatingsView: React.FC = () => {
 								<VStack spacing="1rem" align="stretch" h="100%" px="0.75rem" py="0.5rem">
 									{myRatings.map((rating, index) => (
 										<RestaurantCard
-											key={index}
+											key={`index` + index}
 											record={rating}
 											showStatus
 											isActive={rating.id === editingRating?.id}

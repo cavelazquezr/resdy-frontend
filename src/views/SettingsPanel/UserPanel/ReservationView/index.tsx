@@ -52,11 +52,11 @@ export const ReservationsView: React.FC = () => {
 			search: search === '' ? undefined : search,
 		});
 	};
-	const handleSetStatusFilter = (status: string[] | null) => {
+	const handleSetStatusFilter = (status: string[] | undefined) => {
 		if (status) {
-			setFilters({ ...filters, status: status.length ? status.join() : null });
+			setFilters({ ...filters, status: status.length ? status.join() : undefined });
 		} else {
-			setFilters({ ...filters, status: null });
+			setFilters({ ...filters, status: undefined });
 		}
 	};
 
