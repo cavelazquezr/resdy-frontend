@@ -9,7 +9,7 @@ import { QueryFilter } from '../../../types';
 
 interface IProps {
 	buttonProps?: ButtonProps;
-	filters?: QueryFilter | undefined;
+	filters?: QueryFilter;
 	handleSetFilter: (input: Record<string, string>) => void;
 }
 
@@ -40,7 +40,7 @@ export const DatePicker: React.FC<IProps> = (props) => {
 	}, [range]);
 
 	const isApplyButtonDisabled = React.useMemo(() => {
-		return range === undefined || range.from === undefined || range.to === undefined;
+		return !range?.from || !range?.to;
 	}, [range]);
 
 	React.useEffect(() => {
@@ -63,7 +63,7 @@ export const DatePicker: React.FC<IProps> = (props) => {
 	return (
 		<Menu isOpen={isOpen}>
 			<MenuButton as={Button} {...buttonProps} onClick={() => setIsOpen(!isOpen)}>
-				{range && range.from && range.to ? formatRange(range.from, range.to) : 'Selecciona una fecha'}
+				{range?.from && range?.to ? formatRange(range.from, range.to) : 'Selecciona una fecha'}
 			</MenuButton>
 			<MenuList>
 				<VStack>

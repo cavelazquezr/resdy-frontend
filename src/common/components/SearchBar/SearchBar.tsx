@@ -8,13 +8,14 @@ import { QueryFilter } from '../../../types';
 import { DatePicker } from '../DatePicker/DatePicker';
 
 interface IProps {
-	hasCalendar?: boolean;
 	selectValues?: string[];
 	searchPlaceholder?: string;
-	filters?: QueryFilter | undefined;
+	filters?: QueryFilter;
 	handleSetFilter: (input: Record<string, string | undefined>) => void;
 	hideDatePicker?: boolean;
 	hideCitySelect?: boolean;
+	resetFilters?: boolean;
+	setResetFilters?: (value: boolean) => void;
 }
 
 const datePickerButtonProps: ButtonProps = {
@@ -27,8 +28,35 @@ const datePickerButtonProps: ButtonProps = {
 };
 
 export const SearchBar: React.FC<IProps> = (props) => {
-	const { filters, selectValues, searchPlaceholder, handleSetFilter, hideDatePicker, hideCitySelect } = props;
+	const {
+		filters,
+		selectValues,
+		searchPlaceholder,
+		handleSetFilter,
+		hideDatePicker,
+		hideCitySelect,
+
+		setResetFilters,
+	} = props;
+
 	const [search, setSearch] = React.useState<string | undefined>();
+	const [debounceTimeout, setDebounceTimeout] = React.useState<NodeJS.Timeout | null>(null);
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const WAIT_TIME = 400; //tiempo de espera para realizar la búsqueda;
+		const { value } = e.target;
+		setSearch(value);
+
+		if (debounceTimeout) {
+			clearTimeout(debounceTimeout);
+		}
+
+		const newTimeout = setTimeout(() => {
+			handleSetFilter({ ...filters, search: value });
+		}, WAIT_TIME);
+
+		setDebounceTimeout(newTimeout);
+	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') {
@@ -66,12 +94,11 @@ export const SearchBar: React.FC<IProps> = (props) => {
 						size="md"
 						placeholder="Ciudad"
 					>
-						{selectValues &&
-							selectValues.map((value, i) => (
-								<option key={i} value={value}>
-									{value}
-								</option>
-							))}
+						{selectValues?.map((value) => (
+							<option key={value} value={value}>
+								{value}
+							</option>
+						))}
 					</Select>
 				</HStack>
 			)}
@@ -88,12 +115,9 @@ export const SearchBar: React.FC<IProps> = (props) => {
 					border="none"
 					size="md"
 					value={search}
-					placeholder={searchPlaceholder ? searchPlaceholder : 'Nombre del restaurante...'}
-					onChange={(e) => setSearch(e.target.value)}
-					onKeyDown={(e) => handleKeyDown(e)}
-					onBlur={() => {
-						handleSetFilter({ ...filters, search: search });
-					}}
+					placeholder={searchPlaceholder || 'Nombre del restaurante...'}
+					onKeyDown={handleKeyDown}
+					onChange={handleInputChange}
 				/>
 				<Button
 					variant="default-light"
@@ -106,6 +130,9 @@ export const SearchBar: React.FC<IProps> = (props) => {
 					onClick={() => {
 						setSearch('');
 						handleSetFilter({});
+						if (setResetFilters) {
+							setResetFilters(false);
+						}
 					}}
 				>
 					Limpiar filtros
