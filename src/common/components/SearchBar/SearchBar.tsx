@@ -35,7 +35,7 @@ export const SearchBar: React.FC<IProps> = (props) => {
 		handleSetFilter,
 		hideDatePicker,
 		hideCitySelect,
-		resetFilters,
+
 		setResetFilters,
 	} = props;
 
