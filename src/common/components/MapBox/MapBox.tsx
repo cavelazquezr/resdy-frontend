@@ -41,38 +41,43 @@ export const MapBox: React.FC<IProps> = (props) => {
 	const hasBoundResults = () => {
 		if (currentMap) {
 			const bounds = currentMap.getBounds();
-			const sw = bounds.getSouthWest();
-			const ne = bounds.getNorthEast();
+			if (bounds) {
+				const sw = bounds.getSouthWest();
+				const ne = bounds.getNorthEast();
 
-			const markersInsideBounds = markersCoordinates?.filter((marker) => {
-				return (
-					marker.latitude >= sw.lat &&
-					marker.latitude <= ne.lat &&
-					marker.longitude >= sw.lng &&
-					marker.longitude <= ne.lng
-				);
-			});
+				const markersInsideBounds = markersCoordinates?.filter((marker) => {
+					return (
+						marker.latitude >= sw.lat &&
+						marker.latitude <= ne.lat &&
+						marker.longitude >= sw.lng &&
+						marker.longitude <= ne.lng
+					);
+				});
 
-			return markersInsideBounds && markersInsideBounds?.length > 0;
+				return markersInsideBounds && markersInsideBounds?.length > 0;
+			}
 		}
 		return false;
 	};
 
 	const onChangeViewport = () => {
-		if (currentMap) {
-			setEvent({
-				hasBoundsResults: hasBoundResults() ?? false,
-				bounds: {
-					sw: {
-						lat: currentMap.getBounds().getSouthWest().lat,
-						lng: currentMap.getBounds().getSouthWest().lng,
+		if (currentMap && currentMap.getBounds()) {
+			const bounds = currentMap.getBounds();
+			if (bounds) {
+				setEvent({
+					hasBoundsResults: hasBoundResults() ?? false,
+					bounds: {
+						sw: {
+							lat: bounds.getSouthWest().lat,
+							lng: bounds.getSouthWest().lng,
+						},
+						ne: {
+							lat: bounds.getNorthEast().lat,
+							lng: bounds.getNorthEast().lng,
+						},
 					},
-					ne: {
-						lat: currentMap.getBounds().getNorthEast().lat,
-						lng: currentMap.getBounds().getNorthEast().lng,
-					},
-				},
-			});
+				});
+			}
 		}
 	};
 
@@ -133,7 +138,7 @@ export const MapBox: React.FC<IProps> = (props) => {
 			{markersCoordinates &&
 				markersCoordinates.length > 0 &&
 				markersCoordinates.map(({ longitude, latitude, detail, hovered }, index) => (
-					<Marker key={index} longitude={longitude} latitude={latitude}>
+					<Marker key={index + 1} longitude={longitude} latitude={latitude}>
 						<MapPopup detail={detail} isHovered={hovered ?? false} />
 					</Marker>
 				))}

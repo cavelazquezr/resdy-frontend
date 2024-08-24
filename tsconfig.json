@@ -33,6 +33,6 @@
 		"types": ["vite/client"]
 	},
 
-	"include": ["src", "src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
+	"include": ["src", "src/**/*.ts", "src/**/*.tsx"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }
