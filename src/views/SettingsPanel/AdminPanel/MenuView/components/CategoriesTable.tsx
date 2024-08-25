@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Flex, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, useDisclosure } from '@chakra-ui/react';
 import { FiEdit2, FiEye, FiEyeOff, FiMoreVertical, FiTrash2 } from 'react-icons/fi';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 import { CategoryEditModal } from './CategoryEditModal';
 import { ColumnLayout, CustomTable, SortBy } from '../../../../../common/components/CustomTable/CustomTable';
@@ -15,6 +16,15 @@ import { CategoryUpdateInput, MyCategoriesRecord } from '../../../../../types/ca
 interface IProps {
 	categories?: WithIsUsed<MyCategoriesRecord>[];
 }
+
+const OrdenButtons = () => {
+	return (
+		<>
+			<IconButton icon={<IoIosArrowUp />} aria-label="order-up" variant="outline" border={'none'} />
+			<IconButton icon={<IoIosArrowDown />} aria-label="order-down" variant="outline" border={'none'} />
+		</>
+	);
+};
 
 export const CategoriesTable: React.FC<IProps> = ({ categories }) => {
 	const [sortBy, setSortBy] = React.useState<SortBy>({
@@ -41,7 +51,7 @@ export const CategoriesTable: React.FC<IProps> = ({ categories }) => {
 	const columnsLayout: Array<ColumnLayout> = [
 		{ key: 'label', label: 'Categoría', colSpan: 7, align: 'start', isSortable: true },
 		{ key: 'dishes', label: 'Platos', colSpan: 1, align: 'center', isSortable: true },
-		{ key: 'order', label: 'Orden', colSpan: 1, align: 'center', isSortable: true },
+		{ key: 'order', label: 'Orden', colSpan: 1, align: 'center', isSortable: false },
 		{ key: 'is_active', label: 'Activo', colSpan: 1, align: 'center', isSortable: true },
 		{ colSpan: 1, align: 'end', isSortable: false },
 	];
@@ -66,12 +76,12 @@ export const CategoriesTable: React.FC<IProps> = ({ categories }) => {
 						cells={[
 							{ type: 'text', content: category.label },
 							{ type: 'text', content: category.dishes.toString() },
-							{ type: 'text', content: 'foo' },
+							{ type: 'text', content: <OrdenButtons /> },
 							{
 								type: 'component',
 								content: (
 									<IconButton
-										aria-label="hide-unhide"
+										aria-label="hide-display"
 										variant="ghost"
 										onClick={() =>
 											updateCategoryMutation({

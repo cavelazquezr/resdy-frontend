@@ -149,7 +149,7 @@ const Row: React.FC<IRowProps & { isRowSelected?: boolean; onRowSelect?: (select
 		>
 			<Grid width="100%" templateColumns={templateColumns} alignItems="center" paddingX="1rem" {...commonGridProps}>
 				{cells.map((cell, index) => (
-					<GridItem key={index} textAlign={columnsLayout?.[index]?.align ?? 'start'}>
+					<GridItem key={index + 'cell'} textAlign={columnsLayout?.[index]?.align ?? 'start'}>
 						{cell.prefix}
 						{cell.content}
 						{cell.suffix}
@@ -169,48 +169,54 @@ const Headers: React.FC<IHeadersProps & { onSelectAll?: () => void; allRowsSelec
 }) => {
 	return (
 		<Flex position="relative" bg="gray.100" borderRadius="0.5rem" paddingY="0.75rem">
-			<Grid w="100%" aria-label="table-headers" templateColumns={templateColumns} paddingX="1rem" {...commonGridProps}>
-				{labels &&
-					labels.map((label, index) => (
-						<GridItem key={index}>
-							<HStack justifyContent={columnsLayout?.[index]?.align ?? 'start'} spacing="0.25rem">
-								<Text fontWeight="medium">{label}</Text>
-								{columnsLayout?.[index]?.isSortable && (
-									<Menu>
-										<MenuButton as={IconButton} aria-label="sort-column" size="sm">
-											<Flex alignItems="center" justifyContent="center">
-												<Icon as={HiOutlineSelector} h="1.25rem" w="1.25rem" strokeWidth="1.5px" alignItems="center" />
-											</Flex>
-										</MenuButton>
-										<MenuList>
-											<MenuItem
-												icon={<Icon as={GoSortAsc} h="1rem" w="1rem" />}
-												bg={
-													columnsLayout[index].key === sortBy?.column && sortBy?.direction === 'asc'
-														? 'brand-primary.50'
-														: undefined
-												}
-												onClick={() => setSortBy?.({ column: columnsLayout[index].key || '', direction: 'asc' })}
-											>
-												Ascendente
-											</MenuItem>
-											<MenuItem
-												icon={<Icon as={GoSortDesc} h="1rem" w="1rem" />}
-												bg={
-													columnsLayout[index].key === sortBy?.column && sortBy?.direction === 'desc'
-														? 'brand-primary.50'
-														: undefined
-												}
-												onClick={() => setSortBy?.({ column: columnsLayout[index].key || '', direction: 'desc' })}
-											>
-												Descendente
-											</MenuItem>
-										</MenuList>
-									</Menu>
-								)}
-							</HStack>
-						</GridItem>
-					))}
+			<Grid
+				w="100%"
+				aria-label="table-headers"
+				templateColumns={templateColumns}
+				paddingX="1rem"
+				{...commonGridProps}
+				alignItems={'center'}
+			>
+				{labels?.map((label, index) => (
+					<GridItem key={index + 'label'}>
+						<HStack justifyContent={columnsLayout?.[index]?.align ?? 'start'} spacing="0.25rem">
+							<Text fontWeight="medium">{label}</Text>
+							{columnsLayout?.[index]?.isSortable && (
+								<Menu>
+									<MenuButton as={IconButton} aria-label="sort-column" size="sm">
+										<Flex alignItems="center" justifyContent="center">
+											<Icon as={HiOutlineSelector} h="1.25rem" w="1.25rem" strokeWidth="1.5px" alignItems="center" />
+										</Flex>
+									</MenuButton>
+									<MenuList>
+										<MenuItem
+											icon={<Icon as={GoSortAsc} h="1rem" w="1rem" />}
+											bg={
+												columnsLayout[index].key === sortBy?.column && sortBy?.direction === 'asc'
+													? 'brand-primary.50'
+													: undefined
+											}
+											onClick={() => setSortBy?.({ column: columnsLayout[index].key || '', direction: 'asc' })}
+										>
+											Ascendente
+										</MenuItem>
+										<MenuItem
+											icon={<Icon as={GoSortDesc} h="1rem" w="1rem" />}
+											bg={
+												columnsLayout[index].key === sortBy?.column && sortBy?.direction === 'desc'
+													? 'brand-primary.50'
+													: undefined
+											}
+											onClick={() => setSortBy?.({ column: columnsLayout[index].key || '', direction: 'desc' })}
+										>
+											Descendente
+										</MenuItem>
+									</MenuList>
+								</Menu>
+							)}
+						</HStack>
+					</GridItem>
+				))}
 			</Grid>
 		</Flex>
 	);

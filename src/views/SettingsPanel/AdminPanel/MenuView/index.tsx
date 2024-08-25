@@ -25,13 +25,21 @@ import { DishesTable } from './components/DishesTable';
 import { SearchBar } from '../../../../common/components/SearchBar/SearchBar';
 import { useMenuCategories } from '../../../../hooks/useMenuCategories';
 import { useMenuDishes } from '../../../../hooks/useMenuDishes';
-import { CategoryCreateInput } from '../../../../types/categories';
-import { DishCreateInput } from '../../../../types/dishes';
+import { CategoryCreateInput, MyCategoriesRecord } from '../../../../types/categories';
+import { DishCreateInput, DishOutput } from '../../../../types/dishes';
 
 type TabContent = {
 	label: string;
 	description: string;
-	component: () => JSX.Element;
+	component: React.ReactNode;
+};
+
+const CategoriesTab = ({ categories }: { categories?: Array<MyCategoriesRecord> }) => {
+	return <CategoriesTable categories={categories} />;
+};
+
+const DishesTab = ({ dishes }: { dishes?: Array<DishOutput> }) => {
+	return <DishesTable dishes={dishes} />;
 };
 
 export const MenuView: React.FC = () => {
@@ -76,14 +84,15 @@ export const MenuView: React.FC = () => {
 		{
 			label: 'Categorías',
 			description: 'Organiza las categorías de platos de tu restaurante.',
-			component: () => <CategoriesTable categories={categories} />,
+			component: <CategoriesTab categories={categories} />,
 		},
 		{
 			label: 'Platos',
 			description: 'Organiza los platos de tu restaurante.',
-			component: () => <DishesTable dishes={dishes} />,
+			component: <DishesTab dishes={dishes} />,
 		},
 	];
+
 	return (
 		<React.Fragment>
 			<VStack align="stretch">
@@ -109,7 +118,7 @@ export const MenuView: React.FC = () => {
 						>
 							<TabList zIndex={2}>
 								{tabContent.map((tab, index) => (
-									<Tab minW="10rem" key={index} onClick={() => setTabIndex(index)}>
+									<Tab minW="10rem" key={index + 5} onClick={() => setTabIndex(index)}>
 										{tab.label}
 									</Tab>
 								))}
@@ -150,8 +159,8 @@ export const MenuView: React.FC = () => {
 
 					<TabPanels>
 						{tabContent.map((tab, index) => (
-							<TabPanel p={0} mt="1rem" key={index}>
-								{tab.component()}
+							<TabPanel p={0} mt="1rem" key={index + 6}>
+								{tab.component}
 							</TabPanel>
 						))}
 					</TabPanels>
